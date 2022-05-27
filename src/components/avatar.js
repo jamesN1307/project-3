@@ -2,7 +2,12 @@ import React from 'react';
 import aang from '../images/aang.png'
 import appa from '../images/Appa.png'
 import katara from '../images/Katara.png'
-import sokka from '../images/Sokka.png'
+import sokka from '../images/Sokka.png
+import iroh from '../images/iroh.png'
+import toph from '../images/toph.png'
+import bumi from '../images/bumi.png'
+import momo from '../images/momo.png'
+
 
 const styles = {
     image: {
@@ -46,9 +51,14 @@ export default function ChooseAvatar() {
         <div>
             <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
             <img src={aang} alt="Ang" />
+
             <img src={appa} alt="appa" />
             <img src={katara} alt="katara" />
             <img src={sokka} alt="sokka" />
+            <img src={iroh} alt="Iroh" />
+            <img src={toph} alt="Toph" />
+            <img src={bumi} alt="Bumi" />
+            <img src={momo} alt="Momo" />
         </div>
     </div>
   );
