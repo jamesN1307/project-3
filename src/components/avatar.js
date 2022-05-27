@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 
 const styles = {
     image: {
@@ -29,29 +28,29 @@ const styles = {
         fontWeight: "bold",
         boxShadow: "2px 2px 2px black",
         fontSize: "1rem"
-        //add
+        //add Hover
     }
 
 };
 
-export default function Welcome() {
-    // All functional components must have a return method that contains JSX.
-    // We return all the JSX inside a parent element with a className of "container".
+export default function ChooseAvatar() {
+  // All functional components must have a return method that contains JSX.
+  // We return all the JSX inside a parent element with a className of "container".
 
-    return (
-        <div className="container" >
-            <div>
-                <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
-                <h1 style={styles.h1}>Appa's Landing</h1>
+  return (
+    <div className="container" >
+        <div>
+            <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
+            <h1 style={styles.h1}>Appa's Landing</h1>
                 <nav style={styles.navBar}>
-                    <Link to="/login"><button style={styles.buttons}>Login</button></Link>
+                    <button style={styles.buttons}>Login</button>
                     <br></br>
                     {/* <p>Don't have an account?</p> */}
-                    <Link to="/login"><button style={styles.buttons}>Signup</button></Link>
+                    <button style={styles.buttons}>Sign Up</button>
                 </nav>
-            </div>
-            <div>
-            </div>
         </div>
-    );
+        <div>
+        </div>
+    </div>
+  );
 }
