@@ -1,4 +1,5 @@
 import React from 'react';
+import aang from '../images/aang.png'
 
 const styles = {
     image: {
@@ -40,16 +41,8 @@ export default function ChooseAvatar() {
   return (
     <div className="container" >
         <div>
-            <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
-            <h1 style={styles.h1}>Appa's Landing</h1>
-                <nav style={styles.navBar}>
-                    <button style={styles.buttons}>Login</button>
-                    <br></br>
-                    {/* <p>Don't have an account?</p> */}
-                    <button style={styles.buttons}>Sign Up</button>
-                </nav>
-        </div>
-        <div>
+            <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
+            <img src={aang} alt="Ang" />
         </div>
     </div>
   );
