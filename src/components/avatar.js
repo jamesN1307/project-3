@@ -60,7 +60,7 @@ const styles = {
         width: '100%',
         justifyContent: 'space-around',
         margin: 'auto',
-        height: '100%',
+        height: '40%',
         alignItems: 'center',
     },
 
@@ -71,7 +71,7 @@ const styles = {
         margin: 'auto',
         flexDirection: 'column',
         width: '70%',
-        height: '90%',
+        height: '100%',
     },
 
     containerStyling: {
@@ -81,8 +81,16 @@ const styles = {
     },
 
     headerStyling: {
-        textAlign: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'skyBlue',
+        margin: '20px',
+        padding: '10px',
+        height: '20%',
+        fontSize: '50pt',
+        fontFamily: "herculanum",
+        borderRadius: '8px',
     }
 
 };
@@ -105,44 +113,47 @@ export default function ChooseAvatar() {
     <div className="container" style={styles.containerStyling}>
         <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
 
-        <h1 style={styles.headerStyling}>
-            Choose Your Character!
-        </h1>
-
+        {/* Contains header and both rows */}
         <div style={styles.characterSelectBox}>
+
+            {/* */}
+            <h1 style={styles.headerStyling}>Choose Your Character!</h1>
+            
+            {/* Top row of characters */}
             <section style={styles.characterRow}>
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img onMouseOver={hoverOnCharacter} src={aang} alt="Ang" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang} alt="Ang" />
                 </div>
 
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={appa} alt="appa" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" />
                 </div>
 
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}> 
-                    <img src={katara} alt="katara" />
+                <div style={styles.characterImage}> 
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" />
                 </div>
                 
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={sokka} alt="sokka" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" />
                 </div>
             </section>
             
+            {/* Bottom row of characters */}
             <section style={styles.characterRow}>
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={iroh} alt="Iroh" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" />
                 </div>
                 
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={toph} alt="Toph" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" />
                 </div>
                 
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={bumi} alt="Bumi" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" />
                 </div>
             
-                <div onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter} style={styles.characterImage}>
-                    <img src={momo} alt="Momo" />
+                <div style={styles.characterImage}>
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" />
                 </div>
             </section>
 
