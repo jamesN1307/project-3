@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import Game from './components/game'
 import Avatar from "./components/avatar"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Login from "./routes/login";
@@ -13,6 +14,7 @@ root.render(
       <Route path="/" element={<App />} />
       <Route path="avatar" element={<Avatar />} />
       <Route path="login" element={<Login />} />
+      <Route path="game" element={<Game />} />
     </Routes>
   </BrowserRouter>
 );
