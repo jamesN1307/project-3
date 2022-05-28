@@ -2,7 +2,7 @@ import React from 'react';
 import aang from '../images/aang.png'
 import appa from '../images/Appa.png'
 import katara from '../images/Katara.png'
-import sokka from '../images/Sokka.png
+import sokka from '../images/Sokka.png'
 import iroh from '../images/iroh.png'
 import toph from '../images/toph.png'
 import bumi from '../images/bumi.png'
