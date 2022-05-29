@@ -17,8 +17,12 @@ const styles = {
         left: 0,
         top: 0,
         zIndex: -1,
+<<<<<<< HEAD
         filter: "contrast(60%)",
         opacity: .65
+=======
+        filter: 'contrast(60%)',
+>>>>>>> dev
     },
     h1: {
         marginTop: "5%",
