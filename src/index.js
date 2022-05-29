@@ -16,11 +16,8 @@ root.render(
       <Route path="/" element={<App />} />
       <Route path="avatar" element={<Avatar />} />
       <Route path="login" element={<Login />} />
-<<<<<<< HEAD
       <Route path="leaderboard" element={<Leaderboard />} />
-=======
       <Route path="game" element={<Game />} />
->>>>>>> dev
     </Routes>
   </BrowserRouter>
 );
