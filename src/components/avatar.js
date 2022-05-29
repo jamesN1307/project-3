@@ -17,6 +17,8 @@ const styles = {
         left: 0,
         top: 0,
         zIndex: -1,
+        filter: "contrast(60%)",
+        opacity: .65
     },
     h1: {
         marginTop: "5%",

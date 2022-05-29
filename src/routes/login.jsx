@@ -1,6 +1,27 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
+import Krew from '../images/Krew.png'
+
+const styles = {
+  image: {
+    height: "100vh",
+    width: "100vw",
+    position: "absolute",
+    zIndex: -1,
+    opacity: .65
+  },
+  title: {
+    fontSize: "30px",
+    fontWeight: "800",
+    position: "absolute",
+    left: "35%",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "herculanum"
+  }
+}
+
 
 function App() {
   // React States
@@ -54,6 +75,7 @@ function App() {
     );
 
   // JSX code for login form
+  // CHANGE CODE FOR STYLING FORM
   const renderForm = (
     <div className="form">
       <form onSubmit={handleSubmit}>
@@ -76,8 +98,9 @@ function App() {
 
   return (
     <div className="app">
-      <div className="login-form">
-        <div className="title">Sign In</div>
+      <img style={styles.image} src={Krew} alt="Ang and epic background" />
+      <div className="login-form" style={styles.title}>
+        <div className="title" style={{fontSize: "100px", fontWeight: "500", paddingBottom: "30vh"}}>Sign In</div>
         {isSubmitted ? window.location.href = "/avatar" : renderForm}
       </div>
     </div>
