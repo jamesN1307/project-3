@@ -7,7 +7,7 @@ import iroh from '../images/iroh.png'
 import toph from '../images/toph.png'
 import bumi from '../images/bumi.png'
 import momo from '../images/momo.png'
-
+import { Link } from "react-router-dom";
 
 const styles = {
     image: {
@@ -123,7 +123,7 @@ export default function ChooseAvatar() {
             {/* Top row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang} alt="Ang" />
+                <Link to="/login"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang} alt="Ang" /></Link>
                 </div>
 
                 <div style={styles.characterImage}>
