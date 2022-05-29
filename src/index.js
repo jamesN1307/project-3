@@ -6,6 +6,8 @@ import Game from './components/game'
 import Avatar from "./components/avatar"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Login from "./routes/login";
+import Leaderboard from "./components/leaderboard";
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +16,11 @@ root.render(
       <Route path="/" element={<App />} />
       <Route path="avatar" element={<Avatar />} />
       <Route path="login" element={<Login />} />
+<<<<<<< HEAD
+      <Route path="leaderboard" element={<Leaderboard />} />
+=======
       <Route path="game" element={<Game />} />
+>>>>>>> dev
     </Routes>
   </BrowserRouter>
 );
