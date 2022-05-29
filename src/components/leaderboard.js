@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import background from "../images/leaderboard_background.png";
+// import background from "../images/leaderboard_background.png";
 
 // LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
 
@@ -90,7 +90,7 @@ export default function Leaderboard() {
     return (
         <div className="container" >
             <div style={styles.masterContainer} >
-                <img style={styles.background} src={background} alt="Aang and epic background" />
+                {/* <img style={styles.background} src={background} alt="Aang and epic background" /> */}
                 <section style={styles.mainBlock}>
 
                     <h1 style={styles.header}>Leaderboard</h1>

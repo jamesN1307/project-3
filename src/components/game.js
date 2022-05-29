@@ -1,23 +1,17 @@
-import React, { useRef, useEffect } from 'react'
-import { Link } from "react-router-dom";
-import canvas from './canvas'
+import React from 'react';
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
-export default function Game (){
-const canvas = document.querySelector('#canvas')
-const c = canvas.getContext('2d');
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
+const Game = () => {
+    let ref = useRef();
+    
+    useEffect(() => {
+        let canvas = ref.current;
+        let c = canvas.getContext('2d');
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
 
-// const canvas = {
-//     display: "block",
-//     backgroundColor: "white",
-//     width: "window.innerWidth",
-//     marginRight: "window.innerHeight",
-//   }
-
-// const c =  canvas.getContext("2d")
-
-const gravity = 0.5
+        const gravity = 0.5
 
 // create player 
 class Player {
@@ -104,7 +98,7 @@ function animate() {
     // we will stop the player from moving to the right at 600px and left at 100px
     if (keys.right.pressed && player.position.x < 600) {
         player.velocity.x = 5
-    } else if (keys.left.pressed && player.position.x > 100) {
+    } else if (keys.left.pressed && player.position.xd > 100) {
         player.velocity.x = -5
     } else {
         player.velocity.x = 0
@@ -178,10 +172,14 @@ window.addEventListener("keyup", ({ keyCode }) => {
     }
     // console.log(keys.right.pressed)
 })
-    return (
-    <div>
-        <canvas id = "canvas"></canvas>
-        <script src="./asset/game.js"></script>
-    </div>
-    );
-  }
+    });
+    
+     return (
+         <canvas
+             ref={ref} 
+            //  style={{ width: '100px', height: '100px' }}
+         />
+     );
+ };
+ 
+ export default Game;
