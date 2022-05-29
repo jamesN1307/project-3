@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 import React from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+=======
+const canvas = document.querySelector('#canvas')
+const c = canvas.getContext('2d');
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+>>>>>>> dev
 
 const getPixelRatio = context => {
     var backingStore =
