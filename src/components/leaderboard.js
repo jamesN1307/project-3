@@ -2,7 +2,18 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import background from "../images/leaderboard_background.png";
 
+// LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
+
 const styles = {
+    masterContainer: {
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        flexGrow: '1',
+        flexShrink: '1',
+    },
+
     background: {
         width: '100%',
         height: '100%',
@@ -30,6 +41,9 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+        height: '100%',
+        flexGrow: '1',
+        flexShrink: '1',
     },
 
     //arranges score blocks on the leaderboard page
@@ -38,6 +52,9 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '90%',
+        height: '100%',
+        flexGrow: '1',
+        flexShrink: '1',
     },
 
     //styling for individual score block
@@ -48,6 +65,9 @@ const styles = {
         width: '20%',
         borderRadius: '8px',
         alignItems: 'center',
+        height: '100%',
+        
+        flexShrink: '1',
     },
 
     //title of each score block
@@ -57,7 +77,9 @@ const styles = {
 
     //individual score display elements within each block
     scoreBlockElement: {
-
+        display: 'flex',
+        flexShrink: '1',
+        fontSize: '16pt',
     }
 }
 
@@ -67,7 +89,7 @@ export default function Leaderboard() {
     
     return (
         <div className="container" >
-            <div style={styles.mainBlock}>
+            <div style={styles.masterContainer} >
                 <img style={styles.background} src={background} alt="Aang and epic background" />
                 <section style={styles.mainBlock}>
 
