@@ -1,4 +1,6 @@
 import React from 'react';
+import Matter from "matter-js";
+
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import Grass from '../images/grass.png'
@@ -55,8 +57,8 @@ const Game = () => {
                     x: x,
                     y: y,
                 }
-                this.width = 200
-                this.height = 20
+                this.width = 450
+                this.height = 50
                 this.image = image
             }
 
@@ -80,12 +82,24 @@ const Game = () => {
             y: 300,
             image
         }), new Platform({
-            x: 300,
+            x: 600,
             y: 200,
             image
         }), new Platform({
-            x: 600,
+            x: 1000,
             y: 100,
+            image
+        }), new Platform({
+            x: 1400,
+            y: 450,
+            image
+        }), new Platform({
+            x: 1100,
+            y: 550,
+            image
+        }), new Platform({
+            x: 2100,
+            y: 50,
             image
         })
         ]
@@ -139,7 +153,7 @@ const Game = () => {
                 }
             })
             // a win conditional? (maybe??)
-            if (scrollOffset > 2000) {
+            if (scrollOffset > 3000) {
                 console.log("you win")
             }
         }
@@ -189,10 +203,13 @@ const Game = () => {
     });
 
     return (
+        <div>
+        <h2>Score:</h2>
         <canvas
             ref={ref}
         //  style={{ width: '100px', height: '100px' }}
         />
+        </div>
     );
 };
 
