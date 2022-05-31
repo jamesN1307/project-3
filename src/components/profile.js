@@ -19,19 +19,28 @@ const styles = {
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
+        borderStyle: 'solid',
     },
     
     //Items within left block
 
     sectionHeader: {
         backgroundColor: 'skyblue',
+        fontSize: '28pt',
+        borderRadius: '8px',
     },
 
     scoreBlock: {
-        
+        borderStyle: 'solid',
+        width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        borderRadius: '8px',
     },
 
     usernameItem: {
+        borderRadius: '8px',
 
     },
 
@@ -40,14 +49,22 @@ const styles = {
     },
 
     buttonBlock: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
 
+    gameButton: {
+        borderRadius: '8px',
     },
 
     leaderButtons: {
+        display: 'flex',
+        flexDirection: 'column',
 
     },
 
     leaderLink: {
+        borderRadius: '8px',
 
     },
 
@@ -57,6 +74,9 @@ const styles = {
         flexDirection: 'column',
         width: '35%',
         height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderStyle: 'solid',
     },
     //Items within right block
 
@@ -89,7 +109,7 @@ export default function Profile() {
             <section style={styles.pageColumnLeft}>
                 <h1 style={styles.sectionHeader}>Profile</h1>
                 {/* username and scores */}
-                <article>
+                <article style={styles.scoreBlock}>
                     <h2 style={styles.usernameItem}>Username</h2>
                     {/*improvement - revisit, add loop over server elements to add sections for all level scores?}*/}
                     <p style={styles.scores}>Level One - /score/</p>
@@ -100,7 +120,7 @@ export default function Profile() {
 
                 {/* section with buttons to leaderboard and 'play game' buttons*/}
                 <section style={styles.buttonBlock}>
-                    <button>Play Game</button>
+                    <button style={styles.gameButton}>Play Game</button>
                     <div style={styles.leaderButtons}>
                         <button style={styles.leaderLink}>Leaderboard - 1 Player</button>
                         <button style={styles.leaderLink}>Leaderboard - 2 Player</button>
@@ -118,6 +138,8 @@ export default function Profile() {
                         <input type='submit' value='New Comment' style={styles.submitComment}></input>
                     </section>
                     {/*sample elements*/}
+                    <p style={styles.postedComment}>This is what posted comments will look like.</p>
+                    <p style={styles.postedComment}>This is what posted comments will look like.</p>
                     <p style={styles.postedComment}>This is what posted comments will look like.</p>
                 </div>
             </section>
