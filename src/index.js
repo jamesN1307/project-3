@@ -6,7 +6,10 @@ import Game from './components/game'
 import Avatar from "./components/avatar"
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Login from "./routes/login";
-import Leaderboard from "./components/leaderboard";
+import LeaderboardSingle from "./components/single_leaderboard";
+import LeaderboardDouble from "./components/double_leaderboard";
+import Profile from "./components/profile";
+import Levels from "./components/levelSelect";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,8 +19,11 @@ root.render(
       <Route path="/" element={<App />} />
       <Route path="avatar" element={<Avatar />} />
       <Route path="login" element={<Login />} />
-      <Route path="leaderboard" element={<Leaderboard />} />
+      <Route path="leaderboard_one" element={<LeaderboardSingle />} />
+      <Route path="leaderboard_two" element={<LeaderboardDouble />} />
       <Route path="game" element={<Game />} />
+      <Route path="profile" element={<Profile />} />
+      <Route path="levels" element={<Levels />} />
     </Routes>
   </BrowserRouter>
 );
