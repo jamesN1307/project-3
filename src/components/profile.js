@@ -8,6 +8,7 @@ const styles = {
         flexDirection: 'row',
         width: '100%',
         height: '100%',
+        backgroundColor: 'moccasin',
     },
 
     //style left 'column' of page
@@ -32,12 +33,19 @@ export default function Profile() {
     // We return all the JSX inside a parent element with a className of "container".
 
     return (
-        <div className="container" >
+        <div className="container" style={styles.pageContainer}>
             {/*Left 'column' */}
             <section style={styles.pageColumnLeft}>
                 <h1></h1>
                 {/* username and scores */}
-                <article></article>
+                <article>
+                    <h2></h2>
+                    {/*improvement - revisit, add loop over server elements to add sections for all level scores?}*/}
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                </article>
 
                 {/* section with buttons to leaderboard and 'play game' buttons*/}
                 <section>
@@ -53,7 +61,14 @@ export default function Profile() {
             <section style={styles.pageColumnRight}>
                 <h1></h1>
                 {/*Chat container*/}
-                <div></div>
+                <div>
+                    <section>
+                        <input></input>
+                        <button></button>
+                    </section>
+                    {/*sample elements*/}
+                    <p></p>
+                </div>
             </section>
         </div>
     );
