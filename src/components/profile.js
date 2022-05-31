@@ -23,6 +23,34 @@ const styles = {
     
     //Items within left block
 
+    sectionHeader: {
+        backgroundColor: 'skyblue',
+    },
+
+    scoreBlock: {
+        
+    },
+
+    usernameItem: {
+
+    },
+
+    scores: {
+
+    },
+
+    buttonBlock: {
+
+    },
+
+    leaderButtons: {
+
+    },
+
+    leaderLink: {
+
+    },
+
     //style right 'column' of page
     pageColumnRight: {
         display: 'flex',
@@ -31,6 +59,24 @@ const styles = {
         height: '100%',
     },
     //Items within right block
+
+    chatBlock: {
+
+    },
+
+    commentText: {
+
+    },
+
+    submitComment: {
+
+    },
+
+    postedComment: {
+
+    }
+
+
 };
 
 export default function Profile() {
@@ -41,38 +87,38 @@ export default function Profile() {
         <div className="container" style={styles.pageContainer}>
             {/*Left 'column' */}
             <section style={styles.pageColumnLeft}>
-                <h1>Profile</h1>
+                <h1 style={styles.sectionHeader}>Profile</h1>
                 {/* username and scores */}
                 <article>
-                    <h2>Username</h2>
+                    <h2 style={styles.usernameItem}>Username</h2>
                     {/*improvement - revisit, add loop over server elements to add sections for all level scores?}*/}
-                    <p>Level One - /score/</p>
-                    <p>Level Two - /score/</p>
-                    <p>Level Three - /score/</p>
-                    <p>Global Score - /score/</p>
+                    <p style={styles.scores}>Level One - /score/</p>
+                    <p style={styles.scores}>Level Two - /score/</p>
+                    <p style={styles.scores}>Level Three - /score/</p>
+                    <p style={styles.scores}>Global Score - /score/</p>
                 </article>
 
                 {/* section with buttons to leaderboard and 'play game' buttons*/}
-                <section>
+                <section style={styles.buttonBlock}>
                     <button>Play Game</button>
-                    <div>
-                        <button>Leaderboard - 1 Player</button>
-                        <button>Leaderboard - 2 Player</button>
+                    <div style={styles.leaderButtons}>
+                        <button style={styles.leaderLink}>Leaderboard - 1 Player</button>
+                        <button style={styles.leaderLink}>Leaderboard - 2 Player</button>
                     </div>
                 </section>
             </section>
 
             {/*Right 'column' */}
             <section style={styles.pageColumnRight}>
-                <h1>Chat</h1>
+                <h1 style={styles.sectionHeader}>Chat</h1>
                 {/*Chat container*/}
-                <div>
+                <div style={styles.chatBlock}>
                     <section>
-                        <input type='text'></input>
-                        <input type='submit' value='New Comment'></input>
+                        <input type='text'style={styles.commentText}></input>
+                        <input type='submit' value='New Comment' style={styles.submitComment}></input>
                     </section>
                     {/*sample elements*/}
-                    <p></p>
+                    <p style={styles.postedComment}>This is what posted comments will look like.</p>
                 </div>
             </section>
         </div>
