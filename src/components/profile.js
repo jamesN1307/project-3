@@ -10,7 +10,7 @@ const styles = {
         height: '100%',
     },
 
-    //style each 'column' of page
+    //style left 'column' of page
     pageColumnLeft: {
         display: 'flex',
         flexDirection: 'column',
@@ -18,6 +18,7 @@ const styles = {
         height: '100%',
     },
 
+    //style right 'column' of page
     pageColumnRight: {
         display: 'flex',
         flexDirection: 'column',
@@ -32,8 +33,28 @@ export default function Profile() {
 
     return (
         <div className="container" >
-            <section style={styles.pageColumnLeft}></section>
-            <section style={styles.pageColumnRight}></section>
+            {/*Left 'column' */}
+            <section style={styles.pageColumnLeft}>
+                <h1></h1>
+                {/* username and scores */}
+                <article></article>
+
+                {/* section with buttons to leaderboard and 'play game' buttons*/}
+                <section>
+                    <button></button>
+                    <div>
+                        <button></button>
+                        <button></button>
+                    </div>
+                </section>
+            </section>
+
+            {/*Right 'column' */}
+            <section style={styles.pageColumnRight}>
+                <h1></h1>
+                {/*Chat container*/}
+                <div></div>
+            </section>
         </div>
     );
 }
