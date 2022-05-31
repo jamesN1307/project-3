@@ -2,15 +2,28 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 const styles = {
-    image: {
+    //master div
+    pageContainer: {
+        display: 'flex',
+        flexDirection: 'row',
         width: '100%',
         height: '100%',
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        zIndex: -1,
     },
 
+    //style each 'column' of page
+    pageColumnLeft: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '65%',
+        height: '100%',
+    },
+
+    pageColumnRight: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '35%',
+        height: '100%',
+    },
 };
 
 export default function Profile() {
@@ -19,10 +32,8 @@ export default function Profile() {
 
     return (
         <div className="container" >
-            <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
-            <div>
-
-            </div>
+            <section style={styles.pageColumnLeft}></section>
+            <section style={styles.pageColumnRight}></section>
         </div>
     );
 }
