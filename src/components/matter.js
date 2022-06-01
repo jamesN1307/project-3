@@ -31,6 +31,7 @@ class Scene extends React.Component {
       var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         friction: 0.1,
+
         //track whether the box has jumped
         hasJumped: false,
         fallen: false,
@@ -67,16 +68,17 @@ class Scene extends React.Component {
         },
       };
 
+      
       //If the player character has jumped and is falling
-      let playerFallen = new function() {
+      function playerFallen() {
         if (boxA.hasJumped && (boxA.velocity.y > 0)) {
           boxA.fallen = true;
         }
       };
-
+      
       //if the player character has jumped, fallen, and hit stopped when hitting the ground
-      let resetJumps = new function() {
-        if (boxA.hasJumped && boxA.fallen && (boxA.velocity.y=0)) {
+      function resetJumps() {
+        if (boxA.hasJumped && boxA.fallen && (boxA.velocity.y===0)) {
           boxA.hasJumped = false;
           boxA.fallen = false;
         }
