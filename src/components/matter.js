@@ -20,7 +20,12 @@ class Scene extends React.Component {
       const engine = Matter.Engine.create();
       const render = Matter.Render.create({
         element: document.body,
-        engine: engine
+        engine: engine,
+        option:{
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+        
       });
       
       const boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
