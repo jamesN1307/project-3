@@ -34,17 +34,15 @@ class Scene extends React.Component {
       World.add(engine.world, [
         //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
-      Bodies.rectangle(435, 630, 810, 60, {isStatic: true}),
+      Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
       Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
+      Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
     ]);
       World.add(engine.world, [boxA]);
 
       const keyHandlers = {
         KeyD: () => {
-          Matter.Body.applyForce(boxA, {
-            x: boxA.position.x,
-            y: boxA.position.y
-          }, {x: 0.02, y: 0})
+          Matter.Body.setVelocity(boxA,  {x: 5, y:(boxA.velocity.y)})
         },
         KeyW: () => {
           Matter.Body.applyForce(boxA, {
@@ -53,10 +51,7 @@ class Scene extends React.Component {
           }, {x: 0.0, y: -0.05})
         },
         KeyA: () => {
-          Matter.Body.applyForce(boxA, {
-            x: boxA.position.x,
-            y: boxA.position.y
-          }, {x: -0.02, y: 0})
+          Matter.Body.setVelocity(boxA,  {x: -5, y:(boxA.velocity.y)})
         },
       };
       
