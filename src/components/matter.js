@@ -32,15 +32,10 @@ class Scene extends React.Component {
         friction: 0.1,
       });
       World.add(engine.world, [
-      Bodies.rectangle(600, 560, 80, 80, {
-        isStatic: true,
-      }),
-      Bodies.rectangle(435, 630, 810, 60, {
-        isStatic: true
-      }),
-      Bodies.rectangle(0, 200, 60, 800, {
-        isStatic: true
-      }),
+        //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
+      Bodies.rectangle(435, 630, 810, 60, {isStatic: true}),
+      Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
     ]);
       World.add(engine.world, [boxA]);
 
