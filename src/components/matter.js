@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-
+import aang from "../images/aang.png"
 class Scene extends React.Component {
   constructor(props) {
     super(props);
@@ -19,29 +19,50 @@ class Scene extends React.Component {
 
       const engine = Matter.Engine.create();
       const render = Matter.Render.create({
-        element: document.body,
+        element: this.refs.scene,
         engine: engine,
-        option:{
+        options: {
           width: window.innerWidth,
           height: window.innerHeight
         }
-        
       });
-      
-      const boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
-        inertia: Infinity,
-        friction: 0.1,
-      });
-      const boxB = Matter.Bodies.rectangle(600, 560, 80, 80, {
+      // mouse move input 
+      // window.onmousemove = function(e) {
+      //   boxA.getMousePosition(e.clientX, e.clientY)
+      // }
+
+      // var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
+      //   inertia: Infinity,
+      //   friction: 0.1,
+      //   render: {
+      //     sprite: {
+      //       render: aang,
+      //       xScale: 0.4,
+      //       yScale: 0.4
+      //     }
+      //   }
+      // });
+      (async () => {
+        const image = await new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.oneerror = reject;
+          image.src = aang
+        })
+      })
+      World.add(engine.world, [
+      Bodies.rectangle(600, 560, 80, 80, {
         isStatic: true,
-      });
-      const ground = Matter.Bodies.rectangle(435, 630, 810, 60, {
+      }),
+      Bodies.rectangle(435, 630, 810, 60, {
         isStatic: true
-      });
-      const leftWall = Matter.Bodies.rectangle(0, 200, 60, 800, {
+      }),
+      Bodies.rectangle(0, 200, 60, 800, {
         isStatic: true
-      });
-      
+      }),
+    ]);
+      World.add(engine.world, [boxA]);
+
       const keyHandlers = {
         KeyD: () => {
           Matter.Body.applyForce(boxA, {
@@ -77,9 +98,6 @@ class Scene extends React.Component {
         });
       });
       
-      Matter.Composite.add(
-        engine.world, [boxA, boxB, ground, leftWall]
-      );
       Matter.Render.run(render);
       const runner = Matter.Runner.create();
       Matter.Runner.run(runner, engine);
