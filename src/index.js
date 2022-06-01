@@ -10,6 +10,7 @@ import LeaderboardSingle from "./components/single_leaderboard";
 import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
+import Matter from "./components/matter"
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,6 +25,7 @@ root.render(
       <Route path="game" element={<Game />} />
       <Route path="profile" element={<Profile />} />
       <Route path="levels" element={<Levels />} />
+      <Route path="matter" element={<Matter />} />
     </Routes>
   </BrowserRouter>
 );

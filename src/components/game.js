@@ -78,8 +78,8 @@ const Game = () => {
         console.log(image)
         const player = new Player()
         const platforms = [new Platform({
-            x: 100,
-            y: 300,
+            x: 0,
+            y: 600,
             image
         }), new Platform({
             x: 600,
@@ -153,7 +153,8 @@ const Game = () => {
                 }
             })
             // a win conditional? (maybe??)
-            if (scrollOffset > 3000) {
+            if (scrollOffset > 300) {
+                location.href="/login"
                 console.log("you win")
             }
         }
