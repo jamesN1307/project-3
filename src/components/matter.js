@@ -19,24 +19,31 @@ class Scene extends React.Component {
 
       const engine = Matter.Engine.create();
       const render = Matter.Render.create({
-        element: document.body,
-        engine: engine
+        element: this.refs.scene,
+        engine: engine,
+        options: {
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
       });
       
-      const boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
+      var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         friction: 0.1,
       });
-      const boxB = Matter.Bodies.rectangle(600, 560, 80, 80, {
+      World.add(engine.world, [
+      Bodies.rectangle(600, 560, 80, 80, {
         isStatic: true,
-      });
-      const ground = Matter.Bodies.rectangle(435, 630, 810, 60, {
+      }),
+      Bodies.rectangle(435, 630, 810, 60, {
         isStatic: true
-      });
-      const leftWall = Matter.Bodies.rectangle(0, 200, 60, 800, {
+      }),
+      Bodies.rectangle(0, 200, 60, 800, {
         isStatic: true
-      });
-      
+      }),
+    ]);
+      World.add(engine.world, [boxA]);
+
       const keyHandlers = {
         KeyD: () => {
           Matter.Body.applyForce(boxA, {
@@ -72,9 +79,6 @@ class Scene extends React.Component {
         });
       });
       
-      Matter.Composite.add(
-        engine.world, [boxA, boxB, ground, leftWall]
-      );
       Matter.Render.run(render);
       const runner = Matter.Runner.create();
       Matter.Runner.run(runner, engine);
