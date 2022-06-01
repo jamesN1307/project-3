@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 const styles = {
+    //background image
     image: {
         width: '100%',
         height: '100%',
@@ -9,29 +10,40 @@ const styles = {
         left: 0,
         top: 0,
         zIndex: -1,
+        filter: 'contrast(50%)',
     },
-    h1: {
-        marginTop: "5%",
-        fontSize: "80px",
-        fontFamily: "herculanum",
-        textShadow: "3px 3px 3px skyblue"
-    },
-    navBar: {
-        display: "flex",
-        flexDirection: "column",
-        width: "10rem",
-        height: "50rem",
-        marginLeft: "15vw",
-    },
-    buttons: {
-        borderRadius: ".1rem",
-        fontFamily: "herculanum",
-        fontWeight: "bold",
-        boxShadow: "2px 2px 2px black",
-        fontSize: "1rem"
-        //add
-    }
 
+    //master div styling
+    mainContainer: {
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+    },
+
+    pageHeader: {
+        backgroundColor: 'skyblue',
+        fontSize: '45pt',
+        textAlign: 'center',
+        padding: '0 15px 0',
+        borderRadius: '8px',
+    },
+
+    buttonContainer: {
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    levelButton: {
+        backgroundColor: 'moccasin',
+        fontSize: '35pt',
+        borderRadius: '8px',
+        margin: '15px auto',
+        width: '20%',
+    }
 };
 
 export default function Levels() {
@@ -39,18 +51,13 @@ export default function Levels() {
     // We return all the JSX inside a parent element with a className of "container".
 
     return (
-        <div className="container" >
-            <div>
-                <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
-                <h1 style={styles.h1}>Appa's Landing</h1>
-                <nav style={styles.navBar}>
-                    <Link to="/login"><button style={styles.buttons}>Login</button></Link>
-                    <br></br>
-                    {/* <p>Don't have an account?</p> */}
-                    <Link to="/login"><button style={styles.buttons}>Signup</button></Link>
-                </nav>
-            </div>
-            <div>
+        <div className="container" style={styles.mainContainer}>
+            <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
+            <div style={styles.buttonContainer}>
+                <h1 style={styles.pageHeader}>Level Selection</h1>
+                <button style={styles.levelButton}>Level One</button>
+                <button style={styles.levelButton}>Level Two</button>
+                <button style={styles.levelButton}>Level Three</button>
             </div>
         </div>
     );
