@@ -154,7 +154,7 @@ const Game = () => {
             })
             // a win conditional? (maybe??)
             if (scrollOffset > 300) {
-                location.href="/login"
+                // location.href="/login"
                 console.log("you win")
             }
         }
