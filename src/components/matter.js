@@ -27,32 +27,59 @@ class Scene extends React.Component {
         }
       });
       
+      // "Player Character"
       var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         friction: 0.1,
+        //track whether the box has jumped
+        hasJumped: false,
+        fallen: false,
       });
+
+      // Essential platform/wall rectangle elements
       World.add(engine.world, [
         //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
-      Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
-      Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
-      Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
-    ]);
+        Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
+        Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
+        Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
+        Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
+        ]);
+
       World.add(engine.world, [boxA]);
 
+      //Player Controls
       const keyHandlers = {
         KeyD: () => {
           Matter.Body.setVelocity(boxA,  {x: 5, y:(boxA.velocity.y)})
         },
         KeyW: () => {
-          Matter.Body.applyForce(boxA, {
-            x: boxA.position.x,
-            y: boxA.position.y
-          }, {x: 0.0, y: -0.05})
+          //if the box has NOT jumped
+          if (!boxA.hasJumped) {
+            boxA.hasJumped = true;
+            Matter.Body.applyForce(boxA, {
+              x: boxA.position.x,
+              y: boxA.position.y
+            }, {x: 0.0, y: -0.4})
+          }
         },
         KeyA: () => {
           Matter.Body.setVelocity(boxA,  {x: -5, y:(boxA.velocity.y)})
         },
+      };
+
+      //If the player character has jumped and is falling
+      let playerFallen = new function() {
+        if (boxA.hasJumped && (boxA.velocity.y > 0)) {
+          boxA.fallen = true;
+        }
+      };
+
+      //if the player character has jumped, fallen, and hit stopped when hitting the ground
+      let resetJumps = new function() {
+        if (boxA.hasJumped && boxA.fallen && (boxA.velocity.y=0)) {
+          boxA.hasJumped = false;
+          boxA.fallen = false;
+        }
       };
       
       const keysDown = new Set();
@@ -67,6 +94,10 @@ class Scene extends React.Component {
         [...keysDown].forEach(k => {
           keyHandlers[k]?.();
         });
+
+        playerFallen();
+        resetJumps();
+
       });
       
       Matter.Render.run(render);
