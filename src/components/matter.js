@@ -29,13 +29,12 @@ class Scene extends React.Component {
       
       const player = {
         score: 0,
+        //track whether the box has jumped
+        hasJumped: false,
+        fallen: false,
         body: Matter.Bodies.rectangle(400, 200, 80, 80, {
           inertia: Infinity,
           friction: 0.1,
-
-          //track whether the box has jumped
-          hasJumped: false,
-          fallen: false,
         }),
         lastShot: Date.now(),
         cooldown: 150,
@@ -84,10 +83,13 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body,  {x: 10, y:(player.body.velocity.y)})
         },
         KeyW: () => {
-          Matter.Body.applyForce(player.body, {
-            x: player.body.position.x,
-            y: player.body.position.y
-          }, {x: 0.0, y: -0.05})
+          if (!player.hasJumped) {
+            Matter.Body.applyForce(player.body, {
+              x: player.body.position.x,
+              y: player.body.position.y
+            }, {x: 0.0, y: -0.4})
+            player.hasJumped = true;
+          }
         },
         KeyA: () => {
           Matter.Body.setVelocity(player.body,  {x: -10, y:(player.body.velocity.y)})
@@ -98,16 +100,16 @@ class Scene extends React.Component {
       
       //If the player character has jumped and is falling
       function playerFallen() {
-        if (boxA.hasJumped && (boxA.velocity.y > 0)) {
-          boxA.fallen = true;
+        if (player.hasJumped && (player.body.velocity.y > 0)) {
+          player.fallen = true;
         }
       };
       
       //if the player character has jumped, fallen, and hit stopped when hitting the ground
       function resetJumps() {
-        if (boxA.hasJumped && boxA.fallen && (0.00000001<boxA.velocity.y<0.00000001)) {
-          boxA.hasJumped = false;
-          boxA.fallen = false;
+        if (player.hasJumped && player.fallen && (0.00000001<player.body.velocity.y<0.00000001)) {
+          player.hasJumped = false;
+          player.fallen = false;
         }
       };
       
