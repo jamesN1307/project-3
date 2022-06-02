@@ -62,6 +62,9 @@ class Scene extends React.Component {
               y: boxA.position.y
             }, {x: 0.0, y: -0.4})
           }
+          console.log("hasJumped is" + boxA.hasJumped);
+          console.log("fallen is" + boxA.fallen);
+          console.log("velocity" + boxA.velocity.y);
         },
         KeyA: () => {
           Matter.Body.setVelocity(boxA,  {x: -5, y:(boxA.velocity.y)})
@@ -78,7 +81,7 @@ class Scene extends React.Component {
       
       //if the player character has jumped, fallen, and hit stopped when hitting the ground
       function resetJumps() {
-        if (boxA.hasJumped && boxA.fallen && (boxA.velocity.y===0)) {
+        if (boxA.hasJumped && boxA.fallen && (0.00000001<boxA.velocity.y<0.00000001)) {
           boxA.hasJumped = false;
           boxA.fallen = false;
         }
