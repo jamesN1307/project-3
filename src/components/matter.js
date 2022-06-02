@@ -27,48 +27,72 @@ class Scene extends React.Component {
         }
       });
       
-      // "Player Character"
-      var boxA = Matter.Bodies.rectangle(400, 200, 80, 80, {
-        inertia: Infinity,
-        friction: 0.1,
+      const player = {
+        score: 0,
+        body: Matter.Bodies.rectangle(400, 200, 80, 80, {
+          inertia: Infinity,
+          friction: 0.1,
 
-        //track whether the box has jumped
-        hasJumped: false,
-        fallen: false,
-      });
-
-      // Essential platform/wall rectangle elements
+          //track whether the box has jumped
+          hasJumped: false,
+          fallen: false,
+        }),
+        lastShot: Date.now(),
+        cooldown: 150,
+        fireForce: 0.1,
+        fire() {
+          if (Date.now() - this.lastShot < this.cooldown) {
+            return;
+          }
+          
+          // move the bullet away from the player a bit
+          const {x: bx, y: by} = this.body.position;
+          const x = bx + (Math.cos(this.body.angle) * 10);
+          const y = by + (Math.sin(this.body.angle) * 10);
+      
+          const bullet = Matter.Bodies.circle(
+            x, y, 4, {
+              frictionAir: 0.006,
+              density: 0.1,
+              render: {fillStyle: "yellow"},
+            },
+          );
+          bullets.add(bullet);
+          World.add(engine.world, bullet);
+          Matter.Body.applyForce(
+            bullet, this.body.position, {
+              x: Math.cos(this.body.angle) * this.fireForce, 
+              y: Math.sin(this.body.angle) * this.fireForce,
+            },
+          );
+          this.lastShot = Date.now();
+        },
+      }
+      const bullets = new Set();
       World.add(engine.world, [
         //(location on x axis, location on y axis, width of box, height of box)
-        Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
-        Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
-        Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
-        Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
-        ]);
-
-      World.add(engine.world, [boxA]);
+      Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
+      Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
+      Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
+      Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
+    ]);
+      World.add(engine.world, [player.body]);
 
       //Player Controls
       const keyHandlers = {
         KeyD: () => {
-          Matter.Body.setVelocity(boxA,  {x: 5, y:(boxA.velocity.y)})
+          Matter.Body.setVelocity(player.body,  {x: 10, y:(player.body.velocity.y)})
         },
         KeyW: () => {
-          //if the box has NOT jumped
-          if (!boxA.hasJumped) {
-            boxA.hasJumped = true;
-            Matter.Body.applyForce(boxA, {
-              x: boxA.position.x,
-              y: boxA.position.y
-            }, {x: 0.0, y: -0.4})
-          }
-          console.log("hasJumped is" + boxA.hasJumped);
-          console.log("fallen is" + boxA.fallen);
-          console.log("velocity" + boxA.velocity.y);
+          Matter.Body.applyForce(player.body, {
+            x: player.body.position.x,
+            y: player.body.position.y
+          }, {x: 0.0, y: -0.05})
         },
         KeyA: () => {
-          Matter.Body.setVelocity(boxA,  {x: -5, y:(boxA.velocity.y)})
+          Matter.Body.setVelocity(player.body,  {x: -10, y:(player.body.velocity.y)})
         },
+        KeyS: () => player.fire()
       };
 
       
@@ -111,7 +135,7 @@ class Scene extends React.Component {
   }
 
   render() {
-    return <div ref="scene" />;
+    return <div ref="scene">score: 0</div>
   }
 }
 export default Scene;
