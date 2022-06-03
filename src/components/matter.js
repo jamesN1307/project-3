@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import aang from "../images/aang.png"
+import grass from "../images/grass.png"
+
 class Scene extends React.Component {
   constructor(props) {
     super(props);
@@ -24,8 +26,9 @@ class Scene extends React.Component {
         engine: engine,
         options: {
           width: window.innerWidth,
-          height: window.innerHeight
-        }
+          height: window.innerHeight,
+          wireframes: false
+        },
       });
       
       const mainEngine = engine.world;
@@ -40,12 +43,17 @@ class Scene extends React.Component {
         body: Bodies.rectangle(400, 200, 80, 80, {
           inertia: Infinity,
           friction: 0.1,
-          label: 'player'
+          render: {
+            sprite: {
+              texture:  aang
+            }
+          },
+          label: 'player',
         }),
 
         lastShot: Date.now(),
-        cooldown: 150,
-        fireForce: 0.1,
+        cooldown: 300,
+        fireForce: 2,
         fire() {
           if (Date.now() - this.lastShot < this.cooldown) {
             return;
@@ -60,7 +68,8 @@ class Scene extends React.Component {
             x, y, 4, {
               frictionAir: 0.006,
               density: 0.1,
-              render: {fillStyle: "yellow"},
+              render: {fillStyle: "green"},
+              label: "bullet"
             },
           );
           bullets.add(bullet);
@@ -79,41 +88,22 @@ class Scene extends React.Component {
       const pickupSides = 30;
       const arrayPickups = [
         {
-          body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true, label: 'coin'}),
+          body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true, render: {fillStyle: "yellow"}, label: 'coin'}),
+        }, 
+        {
+          body: Matter.Bodies.rectangle(500,550,80,50, {isStatic: true, render: {fillStyle: "red"}, label: 'enemy'}),
         }, 
       ];
-      
-      /*
-      //DETECTOR ARRAY BETWEEN PLAYER OBJECT AND COINS
-      const pickupsBodies = [player.body];
-      arrayPickups.forEach(element => {
-        pickupsBodies.push(element.body);
-      });
-      const pickupDetector = Matter.Detector.create();
-      Matter.Detector.setBodies(pickupDetector, pickupsBodies);
-
-      function pickupsCollisions() {
-        //collided IS AN ARRAY
-        let collidedArray = Matter.Detector.collisions(pickupDetector);
-        //HAVE TO CHECK BODIES - MAY NOT BE RETURNED IN SPECIFIC ORDER
-        if (collidedArray) {
-            collidedArray.forEach(element => {
-              if (element.bodyA.isPlayer) {
-                Matter.World.remove(element.bodyB);
-              } else {
-                Matter.World.remove(element.bodyA);
-              }
-            });
-        }
-      }*/
 
       //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
       function onCollision(pair) {
         var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
-        var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'coin';
+        var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';        var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
+        var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+
 
         //returns true condition
-        return condition1 || condition2;
+        return condition1 || condition2 || condition3 || condition4;
       };
 
       function deleteCoin(pair) {
@@ -123,6 +113,14 @@ class Scene extends React.Component {
         }; 
 
         if (pair.bodyB.label === 'coin') {
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
+
+        if (pair.bodyA.label === 'enemy') {
+          Matter.World.remove(mainEngine, pair.bodyA)
+        }; 
+
+        if (pair.bodyB.label === 'enemey') {
           Matter.World.remove(mainEngine, pair.bodyB)
         };
       };
@@ -141,14 +139,21 @@ class Scene extends React.Component {
 
       };
 
-
       //BULLET OBJECTS
       const bullets = new Set();
 
       //ADD PLATFORMS TO WORLD
       World.add(mainEngine, [
         //(location on x axis, location on y axis, width of box, height of box)
-        Bodies.rectangle(300, 260, 80, 80, {isStatic: true, label: ''}),
+        Bodies.rectangle(300, 260, 500, 80, {
+          isStatic: true,
+          render: {
+            sprite: {
+              texture:  grass
+            }
+          },
+          label: 'player',
+        }),
         Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
         Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
         Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
