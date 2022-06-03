@@ -4,6 +4,7 @@ import Matter from "matter-js";
 import aang from "../images/aang.png"
 import grass from "../images/grass.png"
 import soldier from "../images/soldier.png"
+import wind from "../images/hurricane_PNG56.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -86,9 +87,15 @@ class Scene extends React.Component {
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
           frictionAir: 0.006,
+          label: "bullet",
           density: 0.1,
-          render: { fillStyle: "blue" },
-          label: "bullet"
+          render:{
+            sprite:{
+              texture: wind,
+              xScale: 0.3,
+              yScale: 0.3
+            }
+          }
         },
         );
         bullets.add(bullet);
