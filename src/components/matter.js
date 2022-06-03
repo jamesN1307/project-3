@@ -2,12 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import aang from "../images/aang.png"
+
+let scoreLevel = 0;
+
 class Scene extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-  } s
-
+  } 
 
   componentDidMount() {
     var Engine = Matter.Engine,
@@ -33,7 +35,6 @@ class Scene extends React.Component {
       // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
       //PLAYER CHARACTER
       const player = {
-        score: 0,
         //track whether the box has jumped
         hasJumped: false,
         fallen: false,
@@ -80,6 +81,7 @@ class Scene extends React.Component {
       const arrayPickups = [
         {
           body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true, label: 'coin'}),
+          coinUsed: false,
         }, 
       ];
       
@@ -110,21 +112,30 @@ class Scene extends React.Component {
       //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
       function onCollision(pair) {
         var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
-        var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'coin';
+        var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
 
         //returns true condition
         return condition1 || condition2;
       };
 
       function deleteCoin(pair) {
-        console.log(pair);
+        //console.log(pair);
         if (pair.bodyA.label === 'coin') {
+          if (!pair.bodyA.isUsed) {
+            scoreLevel += 10;
+            pair.bodyA.isUsed = true;
+          }
           Matter.World.remove(mainEngine, pair.bodyA)
         }; 
 
         if (pair.bodyB.label === 'coin') {
+          if (!pair.bodyB.isUsed) {
+            scoreLevel += 10;
+            pair.bodyB.isUsed = true;
+          }
           Matter.World.remove(mainEngine, pair.bodyB)
         };
+        //scoreLevel += 10;
       };
 
       function detectCollision() {
@@ -136,9 +147,10 @@ class Scene extends React.Component {
           .forEach((pair) => {
             deleteCoin(pair);
             //Add to variable/ score
+            //scoreLevel += 10;
+            console.log('this is your score ' + scoreLevel);
           })
         });
-
       };
 
 
@@ -218,17 +230,20 @@ class Scene extends React.Component {
 
         //DETECT COLLISION BETWEEN PLAYER AND COINS
         detectCollision();
-
-
       });
-      
+
+     
       Matter.Render.run(render);
       const runner = Matter.Runner.create();
       Matter.Runner.run(runner, engine);
   }
 
   render() {
-    return <div ref="scene">score: 0</div>
+    return <div ref="scene">
+      <p>
+        Score: {scoreLevel}
+      </p>
+    </div>
   }
 }
 export default Scene;
