@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import aang from "../images/aang.png"
+import grass from "../images/grass.png"
 
 class Scene extends React.Component {
   constructor(props) {
