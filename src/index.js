@@ -2,16 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import Game from './components/game'
-import Avatar from "./components/avatar"
-import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Game from './components/game';
+import Avatar from "./components/avatar";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Login from "./routes/login";
 import LeaderboardSingle from "./components/single_leaderboard";
 import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
-import Matter from "./components/matter"
-import Phaser from "./components/pGame"
+import Matter from "./components/matter";
+import Phaser from "./components/pGame";
+import './style.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
