@@ -27,6 +27,8 @@ class Scene extends React.Component {
         }
       });
       
+      const mainEngine = engine.world;
+
       // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
       //PLAYER CHARACTER
       const player = {
@@ -34,9 +36,10 @@ class Scene extends React.Component {
         //track whether the box has jumped
         hasJumped: false,
         fallen: false,
-        body: Matter.Bodies.rectangle(400, 200, 80, 80, {
+        body: Bodies.rectangle(400, 200, 80, 80, {
           inertia: Infinity,
           friction: 0.1,
+          label: 'player'
         }),
 
         lastShot: Date.now(),
@@ -75,10 +78,11 @@ class Scene extends React.Component {
       const pickupSides = 30;
       const arrayPickups = [
         {
-          body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true})
+          body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true, label: 'coin'}),
         }, 
       ];
       
+      /*
       //DETECTOR ARRAY BETWEEN PLAYER OBJECT AND COINS
       const pickupsBodies = [player.body];
       arrayPickups.forEach(element => {
@@ -92,29 +96,61 @@ class Scene extends React.Component {
         let collidedArray = Matter.Detector.collisions(pickupDetector);
         //HAVE TO CHECK BODIES - MAY NOT BE RETURNED IN SPECIFIC ORDER
         if (collidedArray) {
-            collidedArray.forEach(element =>{
-            if (element.bodyA === player.body) {
-              World.remove(element.bodyB);
-            } else {
-              World.remove(element.bodyA);
-            }
-          });
+            collidedArray.forEach(element => {
+              if (element.bodyA.isPlayer) {
+                Matter.World.remove(element.bodyB);
+              } else {
+                Matter.World.remove(element.bodyA);
+              }
+            });
         }
-      }
+      }*/
+
+      //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
+      function onCollision(pair) {
+        var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
+        var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'coin';
+
+        //returns true condition
+        return condition1 || condition2;
+      };
+
+      function deleteCoin(pair) {
+        console.log(pair);
+        if (pair.bodyA.label === 'coin') {
+          Matter.World.remove(mainEngine, pair.bodyA)
+        }; 
+
+        if (pair.bodyB.label === 'coin') {
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
+      };
+
+      function detectCollision() {
+        Matter.Events.on(engine, 'collisionStart', (event) => {
+          //console.log(event.pairs);
+          event.pairs.filter((pair) => {
+            return onCollision(pair);
+          })
+          .forEach((pair) => {
+            deleteCoin(pair);
+            //Add to variable/ score
+          })
+        });
+
+      };
 
 
       //BULLET OBJECTS
       const bullets = new Set();
 
       //ADD PLATFORMS TO WORLD
-      const mainEngine = engine.world;
-
       World.add(mainEngine, [
         //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
-      Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
-      Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
-      Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
+        Bodies.rectangle(300, 260, 80, 80, {isStatic: true, label: ''}),
+        Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
+        Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
+        Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
       ]);
 
       //Add coins/score pickups to the world
@@ -180,7 +216,7 @@ class Scene extends React.Component {
         resetJumps();
 
         //DETECT COLLISION BETWEEN PLAYER AND COINS
-        pickupsCollisions();
+        detectCollision();
 
 
       });
