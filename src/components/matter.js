@@ -1,17 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-
+import aang from "../images/aang.png"
 class Scene extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-  }
+  } s
+
 
   componentDidMount() {
     var Engine = Matter.Engine,
       Render = Matter.Render,
-      World = Matter.World,
+      World = Matter.World,  
       Bodies = Matter.Bodies,
       Mouse = Matter.Mouse,
       Runner = Matter.Runner,
@@ -120,7 +121,6 @@ class Scene extends React.Component {
       document.addEventListener("keyup", event => {
         keysDown.delete(event.code);
       });
-      
       Matter.Events.on(engine, "beforeUpdate", event => {
         [...keysDown].forEach(k => {
           keyHandlers[k]?.();
