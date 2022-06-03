@@ -88,14 +88,17 @@ class Scene extends React.Component {
       Matter.Detector.setBodies(pickupDetector, pickupsBodies);
 
       function pickupsCollisions() {
-        let collided = pickupDetector();
+        //collided IS AN ARRAY
+        let collidedArray = Matter.Detector.collisions(pickupDetector);
         //HAVE TO CHECK BODIES - MAY NOT BE RETURNED IN SPECIFIC ORDER
-        if (collided) {
-          if (collided.bodyA === player.body) {
-            Matter.World.remove(collided.bodyB);
-          } else {
-            Matter.World.remove(collided.bodyA);
-          }
+        if (collidedArray) {
+            collidedArray.forEach(element =>{
+            if (element.bodyA === player.body) {
+              World.remove(element.bodyB);
+            } else {
+              World.remove(element.bodyA);
+            }
+          });
         }
       }
 
