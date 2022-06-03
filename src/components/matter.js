@@ -27,6 +27,8 @@ class Scene extends React.Component {
         }
       });
       
+      // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
+      //PLAYER CHARACTER
       const player = {
         score: 0,
         //track whether the box has jumped
@@ -36,6 +38,7 @@ class Scene extends React.Component {
           inertia: Infinity,
           friction: 0.1,
         }),
+
         lastShot: Date.now(),
         cooldown: 150,
         fireForce: 0.1,
@@ -66,16 +69,59 @@ class Scene extends React.Component {
           );
           this.lastShot = Date.now();
         },
+      } //END PLAYER OBJECT
+
+      //COIN/SCORING OBJECTS
+      const pickupSides = 30;
+      const arrayPickups = [
+        {
+          body: Matter.Bodies.rectangle(600,350,pickupSides,pickupSides, {isStatic: true})
+        }, 
+      ];
+      
+      //DETECTOR ARRAY BETWEEN PLAYER OBJECT AND COINS
+      const pickupsBodies = [player.body];
+      arrayPickups.forEach(element => {
+        pickupsBodies.push(element.body);
+      });
+      const pickupDetector = Matter.Detector.create();
+      Matter.Detector.setBodies(pickupDetector, pickupsBodies);
+
+      function pickupsCollisions() {
+        let collided = pickupDetector();
+        //HAVE TO CHECK BODIES - MAY NOT BE RETURNED IN SPECIFIC ORDER
+        if (collided) {
+          if (collided.bodyA === player.body) {
+            Matter.World.remove(collided.bodyB);
+          } else {
+            Matter.World.remove(collided.bodyA);
+          }
+        }
       }
+
+
+      //BULLET OBJECTS
       const bullets = new Set();
-      World.add(engine.world, [
+
+      //ADD PLATFORMS TO WORLD
+      const mainEngine = engine.world;
+
+      World.add(mainEngine, [
         //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(300, 260, 80, 80, {isStatic: true,}),
       Bodies.rectangle(435, 630, 1600, 60, {isStatic: true}),
       Bodies.rectangle(0, 200, 60, 800, {isStatic: true}),
       Bodies.rectangle(2000, 400, 60, 1000, {isStatic: true}),
-    ]);
-      World.add(engine.world, [player.body]);
+      ]);
+
+      //Add coins/score pickups to the world
+      arrayPickups.forEach(element => {
+        World.add(mainEngine, [element.body])
+      });
+      
+        
+      //Add Player to the World
+      World.add(mainEngine, [player.body]);
 
       //Player Controls
       const keyHandlers = {
@@ -121,6 +167,7 @@ class Scene extends React.Component {
         keysDown.delete(event.code);
       });
       
+      //Engine which updates the environment frame-to-frame
       Matter.Events.on(engine, "beforeUpdate", event => {
         [...keysDown].forEach(k => {
           keyHandlers[k]?.();
@@ -128,6 +175,10 @@ class Scene extends React.Component {
 
         playerFallen();
         resetJumps();
+
+        //DETECT COLLISION BETWEEN PLAYER AND COINS
+        pickupsCollisions();
+
 
       });
       
