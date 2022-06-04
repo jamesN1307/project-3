@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import aang from "../images/aang.png"
 import grass from "../images/grass.png"
+import soldier from "../images/soldier.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -13,6 +14,9 @@ class Scene extends React.Component {
   }
 
   componentDidMount() {
+    Matter.use(
+      'matter-attractors'
+    )
     var Engine = Matter.Engine,
       Render = Matter.Render,
       World = Matter.World,
@@ -27,8 +31,10 @@ class Scene extends React.Component {
       engine: engine,
       options: {
         width: window.innerWidth,
-        height: window.innerHeight
-      }
+        height: window.innerHeight,
+        wireframes: false,
+        background: "white"
+        },
     });
 
     const mainEngine = engine.world;
@@ -42,12 +48,29 @@ class Scene extends React.Component {
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         friction: 0.1,
-        label: 'player'
+        render: {
+          sprite: {
+            texture: aang,
+            xScale: 0.3,
+            yScale: 0.3
+          }
+        },
+        plugin: {
+          attractors: [
+            function(bodyA, bodyB) {
+              return {
+                x: (bodyA.position.x - bodyB.position.x) * 1e-6,
+                y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+              };
+            }
+          ]
+        },
+        label: 'player',
       }),
 
       lastShot: Date.now(),
-      cooldown: 150,
-      fireForce: 0.1,
+      cooldown: 300,
+      fireForce: 2,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -62,7 +85,8 @@ class Scene extends React.Component {
           x, y, 4, {
           frictionAir: 0.006,
           density: 0.1,
-          render: { fillStyle: "yellow" },
+          render: { fillStyle: "blue" },
+          label: "bullet",
         },
         );
         bullets.add(bullet);
@@ -81,34 +105,52 @@ class Scene extends React.Component {
     const pickupSides = 30;
     const arrayPickups = [
       {
-        body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, { isStatic: true, label: 'coin' }),
-        coinUsed: false,
+        body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
+          isStatic: true, 
+          render: { fillStyle: "yellow" }, 
+          label: "coin",
+          coinUsed: false,
+        })
       },
     ];
 
-    /*
-    //DETECTOR ARRAY BETWEEN PLAYER OBJECT AND COINS
-    const pickupsBodies = [player.body];
-    arrayPickups.forEach(element => {
-      pickupsBodies.push(element.body);
-    });
-    const pickupDetector = Matter.Detector.create();
-    Matter.Detector.setBodies(pickupDetector, pickupsBodies);
-
-    function pickupsCollisions() {
-      //collided IS AN ARRAY
-      let collidedArray = Matter.Detector.collisions(pickupDetector);
-      //HAVE TO CHECK BODIES - MAY NOT BE RETURNED IN SPECIFIC ORDER
-      if (collidedArray) {
-          collidedArray.forEach(element => {
-            if (element.bodyA.isPlayer) {
-              Matter.World.remove(element.bodyB);
-            } else {
-              Matter.World.remove(element.bodyA);
-            }
-          });
-      }
-    }*/
+    const arrayEnemies = [
+      {
+        body: Matter.Bodies.rectangle(500, 550, 80, 50, {
+          isStatic: true, 
+          id: "enemy",
+          plugin: {
+            attractors: [
+              function (bodyA, bodyB) {
+                return {
+                  x: (bodyA.position.x - bodyB.position.x) * 1e-6,
+                  y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+                };
+              }
+            ]
+          }, 
+          render: { sprite: { texture: soldier } }, 
+          label: 'enemy'
+        }),
+      },
+      {
+        body: Matter.Bodies.rectangle(300, 350, 80, 50, {
+          isStatic: true, 
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+    ];
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
     const scoreUpdate = () => {
@@ -120,13 +162,15 @@ class Scene extends React.Component {
     function onCollision(pair) {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
+      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
+      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
 
       //returns true condition
-      return condition1 || condition2;
+      return condition1 || condition2 || condition3 || condition4;
     };
 
     function deleteCoin(pair) {
-      if (pair.bodyA.label === 'coin') {
+      if ((pair.bodyA.label === 'coin') || (pair.bodyA.label === 'enemy')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
           pair.bodyA.isUsed = true;
@@ -134,7 +178,7 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'coin') {
+      if ((pair.bodyB.label === 'coin') || (pair.bodyB.label === 'enemy')) {
         if (!pair.bodyB.isUsed) {
           scoreUpdate();
           pair.bodyB.isUsed = true;
@@ -162,7 +206,15 @@ class Scene extends React.Component {
     //ADD PLATFORMS TO WORLD
     World.add(mainEngine, [
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(300, 260, 80, 80, { isStatic: true, label: '' }),
+      Bodies.rectangle(300, 260, 500, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass
+          }
+        },
+        label: 'platform',
+      }),
       Bodies.rectangle(435, 630, 1600, 60, { isStatic: true }),
       Bodies.rectangle(0, 200, 60, 800, { isStatic: true }),
       Bodies.rectangle(2000, 400, 60, 1000, { isStatic: true }),
@@ -232,8 +284,20 @@ class Scene extends React.Component {
 
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
+
+
     });
 
+    Matter.Events.on(engine, 'afterUpdate', function () {
+      if (!player.position.x) {
+        return;
+      }
+
+      // smoothly move the attractor body towards the mouse
+      Matter.Body.translate(arrayPickups, {
+        x: (arrayPickups.position.x - player.position.x) * 0.25,
+      });
+    });
 
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
