@@ -121,6 +121,7 @@ class Scene extends React.Component {
       },
     ];
 
+    //Array of enemy character objects
     const arrayEnemies = [
       {
         body: Matter.Bodies.rectangle(500, 550, 80, 50, {
@@ -229,6 +230,11 @@ class Scene extends React.Component {
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
+      World.add(mainEngine, [element.body])
+    });
+  
+    //Add array of enemies to the world
+    arrayEnemies.forEach(element => {
       World.add(mainEngine, [element.body])
     });
 
