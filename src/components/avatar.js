@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './page_elements/navbar';
 import aang from '../images/aang.png'
 import appa from '../images/Appa.png'
 import katara from '../images/Katara.png'
@@ -78,7 +79,7 @@ const styles = {
     containerStyling: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh'
+        height: '100%'
     },
 
     headerStyling: {
@@ -113,6 +114,7 @@ export default function ChooseAvatar() {
   return (
     <div className="container" style={styles.containerStyling}>
         <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
+        <Navbar />
 
         {/* Contains header and both rows */}
         <div style={styles.characterSelectBox}>
