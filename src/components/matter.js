@@ -245,7 +245,10 @@ class Scene extends React.Component {
     //Player Controls
     const keyHandlers = {
       KeyD: () => {
-        Matter.Body.setVelocity(player.body, { x: 10, y: (player.body.velocity.y) })
+        //Can't adjust left/right velocity when in the air
+        if (!player.hasJumped) {
+          Matter.Body.setVelocity(player.body, { x: 10, y: (player.body.velocity.y) })
+        }
       },
       KeyW: () => {
         if (!player.hasJumped) {
@@ -257,7 +260,10 @@ class Scene extends React.Component {
         }
       },
       KeyA: () => {
-        Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
+        //Can't adjust left/right velocity when in the air
+        if (!player.hasJumped) {
+          Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
+        }
       },
       KeyS: () => player.fire()
     };
