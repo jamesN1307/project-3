@@ -73,7 +73,7 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 2,
+      fireForce: 0.5,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -178,9 +178,12 @@ class Scene extends React.Component {
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+      var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
+      var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6;
     };
 
     function deleteCoin(pair) {
@@ -201,6 +204,17 @@ class Scene extends React.Component {
       };
     };
 
+    //deletes bullet on impact with border
+    function deleteBullet(pair) {
+      if ((pair.bodyA.label === 'bullet')) {
+        Matter.World.remove(mainEngine, pair.bodyA)
+      };
+
+      if ((pair.bodyB.label === 'bullet')) {
+        Matter.World.remove(mainEngine, pair.bodyB)
+      };
+    };
+
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
         event.pairs.filter((pair) => {
@@ -208,6 +222,7 @@ class Scene extends React.Component {
         })
           .forEach((pair) => {
             deleteCoin(pair);
+            deleteBullet(pair)
             //Add to variable/ score
           })
       });
@@ -239,13 +254,15 @@ class Scene extends React.Component {
         label: 'platform',
       }),
 
-      Bodies.rectangle(435, window.innerHeight, 1600, 100, { isStatic: true }),
+      //(location on x axis, location on y axis, width of box, height of box)      
       //bottom border
-      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true }),
+      Bodies.rectangle(0, window.innerHeight, 4000, 100, { isStatic: true, label: "border" }),
       //left border
-      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true }),
+      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      //left border
+      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true, label: "border"  }),
       //top border
-      Bodies.rectangle(0, 0, 2500, 10, { isStatic: true }),
+      Bodies.rectangle(0, 0, 4000, 10, { isStatic: true , label: "border" }),
     ]);
 
     //Add coins/score pickups to the world
