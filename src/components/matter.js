@@ -9,9 +9,10 @@ import wind from "../images/hurricane_PNG56.png"
 class Scene extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-  } s
-
+    this.state = {
+      scoreLevel: 0,
+    };
+  }
 
   componentDidMount() {
     Matter.use(
@@ -34,17 +35,14 @@ class Scene extends React.Component {
         height: window.innerHeight,
         wireframes: false,
         background: "white"
-      },
+        },
     });
 
     const mainEngine = engine.world;
 
     // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
-
-
     //PLAYER CHARACTER
     const player = {
-      score: 0,
       //track whether the box has jumped
       hasJumped: false,
       fallen: false,
@@ -110,15 +108,20 @@ class Scene extends React.Component {
       },
     } //END PLAYER OBJECT
 
-    // const bodyB = 
     //COIN/SCORING OBJECTS
     const pickupSides = 30;
     const arrayPickups = [
       {
         body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
-          isStatic: true, render: { fillStyle: "yellow" }, label: "coin"
+          isStatic: true, 
+          render: { fillStyle: "yellow" }, 
+          label: "coin",
+          coinUsed: false,
         })
       },
+    ];
+
+    const arrayEnemies = [
       {
         body: Matter.Bodies.rectangle(500, 550, 80, 50, {
           isStatic: true, 
@@ -157,39 +160,42 @@ class Scene extends React.Component {
     ];
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
+    const scoreUpdate = () => {
+      this.setState({
+        scoreLevel: this.state.scoreLevel += 10,
+      })
+    };
+
     function onCollision(pair) {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
-      var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player'; 
+      var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
-
 
       //returns true condition
       return condition1 || condition2 || condition3 || condition4;
     };
 
     function deleteCoin(pair) {
-      console.log(pair);
-      if (pair.bodyA.label === 'coin') {
+      if ((pair.bodyA.label === 'coin') || (pair.bodyA.label === 'enemy')) {
+        if (!pair.bodyA.isUsed) {
+          scoreUpdate();
+          pair.bodyA.isUsed = true;
+        }
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'coin') {
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
-
-      if (pair.bodyA.label === 'enemy') {
-        Matter.World.remove(mainEngine, pair.bodyA)
-      };
-
-      if (pair.bodyB.label === 'enemy') {
+      if ((pair.bodyB.label === 'coin') || (pair.bodyB.label === 'enemy')) {
+        if (!pair.bodyB.isUsed) {
+          scoreUpdate();
+          pair.bodyB.isUsed = true;
+        }
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
 
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
-        //console.log(event.pairs);
         event.pairs.filter((pair) => {
           return onCollision(pair);
         })
@@ -198,8 +204,8 @@ class Scene extends React.Component {
             //Add to variable/ score
           })
       });
-
     };
+
 
     //BULLET OBJECTS
     const bullets = new Set();
@@ -305,8 +311,15 @@ class Scene extends React.Component {
     Matter.Runner.run(runner, engine);
   }
 
+
   render() {
-    return <div ref="scene">score: 0</div>
+    return (
+      <div>
+        {/*Check back for when variable should be passed to other pages*/}
+        <div>{`score ${this.state.scoreLevel}`}</div>
+        <div ref="scene" />
+      </div>
+    )
   }
 }
 export default Scene;
