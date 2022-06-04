@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import Navbar from './page_elements/navbar';
 // import background from "../images/leaderboard_background.png";
 
 // LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
@@ -89,11 +90,12 @@ export default function LeaderboardDouble() {
     
     return (
         <div className="container" >
+            <Navbar />
             <div style={styles.masterContainer} >
                 {/* <img style={styles.background} src={background} alt="Aang and epic background" /> */}
                 <section style={styles.mainBlock}>
 
-                    <h1 style={styles.header}>Leaderboard</h1>
+                    <h1 style={styles.header}>Leaderboard - Multiplayer</h1>
 
                     <section style={styles.scoreRow}>
                         {/*NOTE FOR FUTURE DEVELOPMENT - TO AVOID 

@@ -17,6 +17,7 @@ const styles = {
     }
 };
 
+
 export default function Navbar() {
     return (
         <div className="container" style={styles.mainContainer}>
@@ -27,11 +28,11 @@ export default function Navbar() {
             - homepage, then login/signup
             --Link needed - each leaderboard, profile, level select, avatar select?
             -!- level select only once an avatar and game-mode have been chosen?*/}
-            <a href='#' style={styles.anchorClass}>Profile</a>
-            <a href='#' style={styles.anchorClass}>Character Selection</a>
-            <a href='#' style={styles.anchorClass}>Level Selection</a>
-            <a href='#' style={styles.anchorClass}>Leaderboard - Singleplayer</a>
-            <a href='#' style={styles.anchorClass}>Leaderboard - Multiplayer</a>
+            <Link to='/profile'><a href='#' style={styles.anchorClass}>Profile</a></Link>
+            <Link to='/avatar'><a href='#' style={styles.anchorClass}>Character Selection</a></Link>
+            <Link to='/levels'><a href='#' style={styles.anchorClass}>Level Selection</a></Link>
+            <Link to='/leaderboard_one'><a href='#' style={styles.anchorClass}>Leaderboard - Singleplayer</a></Link>
+            <Link to='/leaderboard_two'><a href='#' style={styles.anchorClass}>Leaderboard - Multiplayer</a></Link>
         </div>
     );
 }
