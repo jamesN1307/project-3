@@ -15,17 +15,25 @@ class Scene extends React.Component {
   }
 
   componentDidMount() {
-    Matter.use(
-      'matter-attractors'
-    )
+    // Matter.use(
+    //   'matter-attractors'
+    // )
     var Engine = Matter.Engine,
       Render = Matter.Render,
+      Bounds = Matter.Bounds,
       World = Matter.World,
       Bodies = Matter.Bodies,
+      Vector = Matter.Vector,
       Mouse = Matter.Mouse,
       Runner = Matter.Runner,
       MouseConstraint = Matter.MouseConstraint;
-
+    
+      this.world_bound_X  = 3000;
+      this.world_bound_Y  = 3000;
+      this.zoom           = 1;
+      this.bounds_scale_target = {};
+  
+      
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
       element: this.refs.scene,
@@ -34,8 +42,12 @@ class Scene extends React.Component {
         width: window.innerWidth,
         height: window.innerHeight,
         wireframes: false,
-        background: "white"
+        background: "white",
+        showVelocity: true,
+        showCollisions: true,
+        hasBounds: true
         },
+      
     });
 
     const mainEngine = engine.world;
@@ -245,7 +257,10 @@ class Scene extends React.Component {
     //Player Controls
     const keyHandlers = {
       KeyD: () => {
-        Matter.Body.setVelocity(player.body, { x: 10, y: (player.body.velocity.y) })
+        //Can't adjust left/right velocity when in the air
+        if (!player.hasJumped) {
+          Matter.Body.setVelocity(player.body, { x: 10, y: (player.body.velocity.y) })
+        }
       },
       KeyW: () => {
         if (!player.hasJumped) {
@@ -257,7 +272,10 @@ class Scene extends React.Component {
         }
       },
       KeyA: () => {
-        Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
+        //Can't adjust left/right velocity when in the air
+        if (!player.hasJumped) {
+          Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
+        }
       },
       KeyS: () => player.fire()
     };
