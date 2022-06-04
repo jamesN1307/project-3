@@ -24,7 +24,8 @@ class Scene extends React.Component {
       Bodies = Matter.Bodies,
       Mouse = Matter.Mouse,
       Runner = Matter.Runner,
-      MouseConstraint = Matter.MouseConstraint;
+      MouseConstraint = Matter.MouseConstraint,
+      Bounds = Matter.Bounds;
 
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
@@ -34,8 +35,9 @@ class Scene extends React.Component {
         width: window.innerWidth,
         height: window.innerHeight,
         wireframes: false,
-        background: "white"
-        },
+        background: "white",
+        hasBounds: true
+      },
     });
 
     const mainEngine = engine.world;
@@ -58,7 +60,7 @@ class Scene extends React.Component {
         },
         plugin: {
           attractors: [
-            function(bodyA, bodyB) {
+            function (bodyA, bodyB) {
               return {
                 x: (bodyA.position.x - bodyB.position.x) * 1e-6,
                 y: (bodyA.position.y - bodyB.position.y) * 1e-6,
@@ -87,8 +89,8 @@ class Scene extends React.Component {
           frictionAir: 0.006,
           label: "bullet",
           density: 0.1,
-          render:{
-            sprite:{
+          render: {
+            sprite: {
               texture: wind,
               xScale: 0.3,
               yScale: 0.3
@@ -108,13 +110,17 @@ class Scene extends React.Component {
       },
     } //END PLAYER OBJECT
 
+    Matter.Render.lookAt = function(render, player, padding, center) {
+	  center = typeof center !== 'undefined' ? center : true;
+    }
+
     //COIN/SCORING OBJECTS
     const pickupSides = 30;
     const arrayPickups = [
       {
         body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
-          isStatic: true, 
-          render: { fillStyle: "yellow" }, 
+          isStatic: true,
+          render: { fillStyle: "yellow" },
           label: "coin",
           coinUsed: false,
         })
@@ -124,8 +130,7 @@ class Scene extends React.Component {
     //Array of enemy character objects
     const arrayEnemies = [
       {
-        body: Matter.Bodies.rectangle(500, 550, 80, 50, {
-          isStatic: true, 
+        body: Matter.Bodies.rectangle(1000, 460, 80, 50, {
           id: "enemy",
           plugin: {
             attractors: [
@@ -136,14 +141,15 @@ class Scene extends React.Component {
                 };
               }
             ]
-          }, 
-          render: { sprite: { texture: soldier } }, 
+          },
+          render: { sprite: { texture: soldier } },
           label: 'enemy'
         }),
       },
       {
-        body: Matter.Bodies.rectangle(300, 350, 80, 50, {
-          isStatic: true, 
+        //(location on x axis, location on y axis, width of box, height of box)
+
+        body: Matter.Bodies.rectangle(300, 160, 80, 50, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -223,16 +229,30 @@ class Scene extends React.Component {
         },
         label: 'platform',
       }),
-      Bodies.rectangle(435, 630, 1600, 60, { isStatic: true }),
-      Bodies.rectangle(0, 200, 60, 800, { isStatic: true }),
-      Bodies.rectangle(2000, 400, 60, 1000, { isStatic: true }),
+      Bodies.rectangle(1000, 560, 500, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass
+          }
+        },
+        label: 'platform',
+      }),
+
+      Bodies.rectangle(435, window.innerHeight, 1600, 100, { isStatic: true }),
+      //bottom border
+      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true }),
+      //left border
+      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true }),
+      //top border
+      Bodies.rectangle(0, 0, 2500, 10, { isStatic: true }),
     ]);
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
       World.add(mainEngine, [element.body])
     });
-  
+
     //Add array of enemies to the world
     arrayEnemies.forEach(element => {
       World.add(mainEngine, [element.body])
