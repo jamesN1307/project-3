@@ -130,6 +130,9 @@ class Scene extends React.Component {
     //Array of enemy character objects
     const arrayEnemies = [
       {
+        spawnX: 1000,
+        endX: 1200,
+        goingRight: true,
         body: Matter.Bodies.rectangle(1000, 460, 80, 50, {
           id: "enemy",
           plugin: {
@@ -148,8 +151,30 @@ class Scene extends React.Component {
       },
       {
         //(location on x axis, location on y axis, width of box, height of box)
-
+        spawnX: 300,
+        endX: 500,
+        goingRight: true,
         body: Matter.Bodies.rectangle(300, 160, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 500,
+        endX: 1200,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(500, 500, 80, 50, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -226,6 +251,26 @@ class Scene extends React.Component {
             //Add to variable/ score
           })
       });
+    };
+
+    //Custom function - update enemy velocity
+    //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
+    //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
+    function moveEnemy(enemyObject) {
+
+      // if object has overshot the endPoint or startPoint
+      if (enemyObject.body.position.x > enemyObject.endX) {
+        enemyObject.goingRight = false;
+      } else if (enemyObject.body.position.x < enemyObject.spawnX) {
+        enemyObject.goingRight = true;
+      }
+
+      //if 'goingRight' is true or false - if true, go right, otherwise go left
+      if (enemyObject.goingRight) {
+        Matter.Body.setVelocity(enemyObject.body,{ x: 1, y: (enemyObject.body.velocity.y)} );
+      } else {
+        Matter.Body.setVelocity(enemyObject.body,{ x: -1, y: (enemyObject.body.velocity.y)} );
+      }
     };
 
 
@@ -341,7 +386,10 @@ class Scene extends React.Component {
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
 
-
+      //Move each enemy
+      arrayEnemies.forEach(element => {
+        moveEnemy(element);
+      });
     });
 
     Matter.Events.on(engine, 'afterUpdate', function () {
