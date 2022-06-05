@@ -132,7 +132,7 @@ export default function Profile() {
 
                         {/* section with buttons to leaderboard and 'play game' buttons*/}
                         <section style={styles.buttonBlock}>
-                            <button style={styles.gameButton}>Play Game</button>
+                        <Link to="/matter"><button style={styles.gameButton}>Play Game</button></Link>
                             <div style={styles.leaderButtons}>
                                 <button style={styles.leaderLink}>Leaderboard - 1 Player</button>
                                 <button style={styles.leaderLink}>Leaderboard - 2 Player</button>
