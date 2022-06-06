@@ -26,6 +26,7 @@ class Scene extends React.Component {
       Vector = Matter.Vector,
       Mouse = Matter.Mouse,
       Runner = Matter.Runner,
+<<<<<<< HEAD
       MouseConstraint = Matter.MouseConstraint;
     
       this.world_bound_X  = 3000;
@@ -34,6 +35,11 @@ class Scene extends React.Component {
       this.bounds_scale_target = {};
   
       
+=======
+      MouseConstraint = Matter.MouseConstraint,
+      Bounds = Matter.Bounds;
+
+>>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
       element: this.refs.scene,
@@ -43,11 +49,16 @@ class Scene extends React.Component {
         height: window.innerHeight,
         wireframes: false,
         background: "white",
+<<<<<<< HEAD
         showVelocity: true,
         showCollisions: true,
         hasBounds: true
         },
       
+=======
+        hasBounds: true
+      },
+>>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
     });
 
     const mainEngine = engine.world;
@@ -70,7 +81,7 @@ class Scene extends React.Component {
         },
         plugin: {
           attractors: [
-            function(bodyA, bodyB) {
+            function (bodyA, bodyB) {
               return {
                 x: (bodyA.position.x - bodyB.position.x) * 1e-6,
                 y: (bodyA.position.y - bodyB.position.y) * 1e-6,
@@ -83,7 +94,7 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 2,
+      fireForce: 0.5,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -99,8 +110,8 @@ class Scene extends React.Component {
           frictionAir: 0.006,
           label: "bullet",
           density: 0.1,
-          render:{
-            sprite:{
+          render: {
+            sprite: {
               texture: wind,
               xScale: 0.3,
               yScale: 0.3
@@ -120,13 +131,17 @@ class Scene extends React.Component {
       },
     } //END PLAYER OBJECT
 
+    Matter.Render.lookAt = function(render, player, padding, center) {
+	  center = typeof center !== 'undefined' ? center : true;
+    }
+
     //COIN/SCORING OBJECTS
     const pickupSides = 30;
     const arrayPickups = [
       {
         body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
-          isStatic: true, 
-          render: { fillStyle: "yellow" }, 
+          isStatic: true,
+          render: { fillStyle: "yellow" },
           label: "coin",
           coinUsed: false,
         })
@@ -136,8 +151,10 @@ class Scene extends React.Component {
     //Array of enemy character objects
     const arrayEnemies = [
       {
-        body: Matter.Bodies.rectangle(500, 550, 80, 50, {
-          isStatic: true, 
+        spawnX: 1000,
+        endX: 1200,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(1000, 460, 80, 50, {
           id: "enemy",
           plugin: {
             attractors: [
@@ -148,14 +165,37 @@ class Scene extends React.Component {
                 };
               }
             ]
-          }, 
-          render: { sprite: { texture: soldier } }, 
+          },
+          render: { sprite: { texture: soldier } },
           label: 'enemy'
         }),
       },
       {
-        body: Matter.Bodies.rectangle(300, 350, 80, 50, {
-          isStatic: true, 
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 300,
+        endX: 500,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(300, 160, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 500,
+        endX: 1200,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(500, 500, 80, 50, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -184,9 +224,12 @@ class Scene extends React.Component {
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+      var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
+      var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6;
     };
 
     function deleteCoin(pair) {
@@ -207,6 +250,17 @@ class Scene extends React.Component {
       };
     };
 
+    //deletes bullet on impact with border
+    function deleteBullet(pair) {
+      if ((pair.bodyA.label === 'bullet')) {
+        Matter.World.remove(mainEngine, pair.bodyA)
+      };
+
+      if ((pair.bodyB.label === 'bullet')) {
+        Matter.World.remove(mainEngine, pair.bodyB)
+      };
+    };
+
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
         event.pairs.filter((pair) => {
@@ -214,9 +268,30 @@ class Scene extends React.Component {
         })
           .forEach((pair) => {
             deleteCoin(pair);
+            deleteBullet(pair)
             //Add to variable/ score
           })
       });
+    };
+
+    //Custom function - update enemy velocity
+    //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
+    //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
+    function moveEnemy(enemyObject) {
+
+      // if object has overshot the endPoint or startPoint
+      if (enemyObject.body.position.x > enemyObject.endX) {
+        enemyObject.goingRight = false;
+      } else if (enemyObject.body.position.x < enemyObject.spawnX) {
+        enemyObject.goingRight = true;
+      }
+
+      //if 'goingRight' is true or false - if true, go right, otherwise go left
+      if (enemyObject.goingRight) {
+        Matter.Body.setVelocity(enemyObject.body,{ x: 1, y: (enemyObject.body.velocity.y)} );
+      } else {
+        Matter.Body.setVelocity(enemyObject.body,{ x: -1, y: (enemyObject.body.velocity.y)} );
+      }
     };
 
 
@@ -235,16 +310,32 @@ class Scene extends React.Component {
         },
         label: 'platform',
       }),
-      Bodies.rectangle(435, 630, 1600, 60, { isStatic: true }),
-      Bodies.rectangle(0, 200, 60, 800, { isStatic: true }),
-      Bodies.rectangle(2000, 400, 60, 1000, { isStatic: true }),
+      Bodies.rectangle(1000, 560, 500, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass
+          }
+        },
+        label: 'platform',
+      }),
+
+      //(location on x axis, location on y axis, width of box, height of box)      
+      //bottom border
+      Bodies.rectangle(0, window.innerHeight, 4000, 100, { isStatic: true, label: "border" }),
+      //left border
+      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      //left border
+      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      //top border
+      Bodies.rectangle(0, 0, 4000, 10, { isStatic: true , label: "border" }),
     ]);
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
       World.add(mainEngine, [element.body])
     });
-  
+
     //Add array of enemies to the world
     arrayEnemies.forEach(element => {
       World.add(mainEngine, [element.body])
@@ -316,7 +407,10 @@ class Scene extends React.Component {
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
 
-
+      //Move each enemy
+      arrayEnemies.forEach(element => {
+        moveEnemy(element);
+      });
     });
 
     Matter.Events.on(engine, 'afterUpdate', function () {
