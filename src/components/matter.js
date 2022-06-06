@@ -545,7 +545,7 @@ render.mouse = mouse;
         label: 'platform',
       }),
 
-      //bottom border
+      //Border creation - once camera follows player, Remove height/width references
       Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
       //left border
       Bodies.rectangle(0, 400, 10, 2000, { isStatic: true, label: "border" }),
