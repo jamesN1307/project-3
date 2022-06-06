@@ -149,19 +149,19 @@ export default function ChooseAvatar() {
             {/* Bottom row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" id = "5"/>
+                <Link to="/iroh"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" id = "5"/></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" id = "6"/>
+                <Link to="/toph"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" id = "6"/></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" id = "7"/>
+                <Link to="/bumi"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" id = "7"/></Link>
                 </div>
             
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" id = "8"/>
+                <Link to="/momo"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" id = "8"/></Link>
                 </div>
             </section>
 
