@@ -31,8 +31,8 @@ class Scene extends React.Component {
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
-    const engine = Matter.Engine.create();
-    const render = Matter.Render.create({
+    const engine = Engine.create();
+    const render = Render.create({
       element: this.refs.scene,
       engine: engine,
       options: {
@@ -58,11 +58,12 @@ class Scene extends React.Component {
 
     Composite.add(world, mouseConstraint);
 
-
-    var viewportCentre = {
-      x: render.options.width * 0.5,
-      y: render.options.height * 0.5
-    };
+//--BEGIN CODE FOR VIEWPORT AND MOUSE CONTROL OF CAMERA ------------------------------------------------------------
+/*
+var viewportCentre = {
+  x: render.options.width * 0.5,
+  y: render.options.height * 0.5
+};
 
     // create limits for the viewport
     var extents = {
@@ -70,30 +71,30 @@ class Scene extends React.Component {
       max: { x: window.innerWidth, y: window.innerHeight }
     };
 
-    // keep track of current bounds scale (view zoom)
-    var boundsScaleTarget = 1,
-      boundsScale = {
-        x: 1,
-        y: 1
-      };
+// keep track of current bounds scale (view zoom)
+var boundsScaleTarget = 1,
+  boundsScale = {
+      x: 1,
+      y: 1
+  };
 
-    // use a render event to control our view
-    // use a render event to control our view
-    Events.on(render, 'beforeRender', function () {
-      var world = engine.world,
+ // use a render event to control our view
+ // use a render event to control our view
+ Events.on(render, 'beforeRender', function() {
+    var world = engine.world,
         mouse = mouseConstraint.mouse,
         translate;
 
-      // mouse wheel controls zoom
-      var scaleFactor = mouse.wheelDelta * -0.1;
-      if (scaleFactor !== 0) {
+    // mouse wheel controls zoom
+    var scaleFactor = mouse.wheelDelta * -0.1;
+    if (scaleFactor !== 0) {
         if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
-          boundsScaleTarget += scaleFactor;
+            boundsScaleTarget += scaleFactor;
         }
-      }
+    }
 
-      // if scale has changed
-      if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
+    // if scale has changed
+    if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
         // smoothly tween scale factor
         scaleFactor = (boundsScaleTarget - boundsScale.x) * 0.2;
         boundsScale.x += scaleFactor;
@@ -105,8 +106,8 @@ class Scene extends React.Component {
 
         // translate so zoom is from centre of view
         translate = {
-          x: render.options.width * scaleFactor * -0.5,
-          y: render.options.height * scaleFactor * -0.5
+            x: render.options.width * scaleFactor * -0.5,
+            y: render.options.height * scaleFactor * -0.5
         };
 
         Bounds.translate(render.bounds, translate);
@@ -114,46 +115,50 @@ class Scene extends React.Component {
         // update mouse
         Mouse.setScale(mouse, boundsScale);
         Mouse.setOffset(mouse, render.bounds.min);
-      }
+    }
 
-      // get vector from mouse relative to centre of viewport
-      var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
+    // get vector from mouse relative to centre of viewport
+    var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
         centreDist = Vector.magnitude(deltaCentre);
 
-      // translate the view if mouse has moved over 50px from the centre of viewport
-      if (centreDist > 50) {
+    // translate the view if mouse has moved over 50px from the centre of viewport
+    if (centreDist > 50) {
         // create a vector to translate the view, allowing the user to control view speed
         var direction = Vector.normalise(deltaCentre),
-          speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.0002);
+            speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.0002);
 
         translate = Vector.mult(direction, speed);
 
         // prevent the view moving outside the extents
         if (render.bounds.min.x + translate.x < extents.min.x)
-          translate.x = extents.min.x - render.bounds.min.x;
+            translate.x = extents.min.x - render.bounds.min.x;
 
         if (render.bounds.max.x + translate.x > extents.max.x)
-          translate.x = extents.max.x - render.bounds.max.x;
+            translate.x = extents.max.x - render.bounds.max.x;
 
         if (render.bounds.min.y + translate.y < extents.min.y)
-          translate.y = extents.min.y - render.bounds.min.y;
+            translate.y = extents.min.y - render.bounds.min.y;
 
         if (render.bounds.max.y + translate.y > extents.max.y)
-          translate.y = extents.max.y - render.bounds.max.y;
+            translate.y = extents.max.y - render.bounds.max.y;
 
         // move the view
         Bounds.translate(render.bounds, translate);
 
         // we must update the mouse too
         Mouse.setOffset(mouse, render.bounds.min);
-      }
-    });
+    }
+  });
 
 
-    // keep the mouse in sync with rendering
-    render.mouse = mouse;
+// keep the mouse in sync with rendering
+render.mouse = mouse;
+*/
 
-    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
+//------------------------------------------END MOUSE CAMERA CONTROL SECTION ----------------------------
+
+
+    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
     //PLAYER CHARACTER
     const player = {
       //track whether the box has jumped
@@ -224,7 +229,7 @@ class Scene extends React.Component {
       center = typeof center !== 'undefined' ? center : true;
     }
 
-    //COIN/SCORING OBJECTS
+    //COIN/SCORING OBJECTS-----------------------------------------------------------------------------------------
     const pickupSides = 30;
     const arrayPickups = [
       {
@@ -334,7 +339,7 @@ class Scene extends React.Component {
       },
     ];
 
-    //Array of enemy character objects
+    //Array of enemy character objects----------------------------------------------------------------------------------
     const arrayEnemies = [
       {
         spawnX: 1000,
@@ -478,7 +483,7 @@ class Scene extends React.Component {
       },
     ];
 
-    //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
+    //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS-----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
         scoreLevel: this.state.scoreLevel += 10,
@@ -611,7 +616,7 @@ class Scene extends React.Component {
     //BULLET OBJECTS
     const bullets = new Set();
 
-    //ADD PLATFORMS TO WORLD
+    //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     World.add(mainEngine, [
       //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(400, 260, 200, 80, {
@@ -649,6 +654,7 @@ class Scene extends React.Component {
         },
         label: 'platform',
       }),
+
       //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(500, 760, 200, 80, {
         isStatic: true,
@@ -722,15 +728,17 @@ class Scene extends React.Component {
         label: 'platform',
       }),
 
-      //bottom border
-      Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
+      //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
+      Bodies.rectangle(0, 1450, 8000, 100, { isStatic: true, label: "border" }),
       //left border
       Bodies.rectangle(0, 400, 10, 2000, { isStatic: true, label: "border" }),
       //left border
-      Bodies.rectangle(window.innerWidth, 400, 10, 2000, { isStatic: true, label: "border" }),
+      Bodies.rectangle(2800, 400, 10, 2000, { isStatic: true, label: "border" }),
       //top border
       Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
     ]);
+
+    //generate elements within the engine----------------------------------------------------------------------------------------------------------
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
@@ -796,11 +804,23 @@ class Scene extends React.Component {
       keysDown.delete(event.code);
     });
 
+
+    var translate = {
+      x: player.body.position.x-600,
+      y: player.body.position.y-300,
+    }
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
         keyHandlers[k]?.();
       });
+
+      translate = {
+        x: player.body.position.x-600,
+        y: player.body.position.y-300,
+      }
+      Bounds.shift(render.bounds, translate);
 
       playerFallen();
       resetJumps();
@@ -814,16 +834,17 @@ class Scene extends React.Component {
       });
     });
 
+    /*
     Matter.Events.on(engine, 'afterUpdate', function () {
       if (!player.position.x) {
         return;
       }
-
       // smoothly move the attractor body towards the mouse
       Matter.Body.translate(arrayPickups, {
         x: (arrayPickups.position.x - player.position.x) * 0.25,
       });
     });
+    */
 
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
