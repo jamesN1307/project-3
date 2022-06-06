@@ -11,7 +11,10 @@ import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
 import Matter from "./components/matter";
-import Phaser from "./components/pGame";
+import Iroh from "./components/levels/iroh";
+import Toph from "./components/levels/toph";
+import Momo from "./components/levels/momo";
+import Bumi from "./components/levels/bumi";
 import './style.css';
 
 
@@ -28,7 +31,10 @@ root.render(
       <Route path="profile" element={<Profile />} />
       <Route path="levels" element={<Levels />} />
       <Route path="matter" element={<Matter />} />
-      <Route path="phaser" element={<Phaser />} />
+      <Route path="iroh" element={<Iroh />} />
+      <Route path="toph" element={<Toph />} />
+      <Route path="bumi" element={<Bumi />} />
+      <Route path="momo" element={<Momo />} />
     </Routes>
   </BrowserRouter>
 );
