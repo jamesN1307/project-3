@@ -110,8 +110,8 @@ class Scene extends React.Component {
       },
     } //END PLAYER OBJECT
 
-    Matter.Render.lookAt = function(render, player, padding, center) {
-	  center = typeof center !== 'undefined' ? center : true;
+    Matter.Render.lookAt = function (render, player, padding, center) {
+      center = typeof center !== 'undefined' ? center : true;
     }
 
     //COIN/SCORING OBJECTS
@@ -198,6 +198,12 @@ class Scene extends React.Component {
       })
     };
 
+    const scoreDelete = () => {
+      this.setState({
+        scoreLevel: this.state.scoreLevel -= 10,
+      })
+    };
+
     function onCollision(pair) {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
@@ -205,14 +211,16 @@ class Scene extends React.Component {
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
+      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8;
     };
 
     function deleteCoin(pair) {
-      if ((pair.bodyA.label === 'coin') || (pair.bodyA.label === 'enemy')) {
+      if ((pair.bodyA.label === 'coin') || (pair.bodyA.label === 'bullet')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
           pair.bodyA.isUsed = true;
@@ -220,7 +228,7 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if ((pair.bodyB.label === 'coin') || (pair.bodyB.label === 'enemy')) {
+      if ((pair.bodyB.label === 'coin') || (pair.bodyB.label === 'bullet')) {
         if (!pair.bodyB.isUsed) {
           scoreUpdate();
           pair.bodyB.isUsed = true;
@@ -231,11 +239,38 @@ class Scene extends React.Component {
 
     //deletes bullet on impact with border
     function deleteBullet(pair) {
-      if ((pair.bodyA.label === 'bullet')) {
+      if (pair.bodyA.label === 'bullet') {
+        if (!pair.bodyA.isUsed) {
+          scoreUpdate();
+          pair.bodyA.isUsed = true;
+        }
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if ((pair.bodyB.label === 'bullet')) {
+      if (pair.bodyB.label === 'bullet') {
+        if (!pair.bodyB.isUsed) {
+          scoreUpdate();
+          pair.bodyB.isUsed = true;
+        }
+        Matter.World.remove(mainEngine, pair.bodyB)
+      };
+    };
+
+    //deletes bullet on impact with border
+    function deleteEnemy(pair) {
+      if (pair.bodyA.label === 'enemy') {
+        if (!pair.bodyA.isUsed) {
+          scoreDelete();
+          pair.bodyA.isUsed = true;
+        }
+        Matter.World.remove(mainEngine, pair.bodyA)
+      };
+
+      if (pair.bodyB.label === 'enemy') {
+        if (!pair.bodyB.isUsed) {
+          scoreDelete();
+          pair.bodyB.isUsed = true;
+        }
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -248,6 +283,7 @@ class Scene extends React.Component {
           .forEach((pair) => {
             deleteCoin(pair);
             deleteBullet(pair)
+            deleteEnemy(pair)
             //Add to variable/ score
           })
       });
@@ -267,9 +303,9 @@ class Scene extends React.Component {
 
       //if 'goingRight' is true or false - if true, go right, otherwise go left
       if (enemyObject.goingRight) {
-        Matter.Body.setVelocity(enemyObject.body,{ x: 1, y: (enemyObject.body.velocity.y)} );
+        Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
       } else {
-        Matter.Body.setVelocity(enemyObject.body,{ x: -1, y: (enemyObject.body.velocity.y)} );
+        Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
       }
     };
 
@@ -280,34 +316,122 @@ class Scene extends React.Component {
     //ADD PLATFORMS TO WORLD
     World.add(mainEngine, [
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(300, 260, 500, 80, {
+      Bodies.rectangle(400, 260, 400, 80, {
         isStatic: true,
         render: {
           sprite: {
-            texture: grass
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.3
+          }
+        },
+        zoom: 0.4,
+        label: 'platform',
+      }),
+      Bodies.rectangle(1100, 560, 400, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.8,
+            yScale: 0.4
           }
         },
         label: 'platform',
       }),
-      Bodies.rectangle(1000, 560, 500, 80, {
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(1800, 160, 400, 80, {
         isStatic: true,
         render: {
           sprite: {
-            texture: grass
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(500, 760, 300, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(1400, 360, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(1800, 660, 450, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.8,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(1900, 1100, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(250, 1100, 550, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      //(location on x axis, location on y axis, width of box, height of box)
+      Bodies.rectangle(1050, 1000, 350, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
           }
         },
         label: 'platform',
       }),
 
-      //(location on x axis, location on y axis, width of box, height of box)      
       //bottom border
-      Bodies.rectangle(0, window.innerHeight, 4000, 100, { isStatic: true, label: "border" }),
+      Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
       //left border
-      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      Bodies.rectangle(0, 400, 10, 2000, { isStatic: true, label: "border" }),
       //left border
-      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      Bodies.rectangle(window.innerWidth, 400, 10, 2000, { isStatic: true, label: "border" }),
       //top border
-      Bodies.rectangle(0, 0, 4000, 10, { isStatic: true , label: "border" }),
+      Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
     ]);
 
     //Add coins/score pickups to the world
