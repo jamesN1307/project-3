@@ -126,7 +126,7 @@ const Game = () => {
             // we will stop the player from moving to the right at 600px and left at 100px
             if (keys.right.pressed && player.position.x < 600) {
                 player.velocity.x = 5
-            } else if (keys.left.pressed && player.position.xd > 100) {
+            } else if (keys.left.pressed && player.position.x > 100) {
                 player.velocity.x = -5
             } else {
                 player.velocity.x = 0
