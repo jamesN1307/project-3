@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import Navbar from './page_elements/navbar';
 import leaderboard_one from "../images/leaderboard_one.png"
-import celebrate from '../images/celebrate1.png'
+import celebrate from '../images/celebrate.png'
 import EarthKingdom from "../images/EarthKingdom.jpg"
 import rocks from '../images/rocks.png'
 import waterLevel from "../images/waterLevel.jpg"
