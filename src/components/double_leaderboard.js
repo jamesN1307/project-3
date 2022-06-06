@@ -1,6 +1,16 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import Navbar from './page_elements/navbar';
+import leaderboard_one from "../images/leaderboard_one.png"
+import celebrate from '../images/celebrate1.png'
+import EarthKingdom from "../images/EarthKingdom.jpg"
+import rocks from '../images/rocks.png'
+import waterLevel from "../images/waterLevel.jpg"
+import ocean from "../images/ocean.png"
+import avatarAang from "../images/avatarAang.jpg"
+import fire from "../images/fire.jpg"
+import Krew from "../images/Krew.png"
+import sky from "../images/sky.png"
 // import background from "../images/leaderboard_background.png";
 
 // LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
@@ -13,6 +23,7 @@ const styles = {
         justifyContent: 'center',
         flexGrow: '1',
         flexShrink: '1',
+        zIndex: 1
     },
 
     background: {
@@ -27,11 +38,12 @@ const styles = {
     //page header
     header: {
         fontFamily: "herculanum",
-        backgroundColor: 'midnightblue',
-        color: 'skyblue',
+        color: 'black',
+        marginTop: "10vh",
+        marginBottom: "15vh",
         margin: '25px auto 25px',
         padding: '0 20px 0',
-        fontSize: '40pt',
+        fontSize: '60pt',
         borderRadius: '8px',
     },
 
@@ -62,81 +74,126 @@ const styles = {
     scoreBlock: {
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'orange',
-        width: '20%',
-        borderRadius: '8px',
+        backgroundImage: `url(${sky})`,
+        zIndex: -1,
+        borderRadius: '15px',
         alignItems: 'center',
+        width: "20%",
         height: '100%',
-        
         flexShrink: '1',
     },
 
+    scoreEarthBlock: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundImage: `url(${rocks})`,
+        zIndex: -1,
+        borderRadius: '15px',
+        alignItems: 'center',
+        width: "20%",
+        height: '100%',
+        flexShrink: '1',
+    },
+
+    scoreWaterBlock: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundImage: `url(${ocean})`,
+        zIndex: -1,
+        borderRadius: '15px',
+        alignItems: 'center',
+        width: "20%",
+        height: '100%',
+        flexShrink: '1',
+    },
+
+    scoreFireBlock: {
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundImage: `url(${fire})`,
+        zIndex: -1,
+        borderRadius: '15px',
+        alignItems: 'center',
+        width: "20%",
+        height: '100%',
+        flexShrink: '1',
+    },
     //title of each score block
+    scoreBlockTitle: {
+        textDecoration: 'underline',
+        fontSize: "50px"
+    },
+
     scoreBlockHeader: {
         textDecoration: 'underline',
+        color: "white",
+        fontWeight: 800,
+        fontSize: "40px",
+        zIndex: 1
     },
 
     //individual score display elements within each block
     scoreBlockElement: {
-        display: 'flex',
-        flexShrink: '1',
+        marginTop: "10px",
+        height: "45px",
+        width: "95%",
+        backgroundColor: "grey",
+        opacity: "0.9",
+        borderStyle: "solid",
+        borderWidth: 1,
+        borderColor: "grey",
+        borderRadius: "10px",
+        color: "white",
         fontSize: '16pt',
     }
 }
 
-export default function LeaderboardDouble() {
+export default function LeaderboardSingle() {
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-    
+
     return (
         <div className="container" >
+            <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
             <Navbar />
             <div style={styles.masterContainer} >
                 {/* <img style={styles.background} src={background} alt="Aang and epic background" /> */}
                 <section style={styles.mainBlock}>
 
-                    <h1 style={styles.header}>Leaderboard - Multiplayer</h1>
+                    <h1 style={styles.header}>Leaderboard - Two Player</h1>
+
+                    {/*NOTE FOR FUTURE DEVELOPMENT - TO AVOID 
+                        OVERFLOWING THE SCREEN, MAY WANT TO LIMIT THE DISPLAY
+                    TO THE TOP N (5 - 10) SCORES */}
 
                     <section style={styles.scoreRow}>
-                        {/*NOTE FOR FUTURE DEVELOPMENT - TO AVOID 
-                        OVERFLOWING THE SCREEN, MAY WANT TO LIMIT THE DISPLAY
-                        TO THE TOP N (5 - 10) SCORES */}
-                        <article style={styles.scoreBlock}>
-                            <h2 style={styles.scoreBlockHeader}>Total Score</h2>
+                        <article style={styles.scoreEarthBlock}>
+                            <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username - score</p>
+                        </article>
+
+                        <article style={styles.scoreWaterBlock}>
+                            <img src={waterLevel} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username - score</p>
+                        </article>
+
+                        <article style={styles.scoreFireBlock}>
+                            <img src={avatarAang} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                         </article>
 
                         <article style={styles.scoreBlock}>
-                            <h2 style={styles.scoreBlockHeader}>Level One</h2>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                        </article>
-
-                        <article style={styles.scoreBlock}>
-                            <h2 style={styles.scoreBlockHeader}>Level Two</h2>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <img src={Krew} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                         </article>
-
-                        <article style={styles.scoreBlock}>
-                            <h2 style={styles.scoreBlockHeader}>Level Three</h2>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                        </article>
-
                     </section>
 
                 </section>

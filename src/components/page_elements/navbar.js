@@ -5,14 +5,14 @@ const styles = {
     mainContainer: {
         display: 'flex',
         flexDirection: 'row',
+        height: "5vh",
         width: '100%',
+        backgroundColor: "white",
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: 'moccasin',
     },
     anchorClass: {
         color: 'black',
-        backgroundColor: 'skyblue',
         fontSize: '20pt',
     }
 };
@@ -28,11 +28,11 @@ export default function Navbar() {
             - homepage, then login/signup
             --Link needed - each leaderboard, profile, level select, avatar select?
             -!- level select only once an avatar and game-mode have been chosen?*/}
-            <Link to='/profile'><a href='#' style={styles.anchorClass}>Profile</a></Link>
-            <Link to='/avatar'><a href='#' style={styles.anchorClass}>Character Selection</a></Link>
-            <Link to='/levels'><a href='#' style={styles.anchorClass}>Level Selection</a></Link>
-            <Link to='/leaderboard_one'><a href='#' style={styles.anchorClass}>Leaderboard - Singleplayer</a></Link>
-            <Link to='/leaderboard_two'><a href='#' style={styles.anchorClass}>Leaderboard - Multiplayer</a></Link>
+            <Link to='/profile' style={styles.anchorClass}>Profile</Link>
+            <Link to='/avatar' style={styles.anchorClass}>Character Selection</Link>
+            <Link to='/levels' style={styles.anchorClass}>Level Selection</Link>
+            <Link to='/leaderboard_one' style={styles.anchorClass}>Leaderboard - Singleplayer</Link>
+            <Link to='/leaderboard_two' style={styles.anchorClass}>Leaderboard - Multiplayer </Link>
         </div>
     );
 }
