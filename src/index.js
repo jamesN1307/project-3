@@ -11,7 +11,9 @@ import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
 import Matter from "./components/matter";
-import Phaser from "./components/pGame";
+import Katara from "./components/character/katara";
+import Sokka from "./components/character/sokka";
+import Appa from "./components/character/appa";
 import './style.css';
 
 
@@ -28,7 +30,9 @@ root.render(
       <Route path="profile" element={<Profile />} />
       <Route path="levels" element={<Levels />} />
       <Route path="matter" element={<Matter />} />
-      <Route path="phaser" element={<Phaser />} />
+      <Route path="Katara" element={<Katara />} />
+      <Route path="Sokka" element={<Sokka />} />
+      <Route path="Appa" element={<Appa />} />
     </Routes>
   </BrowserRouter>
 );
