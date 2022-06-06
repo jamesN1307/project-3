@@ -220,7 +220,7 @@ class Scene extends React.Component {
     };
 
     function deleteCoin(pair) {
-      if ((pair.bodyA.label === 'coin') || (pair.bodyA.label === 'bullet')) {
+      if (pair.bodyA.label === 'coin') {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
           pair.bodyA.isUsed = true;
@@ -228,7 +228,7 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if ((pair.bodyB.label === 'coin') || (pair.bodyB.label === 'bullet')) {
+      if (pair.bodyB.label === 'coin') {
         if (!pair.bodyB.isUsed) {
           scoreUpdate();
           pair.bodyB.isUsed = true;
@@ -239,38 +239,48 @@ class Scene extends React.Component {
 
     //deletes bullet on impact with border
     function deleteBullet(pair) {
-      if (pair.bodyA.label === 'bullet') {
+      if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
+          pair.bodyA.isUsed = true;
+        }
+        Matter.World.remove(mainEngine, pair.bodyB)
+      };
+
+      if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
+        if (!pair.bodyB.isUsed) {
+          scoreUpdate();
+          pair.bodyB.isUsed = true;
+        }
+        Matter.World.remove(mainEngine, pair.bodyA)
+      };
+    };
+
+    //deletes bullet on impact with border
+    function deleteEnemy(pair) {
+      if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
+        if (!pair.bodyA.isUsed) {
+          scoreDelete();
           pair.bodyA.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'bullet') {
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
         if (!pair.bodyB.isUsed) {
-          scoreUpdate();
+          scoreDelete();
           pair.bodyB.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
 
-    //deletes bullet on impact with border
-    function deleteEnemy(pair) {
-      if (pair.bodyA.label === 'enemy') {
-        if (!pair.bodyA.isUsed) {
-          scoreDelete();
-          pair.bodyA.isUsed = true;
-        }
+    function deleteBull(pair) {
+      if (pair.bodyA.label === 'bullet') {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'enemy') {
-        if (!pair.bodyB.isUsed) {
-          scoreDelete();
-          pair.bodyB.isUsed = true;
-        }
+      if (pair.bodyB.label === 'bullet') {
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -284,6 +294,7 @@ class Scene extends React.Component {
             deleteCoin(pair);
             deleteBullet(pair)
             deleteEnemy(pair)
+            deleteBull(pair)
             //Add to variable/ score
           })
       });
