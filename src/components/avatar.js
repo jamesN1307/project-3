@@ -106,7 +106,11 @@ function leaveCharacter(event) {
     event.preventDefault();
     event.target.style.filter = 'invert(0%)';
 };
+function selectCharacter(event){
+    event.preventDefault();
+    
 
+}
 export default function ChooseAvatar() {
   // All functional components must have a return method that contains JSX.
   // We return all the JSX inside a parent element with a className of "container".
@@ -125,42 +129,44 @@ export default function ChooseAvatar() {
             {/* Top row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                <Link to="/game"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang} alt="Ang" /></Link>
+                <Link to="/game"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang}alt="Ang" id = "1" /></Link>
                 </div>
 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" id = "2"/>
                 </div>
 
                 <div style={styles.characterImage}> 
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" id = "3" />
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" id = "4" />
                 </div>
             </section>
             
             {/* Bottom row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" id = "5"/>
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" id = "6"/>
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" id = "7"/>
                 </div>
             
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" />
+                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" id = "8"/>
                 </div>
             </section>
 
         </div>
     </div>
+   
+
   );
 }

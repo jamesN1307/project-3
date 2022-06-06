@@ -22,11 +22,33 @@ class Scene extends React.Component {
       Render = Matter.Render,
       World = Matter.World,
       Bodies = Matter.Bodies,
+      Body= Matter.Body,
       Mouse = Matter.Mouse,
+      Constraint = Matter.Constraint,
+      Events = Matter.Events,
+      Vector = Matter.Vector,
       Runner = Matter.Runner,
+<<<<<<< HEAD
+      Composite = Matter.Composite,
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
+=======
+<<<<<<< HEAD
+      MouseConstraint = Matter.MouseConstraint;
+    
+      this.world_bound_X  = 3000;
+      this.world_bound_Y  = 3000;
+      this.zoom           = 1;
+      this.bounds_scale_target = {};
+  
+      
+=======
+      MouseConstraint = Matter.MouseConstraint,
+      Bounds = Matter.Bounds;
+
+>>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
+>>>>>>> dev
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
       element: this.refs.scene,
@@ -36,11 +58,132 @@ class Scene extends React.Component {
         height: window.innerHeight,
         wireframes: false,
         background: "white",
+<<<<<<< HEAD
         hasBounds: true
       },
+=======
+<<<<<<< HEAD
+        showVelocity: true,
+        showCollisions: true,
+        hasBounds: true
+        },
+      
+=======
+        hasBounds: true
+      },
+>>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
+>>>>>>> dev
     });
 
     const mainEngine = engine.world;
+    var world = engine.world
+    var mouse = Mouse.create(render.canvas),
+    mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.2,
+            render: {
+                visible: false
+            }
+        }
+    });
+
+Composite.add(world, mouseConstraint);
+
+
+var viewportCentre = {
+  x: render.options.width * 0.5,
+  y: render.options.height * 0.5
+};
+
+// create limits for the viewport
+var extents = {
+  min: { x: -0, y: -0 },
+  max: { x: window.innerWidth, y: window.innerHeight }
+};
+
+// keep track of current bounds scale (view zoom)
+var boundsScaleTarget = 1,
+  boundsScale = {
+      x: 1,
+      y: 1
+  };
+
+ // use a render event to control our view
+ // use a render event to control our view
+ Events.on(render, 'beforeRender', function() {
+  var world = engine.world,
+      mouse = mouseConstraint.mouse,
+      translate;
+
+  // mouse wheel controls zoom
+  var scaleFactor = mouse.wheelDelta * -0.1;
+  if (scaleFactor !== 0) {
+      if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
+          boundsScaleTarget += scaleFactor;
+      }
+  }
+
+  // if scale has changed
+  if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
+      // smoothly tween scale factor
+      scaleFactor = (boundsScaleTarget - boundsScale.x) * 0.2;
+      boundsScale.x += scaleFactor;
+      boundsScale.y += scaleFactor;
+
+      // scale the render bounds
+      render.bounds.max.x = render.bounds.min.x + render.options.width * boundsScale.x;
+      render.bounds.max.y = render.bounds.min.y + render.options.height * boundsScale.y;
+
+      // translate so zoom is from centre of view
+      translate = {
+          x: render.options.width * scaleFactor * -0.5,
+          y: render.options.height * scaleFactor * -0.5
+      };
+
+      Bounds.translate(render.bounds, translate);
+
+      // update mouse
+      Mouse.setScale(mouse, boundsScale);
+      Mouse.setOffset(mouse, render.bounds.min);
+  }
+
+  // get vector from mouse relative to centre of viewport
+  var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
+      centreDist = Vector.magnitude(deltaCentre);
+
+  // translate the view if mouse has moved over 50px from the centre of viewport
+  if (centreDist > 50) {
+      // create a vector to translate the view, allowing the user to control view speed
+      var direction = Vector.normalise(deltaCentre),
+          speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.0002);
+
+      translate = Vector.mult(direction, speed);
+
+      // prevent the view moving outside the extents
+      if (render.bounds.min.x + translate.x < extents.min.x)
+          translate.x = extents.min.x - render.bounds.min.x;
+
+      if (render.bounds.max.x + translate.x > extents.max.x)
+          translate.x = extents.max.x - render.bounds.max.x;
+
+      if (render.bounds.min.y + translate.y < extents.min.y)
+          translate.y = extents.min.y - render.bounds.min.y;
+
+      if (render.bounds.max.y + translate.y > extents.max.y)
+          translate.y = extents.max.y - render.bounds.max.y;
+
+      // move the view
+      Bounds.translate(render.bounds, translate);
+
+      // we must update the mouse too
+      Mouse.setOffset(mouse, render.bounds.min);
+  }
+});
+
+
+// keep the mouse in sync with rendering
+render.mouse = mouse;
 
     // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
     //PLAYER CHARACTER
@@ -110,8 +253,13 @@ class Scene extends React.Component {
       },
     } //END PLAYER OBJECT
 
+<<<<<<< HEAD
+    Matter.Render.lookAt = function(render, player, padding, center) {
+	  center = typeof center !== 'undefined' ? center : true;
+=======
     Matter.Render.lookAt = function (render, player, padding, center) {
       center = typeof center !== 'undefined' ? center : true;
+>>>>>>> dev
     }
 
     //COIN/SCORING OBJECTS
@@ -211,12 +359,19 @@ class Scene extends React.Component {
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+<<<<<<< HEAD
+
+
+      //returns true condition
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6;
+=======
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
 
 
       //returns true condition
       return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8;
+>>>>>>> dev
     };
 
     function deleteCoin(pair) {
@@ -239,6 +394,13 @@ class Scene extends React.Component {
 
     //deletes bullet on impact with border
     function deleteBullet(pair) {
+<<<<<<< HEAD
+      if ((pair.bodyA.label === 'bullet')) {
+        Matter.World.remove(mainEngine, pair.bodyA)
+      };
+
+      if ((pair.bodyB.label === 'bullet')) {
+=======
       if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
@@ -281,6 +443,7 @@ class Scene extends React.Component {
       };
 
       if (pair.bodyB.label === 'bullet') {
+>>>>>>> dev
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -293,8 +456,11 @@ class Scene extends React.Component {
           .forEach((pair) => {
             deleteCoin(pair);
             deleteBullet(pair)
+<<<<<<< HEAD
+=======
             deleteEnemy(pair)
             deleteBull(pair)
+>>>>>>> dev
             //Add to variable/ score
           })
       });
@@ -314,9 +480,15 @@ class Scene extends React.Component {
 
       //if 'goingRight' is true or false - if true, go right, otherwise go left
       if (enemyObject.goingRight) {
+<<<<<<< HEAD
+        Matter.Body.setVelocity(enemyObject.body,{ x: 1, y: (enemyObject.body.velocity.y)} );
+      } else {
+        Matter.Body.setVelocity(enemyObject.body,{ x: -1, y: (enemyObject.body.velocity.y)} );
+=======
         Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
       } else {
         Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
+>>>>>>> dev
       }
     };
 
@@ -350,6 +522,13 @@ class Scene extends React.Component {
         },
         label: 'platform',
       }),
+<<<<<<< HEAD
+      Bodies.rectangle(1000, 560, 500, 80, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass
+=======
       //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(1800, 160, 400, 80, {
         isStatic: true,
@@ -430,11 +609,23 @@ class Scene extends React.Component {
             texture: grass,
             xScale: 0.6,
             yScale: 0.4
+>>>>>>> dev
           }
         },
         label: 'platform',
       }),
 
+<<<<<<< HEAD
+      //(location on x axis, location on y axis, width of box, height of box)      
+      //bottom border
+      Bodies.rectangle(0, window.innerHeight, 4000, 100, { isStatic: true, label: "border" }),
+      //left border
+      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      //left border
+      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true, label: "border"  }),
+      //top border
+      Bodies.rectangle(0, 0, 4000, 10, { isStatic: true , label: "border" }),
+=======
       //bottom border
       Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
       //left border
@@ -443,6 +634,7 @@ class Scene extends React.Component {
       Bodies.rectangle(window.innerWidth, 400, 10, 2000, { isStatic: true, label: "border" }),
       //top border
       Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
+>>>>>>> dev
     ]);
 
     //Add coins/score pickups to the world
