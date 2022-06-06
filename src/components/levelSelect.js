@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './page_elements/navbar';
 import { Link } from "react-router-dom";
 
 const styles = {
@@ -16,6 +17,7 @@ const styles = {
     //master div styling
     mainContainer: {
         display: 'flex',
+        flexDirection: 'column',
         height: '100%',
         width: '100%',
     },
@@ -52,9 +54,11 @@ export default function Levels() {
 
     return (
         <div className="container" style={styles.mainContainer}>
+            <Navbar />
             <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
             <div style={styles.buttonContainer}>
                 <h1 style={styles.pageHeader}>Level Selection</h1>
+                <Link to="/matter"><button style={styles.levelButton}>Level One</button></Link>
                 <button style={styles.levelButton}>Level One</button>
                 <button style={styles.levelButton}>Level Two</button>
                 <button style={styles.levelButton}>Level Three</button>
