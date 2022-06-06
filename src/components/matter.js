@@ -21,34 +21,15 @@ class Scene extends React.Component {
     var Engine = Matter.Engine,
       Render = Matter.Render,
       World = Matter.World,
-      Bodies = Matter.Bodies,
-      Body= Matter.Body,
-      Mouse = Matter.Mouse,
-      Constraint = Matter.Constraint,
+      Composite = Matter.Composite,
       Events = Matter.Events,
       Vector = Matter.Vector,
+      Bodies = Matter.Bodies,
+      Mouse = Matter.Mouse,
       Runner = Matter.Runner,
-<<<<<<< HEAD
-      Composite = Matter.Composite,
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
-=======
-<<<<<<< HEAD
-      MouseConstraint = Matter.MouseConstraint;
-    
-      this.world_bound_X  = 3000;
-      this.world_bound_Y  = 3000;
-      this.zoom           = 1;
-      this.bounds_scale_target = {};
-  
-      
-=======
-      MouseConstraint = Matter.MouseConstraint,
-      Bounds = Matter.Bounds;
-
->>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
->>>>>>> dev
     const engine = Matter.Engine.create();
     const render = Matter.Render.create({
       element: this.refs.scene,
@@ -58,23 +39,9 @@ class Scene extends React.Component {
         height: window.innerHeight,
         wireframes: false,
         background: "white",
-<<<<<<< HEAD
         hasBounds: true
       },
-=======
-<<<<<<< HEAD
-        showVelocity: true,
-        showCollisions: true,
-        hasBounds: true
-        },
-      
-=======
-        hasBounds: true
-      },
->>>>>>> dce110dc764df6962ebf5c0a8c4807640507e4f6
->>>>>>> dev
     });
-
     const mainEngine = engine.world;
     var world = engine.world
     var mouse = Mouse.create(render.canvas),
@@ -253,13 +220,8 @@ render.mouse = mouse;
       },
     } //END PLAYER OBJECT
 
-<<<<<<< HEAD
-    Matter.Render.lookAt = function(render, player, padding, center) {
-	  center = typeof center !== 'undefined' ? center : true;
-=======
     Matter.Render.lookAt = function (render, player, padding, center) {
       center = typeof center !== 'undefined' ? center : true;
->>>>>>> dev
     }
 
     //COIN/SCORING OBJECTS
@@ -359,19 +321,12 @@ render.mouse = mouse;
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
-<<<<<<< HEAD
-
-
-      //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6;
-=======
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
 
 
       //returns true condition
       return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8;
->>>>>>> dev
     };
 
     function deleteCoin(pair) {
@@ -394,13 +349,6 @@ render.mouse = mouse;
 
     //deletes bullet on impact with border
     function deleteBullet(pair) {
-<<<<<<< HEAD
-      if ((pair.bodyA.label === 'bullet')) {
-        Matter.World.remove(mainEngine, pair.bodyA)
-      };
-
-      if ((pair.bodyB.label === 'bullet')) {
-=======
       if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
@@ -443,7 +391,6 @@ render.mouse = mouse;
       };
 
       if (pair.bodyB.label === 'bullet') {
->>>>>>> dev
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -456,11 +403,8 @@ render.mouse = mouse;
           .forEach((pair) => {
             deleteCoin(pair);
             deleteBullet(pair)
-<<<<<<< HEAD
-=======
             deleteEnemy(pair)
             deleteBull(pair)
->>>>>>> dev
             //Add to variable/ score
           })
       });
@@ -480,15 +424,9 @@ render.mouse = mouse;
 
       //if 'goingRight' is true or false - if true, go right, otherwise go left
       if (enemyObject.goingRight) {
-<<<<<<< HEAD
-        Matter.Body.setVelocity(enemyObject.body,{ x: 1, y: (enemyObject.body.velocity.y)} );
-      } else {
-        Matter.Body.setVelocity(enemyObject.body,{ x: -1, y: (enemyObject.body.velocity.y)} );
-=======
         Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
       } else {
         Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
->>>>>>> dev
       }
     };
 
@@ -522,13 +460,6 @@ render.mouse = mouse;
         },
         label: 'platform',
       }),
-<<<<<<< HEAD
-      Bodies.rectangle(1000, 560, 500, 80, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass
-=======
       //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(1800, 160, 400, 80, {
         isStatic: true,
@@ -609,23 +540,11 @@ render.mouse = mouse;
             texture: grass,
             xScale: 0.6,
             yScale: 0.4
->>>>>>> dev
           }
         },
         label: 'platform',
       }),
 
-<<<<<<< HEAD
-      //(location on x axis, location on y axis, width of box, height of box)      
-      //bottom border
-      Bodies.rectangle(0, window.innerHeight, 4000, 100, { isStatic: true, label: "border" }),
-      //left border
-      Bodies.rectangle(0, 400, 10, 1000, { isStatic: true, label: "border"  }),
-      //left border
-      Bodies.rectangle(window.innerWidth, 400, 10, 1000, { isStatic: true, label: "border"  }),
-      //top border
-      Bodies.rectangle(0, 0, 4000, 10, { isStatic: true , label: "border" }),
-=======
       //bottom border
       Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
       //left border
@@ -634,7 +553,6 @@ render.mouse = mouse;
       Bodies.rectangle(window.innerWidth, 400, 10, 2000, { isStatic: true, label: "border" }),
       //top border
       Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
->>>>>>> dev
     ]);
 
     //Add coins/score pickups to the world
