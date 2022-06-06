@@ -1,21 +1,23 @@
-//const { application } = require('express')
-const express = require("express");
-const colors = require("colors");
-const dotenv = require("dotenv").config();
-const { errorHandler } = require("./middleware/errorMiddleware");
-const connectDB = require("./config/db");
-const port = process.env.PORT || 5000;
+const express = require('express');
+const db = require('./config/connection');
+const routes = require('./routes');
 
-connectDB();
+const cwd = process.cwd();
 
+const PORT = 3001;
 const app = express();
 
+// Note: not necessary for the Express server to function. This just helps indicate what activity's server is running in the terminal.
+const activity = cwd.includes('01-Activities')
+  ? cwd.split('/01-Activities/')[1]
+  : cwd;
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(routes);
 
-//app.use('/api/goals', require('./routes/goalRoutes'))
-app.use("/api/users", require("./routes/userRoutes"));
-
-app.use(errorHandler);
-
-app.listen(port, () => console.log(`Server started on port ${port}`));
+db.once('open', () => {
+  app.listen(PORT, () => {
+    console.log(`API server for ${activity} running on port ${PORT}!`);
+  });
+});
