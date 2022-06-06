@@ -108,6 +108,7 @@ function leaveCharacter(event) {
 };
 function selectCharacter(event){
     event.preventDefault();
+    window.addEventListener("")
     
 
 }
@@ -133,15 +134,15 @@ export default function ChooseAvatar() {
                 </div>
 
                 <div style={styles.characterImage}>
-                <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" id = "2"/>
+                <Link to ="/appa"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" id = "2"/></Link>   
                 </div>
 
                 <div style={styles.characterImage}> 
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" id = "3" />
+                <Link to ="/katara"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" id = "3" /></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                    <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" id = "4" />
+                <Link to = "/sokka"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" id = "4" /></Link>
                 </div>
             </section>
             

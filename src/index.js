@@ -15,6 +15,9 @@ import Iroh from "./components/levels/iroh";
 import Toph from "./components/levels/toph";
 import Momo from "./components/levels/momo";
 import Bumi from "./components/levels/bumi";
+import Katara from "./components/character/katara";
+import Sokka from "./components/character/sokka";
+import Appa from "./components/character/appa";
 import './style.css';
 
 
@@ -35,6 +38,9 @@ root.render(
       <Route path="toph" element={<Toph />} />
       <Route path="bumi" element={<Bumi />} />
       <Route path="momo" element={<Momo />} />
+      <Route path="Katara" element={<Katara />} />
+      <Route path="Sokka" element={<Sokka />} />
+      <Route path="Appa" element={<Appa />} />
     </Routes>
   </BrowserRouter>
 );
