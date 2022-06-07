@@ -6,6 +6,7 @@ import grass from "../images/grass.png"
 import soldier from "../images/soldier.png"
 import wind from "../images/hurricane_PNG56.png"
 import coin from "../images/coin.png"
+import waterFlag from "../images/waterFlag.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -525,10 +526,12 @@ render.mouse = mouse;
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
+      var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
+      var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10;
     };
 
     function deleteCoin(pair) {
@@ -597,6 +600,16 @@ render.mouse = mouse;
       };
     };
 
+    function nextLevel(pair) {
+      if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
+        window.location.href = "/katara"
+      };
+
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
+        window.location.href = "/katara"
+      };
+    };
+
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
         event.pairs.filter((pair) => {
@@ -607,6 +620,7 @@ render.mouse = mouse;
             deleteBullet(pair)
             deleteEnemy(pair)
             deleteBull(pair)
+            nextLevel(pair)
             //Add to variable/ score
           })
       });
@@ -746,6 +760,116 @@ render.mouse = mouse;
           }
         },
         label: 'platform',
+      }),
+      Bodies.rectangle(3250, 800, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2550, 300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3050, 1300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3450, 300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2400, 1160, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2800, 860, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3000, 460, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3650, 1080, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2350, 780, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3450, 260, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: waterFlag,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'door',
       }),
 
       //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
