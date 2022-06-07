@@ -36,8 +36,8 @@ class Scene extends React.Component {
       element: this.refs.scene,
       engine: engine,
       options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 4500,
+        height: 2000,
         wireframes: false,
         background: "white",
         hasBounds: true,
@@ -45,18 +45,18 @@ class Scene extends React.Component {
     });
     const mainEngine = engine.world;
     var world = engine.world
-    var mouse = Mouse.create(render.canvas),
-      mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: {
-            visible: false
-          }
-        }
-      });
+    // var mouse = Mouse.create(render.canvas),
+    //   mouseConstraint = MouseConstraint.create(engine, {
+    //     mouse: mouse,
+    //     constraint: {
+    //       stiffness: 0.2,
+    //       render: {
+    //         visible: false
+    //       }
+    //     }
+    //   });
 
-    Composite.add(world, mouseConstraint);
+    // Composite.add(world, mouseConstraint);
 
 //--BEGIN CODE FOR VIEWPORT AND MOUSE CONTROL OF CAMERA ------------------------------------------------------------
 /*
@@ -481,6 +481,26 @@ render.mouse = mouse;
           }, render: { sprite: { texture: soldier } }, label: 'enemy'
         }),
       },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 2550,
+        endX: 2860,
+        goingRight: false,
+        body: Matter.Bodies.rectangle(2550, 800, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
     ];
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS-----------------------------------------------------------------------------------
@@ -729,13 +749,16 @@ render.mouse = mouse;
       }),
 
       //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
-      Bodies.rectangle(0, 1450, 8000, 100, { isStatic: true, label: "border" }),
-      //left border
-      Bodies.rectangle(0, 400, 10, 2000, { isStatic: true, label: "border" }),
-      //left border
-      Bodies.rectangle(2800, 400, 10, 2000, { isStatic: true, label: "border" }),
+      //(location on x axis, location on y axis, width of box, height of box)
+
       //top border
       Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
+      //left border
+      Bodies.rectangle(0, 0, 10, 3000, { isStatic: true, label: "border" }),
+      //right border
+      Bodies.rectangle(4000, 0, 10, 3000, { isStatic: true, label: "border" }),
+      // bottom border
+      Bodies.rectangle(0, 1450, 8000, 100, { isStatic: true, label: "border" }),
     ]);
 
     //generate elements within the engine----------------------------------------------------------------------------------------------------------
