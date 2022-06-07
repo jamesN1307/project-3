@@ -19,7 +19,7 @@ import Katara from "./components/character/katara";
 import Sokka from "./components/character/sokka";
 import Appa from "./components/character/appa";
 import './style.css';
-
+import './utils/API.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
