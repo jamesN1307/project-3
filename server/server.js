@@ -1,23 +1,30 @@
 const express = require('express');
-const db = require('./config/connection');
-const routes = require('./routes');
+const cors = require("cors");
+const allRoutes = require('./controllers');
 
-const cwd = process.cwd();
+const sequelize = require('./config/connection');
 
-const PORT = 3001;
+// Sets up the Express App
+// =============================================================
 const app = express();
+//DEVELOP MODE
+// app.use(cors());
+//PROD MODE
+app.use(cors({
+    origin:"https://mysterious-anchorage-31370.herokuapp.com/"
+}));
+const PORT = process.env.PORT || 3001;
+// Requiring our models for syncing
+const { User } = require('./models');
 
-// Note: not necessary for the Express server to function. This just helps indicate what activity's server is running in the terminal.
-const activity = cwd.includes('01-Activities')
-  ? cwd.split('/01-Activities/')[1]
-  : cwd;
-
+// Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(routes);
 
-db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server for ${activity} running on port ${PORT}!`);
-  });
+app.use('/',allRoutes);
+
+sequelize.sync({ force: false }).then(function() {
+    app.listen(PORT, function() {
+    console.log('App listening on PORT ' + PORT);
+    });
 });
