@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
-import { Link } from "react-router-dom";
 import Krew from '../images/Krew.png'
 
 const styles = {
@@ -48,8 +46,25 @@ function App() {
   const handleSubmit = (event) => {
     //Prevent page reload
     event.preventDefault();
-
     var { uname, pass } = document.forms[0];
+
+    fetch('http://localhost:3001/api/users', 
+    {
+      method:'POST',
+      body: JSON.stringify({
+        name: uname,
+        password: pass
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+
+    }
+    )
+    .then(response => response.json())
+    .then(data => console.log(data));
+  
+    
 
     // Find user login info
     const userData = database.find((user) => user.username === uname.value);
