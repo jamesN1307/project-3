@@ -964,8 +964,8 @@ render.mouse = mouse;
       });
 
       translate = {
-        x: player.body.position.x-600,
-        y: player.body.position.y-300,
+        x: player.body.position.x-window.innerWidth/2,
+        y: player.body.position.y-window.innerHeight/2,
       }
       Bounds.shift(render.bounds, translate);
 
