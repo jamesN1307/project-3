@@ -40,7 +40,7 @@ class Scene extends React.Component {
         width: 4500,
         height: 2000,
         wireframes: false,
-        background: "white",
+        background: "skyblue",
         hasBounds: true,
       },
     });
@@ -340,13 +340,24 @@ render.mouse = mouse;
       },
     ];
 
+    /*
+    sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+    */
+
+    
+    //TEST ENEMY
+
     //Array of enemy character objects----------------------------------------------------------------------------------
     const arrayEnemies = [
       {
         spawnX: 1000,
         endX: 1200,
         goingRight: true,
-        body: Matter.Bodies.rectangle(1000, 460, 80, 50, {
+        body: Matter.Bodies.rectangle(1000, 400, 30, 90, {
           id: "enemy",
           plugin: {
             attractors: [
@@ -358,7 +369,7 @@ render.mouse = mouse;
               }
             ]
           },
-          render: { sprite: { texture: soldier } },
+          render: { sprite: { texture: soldier, xScale: 1, yScale: 1 } },
           label: 'enemy'
         }),
       },
@@ -874,15 +885,17 @@ render.mouse = mouse;
 
       //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
       //(location on x axis, location on y axis, width of box, height of box)
+      //*Note: Matter draws these objects from their centerpoint*
 
+      //CHANGE COLOR TO MATCH BACKGROUND, INCREASE HEIGHT (top border)
       //top border
-      Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
+      Bodies.rectangle(2000, -300, 4000, 10, { isStatic: true, label: "border", render: {fillStyle: 'blue'} }),
       //left border
-      Bodies.rectangle(0, 0, 10, 3000, { isStatic: true, label: "border" }),
+      Bodies.rectangle(-700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       //right border
-      Bodies.rectangle(4000, 0, 10, 3000, { isStatic: true, label: "border" }),
+      Bodies.rectangle(4700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       // bottom border
-      Bodies.rectangle(0, 1450, 8000, 100, { isStatic: true, label: "border" }),
+      Bodies.rectangle(2000, 1775, 6500, 600, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
     ]);
 
     //generate elements within the engine----------------------------------------------------------------------------------------------------------
@@ -953,8 +966,8 @@ render.mouse = mouse;
 
 
     var translate = {
-      x: player.body.position.x-600,
-      y: player.body.position.y-300,
+      x: 0,
+      y: 0,
     }
 
     //Engine which updates the environment frame-to-frame
