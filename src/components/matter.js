@@ -159,17 +159,17 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true},
-      {placeX: 300, placeY: 160, stopX: 500, movingRight: true},
-      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true},
-      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true},
-      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true},
-      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true},
-      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true},
+      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier},
+      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier},
+      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier},
+      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier},
+      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier},
+      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier},
+      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier},
+      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier},
     ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, ) {
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image) {
       const newEnemy = {
           spawnX: spawnX,
           endX: endX,
@@ -187,7 +187,7 @@ class Scene extends React.Component {
                   Matter.Body.applyForce(bodyB, bodyB.position, force);
                 }
               ]
-            }, render: { sprite: { texture: soldier } }, label: 'enemy'
+            }, render: { sprite: { texture: image } }, label: 'enemy'
           }),
       }
       return newEnemy;
@@ -344,11 +344,6 @@ class Scene extends React.Component {
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
 
-    /*
-    //Add array of platforms to the world
-    arrayPlatforms.forEach(element => {
-      World.add(mainEngine, [element.body])
-    });*/
 
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
@@ -372,7 +367,8 @@ class Scene extends React.Component {
       {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20,}, 
       {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20,}, 
       {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20,},
+      //platform to leave level 
       {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20,}, 
     ];
 
@@ -423,7 +419,7 @@ class Scene extends React.Component {
     const arrayEnemies = [];
     //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
     arrayPresetEnemies.forEach(element => {
-      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight);
+      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image);
       arrayEnemies.push(newEnemy);
     });
 
