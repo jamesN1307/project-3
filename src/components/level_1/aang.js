@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../images/aang.png"
-import grass from "../images/grass.png"
-import soldier from "../images/soldier.png"
-import wind from "../images/hurricane_PNG56.png"
-import coin from "../images/coin.png"
-import waterFlag from "../images/waterFlag.png"
+import aang from "../../images/aang.png"
+import grass from "../../images/grass.png"
+import soldier from "../../images/soldier.png"
+import wind from "../../images/hurricane_PNG56.png"
+import coin from "../../images/coin.png"
+import waterFlag from "../../images/waterFlag.png"
 
 class Scene extends React.Component {
   constructor(props) {
