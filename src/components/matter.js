@@ -46,117 +46,6 @@ class Scene extends React.Component {
     });
     const mainEngine = engine.world;
     var world = engine.world
-    // var mouse = Mouse.create(render.canvas),
-    //   mouseConstraint = MouseConstraint.create(engine, {
-    //     mouse: mouse,
-    //     constraint: {
-    //       stiffness: 0.2,
-    //       render: {
-    //         visible: false
-    //       }
-    //     }
-    //   });
-
-    // Composite.add(world, mouseConstraint);
-
-//--BEGIN CODE FOR VIEWPORT AND MOUSE CONTROL OF CAMERA ------------------------------------------------------------
-/*
-var viewportCentre = {
-  x: render.options.width * 0.5,
-  y: render.options.height * 0.5
-};
-
-    // create limits for the viewport
-    var extents = {
-      min: { x: -0, y: -0 },
-      max: { x: window.innerWidth, y: window.innerHeight }
-    };
-
-// keep track of current bounds scale (view zoom)
-var boundsScaleTarget = 1,
-  boundsScale = {
-      x: 1,
-      y: 1
-  };
-
- // use a render event to control our view
- // use a render event to control our view
- Events.on(render, 'beforeRender', function() {
-    var world = engine.world,
-        mouse = mouseConstraint.mouse,
-        translate;
-
-    // mouse wheel controls zoom
-    var scaleFactor = mouse.wheelDelta * -0.1;
-    if (scaleFactor !== 0) {
-        if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
-            boundsScaleTarget += scaleFactor;
-        }
-    }
-
-    // if scale has changed
-    if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
-        // smoothly tween scale factor
-        scaleFactor = (boundsScaleTarget - boundsScale.x) * 0.2;
-        boundsScale.x += scaleFactor;
-        boundsScale.y += scaleFactor;
-
-        // scale the render bounds
-        render.bounds.max.x = render.bounds.min.x + render.options.width * boundsScale.x;
-        render.bounds.max.y = render.bounds.min.y + render.options.height * boundsScale.y;
-
-        // translate so zoom is from centre of view
-        translate = {
-            x: render.options.width * scaleFactor * -0.5,
-            y: render.options.height * scaleFactor * -0.5
-        };
-
-        Bounds.translate(render.bounds, translate);
-
-        // update mouse
-        Mouse.setScale(mouse, boundsScale);
-        Mouse.setOffset(mouse, render.bounds.min);
-    }
-
-    // get vector from mouse relative to centre of viewport
-    var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
-        centreDist = Vector.magnitude(deltaCentre);
-
-    // translate the view if mouse has moved over 50px from the centre of viewport
-    if (centreDist > 50) {
-        // create a vector to translate the view, allowing the user to control view speed
-        var direction = Vector.normalise(deltaCentre),
-            speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.0002);
-
-        translate = Vector.mult(direction, speed);
-
-        // prevent the view moving outside the extents
-        if (render.bounds.min.x + translate.x < extents.min.x)
-            translate.x = extents.min.x - render.bounds.min.x;
-
-        if (render.bounds.max.x + translate.x > extents.max.x)
-            translate.x = extents.max.x - render.bounds.max.x;
-
-        if (render.bounds.min.y + translate.y < extents.min.y)
-            translate.y = extents.min.y - render.bounds.min.y;
-
-        if (render.bounds.max.y + translate.y > extents.max.y)
-            translate.y = extents.max.y - render.bounds.max.y;
-
-        // move the view
-        Bounds.translate(render.bounds, translate);
-
-        // we must update the mouse too
-        Mouse.setOffset(mouse, render.bounds.min);
-    }
-  });
-
-
-// keep the mouse in sync with rendering
-render.mouse = mouse;
-*/
-
-//------------------------------------------END MOUSE CAMERA CONTROL SECTION ----------------------------
 
 
     // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
@@ -231,12 +120,27 @@ render.mouse = mouse;
     }
 
     //COIN/SCORING OBJECTS-----------------------------------------------------------------------------------------
-    const pickupSides = 30;
-    const arrayPickups = [
-      {
-        body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
+
+    //array to hold presets
+    //custom function to call to make body, return it
+    //for each loop then returns each one and adds to engine directly
+    
+    const arrayCoinPresets = [
+      {placeX: 600, placeY: 350},
+      {placeX: 1850, placeY: 100},
+      {placeX: 1550, placeY: 250},
+      {placeX: 2050, placeY: 500},
+      {placeX: 1450, placeY: 1000},
+      {placeX: 150, placeY: 1000},
+      {placeX:1050, placeY: 900},
+    ];
+    
+    function makeCoinObject (coinX, coinY) {
+      const newCoin = {
+        body: Matter.Bodies.rectangle(coinX, coinY, 30, 30, {
           isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
+          render: { 
+            sprite: {
             texture: coin,
             xScale: 0.15,
             yScale: 0.15
@@ -244,105 +148,16 @@ render.mouse = mouse;
           label: "coin",
           coinUsed: false,
         })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(1850, 100, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { 
-            fillStyle: "yellow",
-          sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          } 
-        },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      {
-        body: Matter.Bodies.rectangle(1550, 250, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(1450, 1000, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(150, 1000, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-      //(location on x axis, location on y axis, width of box, height of box)
-      {
-        body: Matter.Bodies.rectangle(1050, 900, pickupSides, pickupSides, {
-          isStatic: true,
-          render: { fillStyle: "yellow", sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
-          }  },
-          label: "coin",
-          coinUsed: false,
-        })
-      },
-    ];
+      }
+      return newCoin;
+    }
 
-    //TEST ENEMY
 
     //Array of enemy character objects----------------------------------------------------------------------------------
+
+    //array to hold presets
+    //custom function to call to make body, return it
+    //for each loop then returns each one and adds to engine directly
     const arrayEnemies = [
       {
         spawnX: 1000,
@@ -709,6 +524,9 @@ render.mouse = mouse;
       return newPlatform;
     }
 
+    //array to hold presets
+    //custom function to call to make body, return it
+    //for each loop then returns each one and adds to engine directly
     
 
     World.add(mainEngine, [
@@ -727,12 +545,12 @@ render.mouse = mouse;
       Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
     ]);
 
-    //generate elements within the engine_------SPAWN ITEMS FORM ARRAYS----------------------------------------------------------------------------------------
+    //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
 
     //Add coins/score pickups to the world
-    arrayPickups.forEach(element => {
+    /*arrayPickups.forEach(element => {
       World.add(mainEngine, [element.body])
-    });
+    });*/
 
     //Add array of enemies to the world
     arrayEnemies.forEach(element => {
@@ -743,6 +561,12 @@ render.mouse = mouse;
     platformPresets.forEach(element => {
       const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight);
       World.add(mainEngine, newPlatform.body)
+    });
+
+    //Sets up Coin Objects
+    arrayCoinPresets.forEach(element => {
+      const newCoin = makeCoinObject(element.placeX, element.placeY);
+      World.add(mainEngine, newCoin.body)
     });
 
     //BELOW HERE - CALLS TO CUSTOM FUNCTIONS WHICH HANDLE CONTROLS, ENEMY MOVEMENT
