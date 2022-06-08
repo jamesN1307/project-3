@@ -357,7 +357,7 @@ render.mouse = mouse;
         spawnX: 1000,
         endX: 1200,
         goingRight: true,
-        body: Matter.Bodies.rectangle(1000, 400, 30, 90, {
+        body: Matter.Bodies.rectangle(1000, 500, 60, 90, {
           id: "enemy",
           plugin: {
             attractors: [
@@ -378,7 +378,7 @@ render.mouse = mouse;
         spawnX: 300,
         endX: 500,
         goingRight: true,
-        body: Matter.Bodies.rectangle(300, 160, 80, 50, {
+        body: Matter.Bodies.rectangle(300, 160, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -398,7 +398,7 @@ render.mouse = mouse;
         spawnX: 700,
         endX: 1800,
         goingRight: true,
-        body: Matter.Bodies.rectangle(700, 1200, 80, 50, {
+        body: Matter.Bodies.rectangle(700, 1200, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -416,9 +416,9 @@ render.mouse = mouse;
       {
         //(location on x axis, location on y axis, width of box, height of box)
         spawnX: 420,
-        endX: 550,
+        endX: 580,
         goingRight: true,
-        body: Matter.Bodies.rectangle(420, 500, 80, 50, {
+        body: Matter.Bodies.rectangle(420, 560, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -438,7 +438,7 @@ render.mouse = mouse;
         spawnX: 1650,
         endX: 1900,
         goingRight: true,
-        body: Matter.Bodies.rectangle(1650, 500, 80, 50, {
+        body: Matter.Bodies.rectangle(1650, 500, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -458,7 +458,7 @@ render.mouse = mouse;
         spawnX: 1750,
         endX: 1780,
         goingRight: true,
-        body: Matter.Bodies.rectangle(1750, 100, 80, 50, {
+        body: Matter.Bodies.rectangle(1750, 100, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -475,10 +475,10 @@ render.mouse = mouse;
       },
       {
         //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 940,
-        endX: 960,
+        spawnX: 950,
+        endX: 1000,
         goingRight: false,
-        body: Matter.Bodies.rectangle(950, 800, 80, 50, {
+        body: Matter.Bodies.rectangle(950, 800, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -498,7 +498,7 @@ render.mouse = mouse;
         spawnX: 2550,
         endX: 2860,
         goingRight: false,
-        body: Matter.Bodies.rectangle(2550, 800, 80, 50, {
+        body: Matter.Bodies.rectangle(2550, 800, 60, 90, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -670,10 +670,9 @@ render.mouse = mouse;
           sprite: {
             texture: grass,
             xScale: 0.6,
-            yScale: 0.3
+            yScale: 2,
           }
         },
-        zoom: 0.4,
         label: 'platform',
       }),
       Bodies.rectangle(1100, 560, 400, 80, {
@@ -895,7 +894,7 @@ render.mouse = mouse;
       //right border
       Bodies.rectangle(4700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       // bottom border
-      Bodies.rectangle(2000, 1775, 6500, 600, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
+      Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
     ]);
 
     //generate elements within the engine----------------------------------------------------------------------------------------------------------
