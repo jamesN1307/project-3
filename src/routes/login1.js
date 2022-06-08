@@ -15,24 +15,35 @@ export default function Login(props) {
 
   const loginSubmit = async (e) => {
     e.preventDefault();
-    // const loglog = await API.login(loginData);
     props.login(loginData);
-    navigate("/avatar", { replace: true });
-    setLoginData({
-      username: "",
-      password: "",
-    });
+    if (
+      loginData.value !== API.userData || loginData.username === "" || loginData.password.length < 8
+    ) {
+      alert("wrong credentials");
+    } else {
+      navigate("/avatar", { replace: true });
+      setLoginData({
+        username: "",
+        password: "",
+      });
+    }
   };
-  const signupSubmit = async (e) => {
+  const signupSubmit = (e) => {
     e.preventDefault();
-    const signsign = await API.signup(signupData);
-    //props.signup(signupData)
-    navigate("/avatar", { replace: true });
-    console.log(signsign);
-    setSignupData({
-      username: "",
-      password: "",
-    });
+    props.signup(signupData);
+    if (
+      signupData.username === "" ||
+      signupData.password === "" ||
+      signupData.password.length < 8
+    ) {
+      alert("please fill in all input fields");
+    } else {
+      navigate("/avatar", { replace: true });
+      setSignupData({
+        username: "",
+        password: "",
+      });
+    }
   };
   return (
     <div className="Login">

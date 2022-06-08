@@ -19,7 +19,7 @@ import Bumi from "./components/level_1/bumi";
 import Katara from "./components/level_1/katara";
 import Sokka from "./components/level_1/sokka";
 import Appa from "./components/level_1/appa";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar/index.js";
 import './style.css';
 //mport './utils/API'
 
