@@ -662,6 +662,25 @@ render.mouse = mouse;
     const bullets = new Set();
 
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
+    const arrayPlatforms = [
+      {
+        width: 200,
+        height: 80,
+        body: 
+          Bodies.rectangle(100, -200, width, height, {
+          isStatic: true,
+          render: {
+            sprite: {
+              texture: grass,
+              xScale: width/550,
+              yScale: height/219,
+            }
+          },
+          label: 'platform',
+        })
+      }
+    ];
+
     World.add(mainEngine, [
       //(location on x axis, location on y axis, width of box, height of box)
       Bodies.rectangle(400, 260, 200, 80, {
@@ -909,6 +928,12 @@ render.mouse = mouse;
       World.add(mainEngine, [element.body])
     });
 
+    //Add array if platforms to the world
+    arrayPlatforms.forEach(element => {
+      World.add(mainEngine, [element.body])
+    });
+
+
 
     //Add Player to the World
     World.add(mainEngine, [player.body]);
@@ -963,7 +988,7 @@ render.mouse = mouse;
       keysDown.delete(event.code);
     });
 
-
+    //initialize vector for screen position
     var translate = {
       x: 0,
       y: 0,
@@ -975,10 +1000,12 @@ render.mouse = mouse;
         keyHandlers[k]?.();
       });
 
+      //update vector for screen position
       translate = {
         x: player.body.position.x-window.innerWidth/2,
         y: player.body.position.y-window.innerHeight/2,
       }
+      //render screen over new position
       Bounds.shift(render.bounds, translate);
 
       playerFallen();
