@@ -5,6 +5,8 @@ import aang from "../../images/Katara.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/wave.png"
+import coin from "../../images/coin.png"
+import waterFlag from "../../images/waterFlag.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -43,115 +45,7 @@ class Scene extends React.Component {
       },
     });
     const mainEngine = engine.world;
-    var world = engine.world
-    var mouse = Mouse.create(render.canvas),
-    mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-            stiffness: 0.2,
-            render: {
-                visible: false
-            }
-        }
-    });
-
-Composite.add(world, mouseConstraint);
-
-
-var viewportCentre = {
-  x: render.options.width * 0.5,
-  y: render.options.height * 0.5
-};
-
-// create limits for the viewport
-var extents = {
-  min: { x: -0, y: -0 },
-  max: { x: window.innerWidth, y: window.innerHeight }
-};
-
-// keep track of current bounds scale (view zoom)
-var boundsScaleTarget = 1,
-  boundsScale = {
-      x: 1,
-      y: 1
-  };
-
- // use a render event to control our view
- // use a render event to control our view
- Events.on(render, 'beforeRender', function() {
-  var world = engine.world,
-      mouse = mouseConstraint.mouse,
-      translate;
-
-  // mouse wheel controls zoom
-  var scaleFactor = mouse.wheelDelta * -0.1;
-  if (scaleFactor !== 0) {
-      if ((scaleFactor < 0 && boundsScale.x >= 0.6) || (scaleFactor > 0 && boundsScale.x <= 1.4)) {
-          boundsScaleTarget += scaleFactor;
-      }
-  }
-
-  // if scale has changed
-  if (Math.abs(boundsScale.x - boundsScaleTarget) > 0.01) {
-      // smoothly tween scale factor
-      scaleFactor = (boundsScaleTarget - boundsScale.x) * 0.2;
-      boundsScale.x += scaleFactor;
-      boundsScale.y += scaleFactor;
-
-      // scale the render bounds
-      render.bounds.max.x = render.bounds.min.x + render.options.width * boundsScale.x;
-      render.bounds.max.y = render.bounds.min.y + render.options.height * boundsScale.y;
-
-      // translate so zoom is from centre of view
-      translate = {
-          x: render.options.width * scaleFactor * -0.5,
-          y: render.options.height * scaleFactor * -0.5
-      };
-
-      Bounds.translate(render.bounds, translate);
-
-      // update mouse
-      Mouse.setScale(mouse, boundsScale);
-      Mouse.setOffset(mouse, render.bounds.min);
-  }
-
-  // get vector from mouse relative to centre of viewport
-  var deltaCentre = Vector.sub(mouse.absolute, viewportCentre),
-      centreDist = Vector.magnitude(deltaCentre);
-
-  // translate the view if mouse has moved over 50px from the centre of viewport
-  if (centreDist > 50) {
-      // create a vector to translate the view, allowing the user to control view speed
-      var direction = Vector.normalise(deltaCentre),
-          speed = Math.min(10, Math.pow(centreDist - 50, 2) * 0.0002);
-
-      translate = Vector.mult(direction, speed);
-
-      // prevent the view moving outside the extents
-      if (render.bounds.min.x + translate.x < extents.min.x)
-          translate.x = extents.min.x - render.bounds.min.x;
-
-      if (render.bounds.max.x + translate.x > extents.max.x)
-          translate.x = extents.max.x - render.bounds.max.x;
-
-      if (render.bounds.min.y + translate.y < extents.min.y)
-          translate.y = extents.min.y - render.bounds.min.y;
-
-      if (render.bounds.max.y + translate.y > extents.max.y)
-          translate.y = extents.max.y - render.bounds.max.y;
-
-      // move the view
-      Bounds.translate(render.bounds, translate);
-
-      // we must update the mouse too
-      Mouse.setOffset(mouse, render.bounds.min);
-  }
-});
-// keep the mouse in sync with rendering
-render.mouse = mouse;
-
-
-
+    
     // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
     //PLAYER CHARACTER
     const player = {
@@ -224,20 +118,117 @@ render.mouse = mouse;
       center = typeof center !== 'undefined' ? center : true;
     }
 
-    //COIN/SCORING OBJECTS
+    //COIN/SCORING OBJECTS-----------------------------------------------------------------------------------------
     const pickupSides = 30;
     const arrayPickups = [
       {
         body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
           isStatic: true,
-          render: { fillStyle: "yellow" },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          } },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(1850, 100, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { 
+            fillStyle: "yellow",
+          sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          } 
+        },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      {
+        body: Matter.Bodies.rectangle(1550, 250, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(1450, 1000, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(150, 1000, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
+          label: "coin",
+          coinUsed: false,
+        })
+      },
+      //(location on x axis, location on y axis, width of box, height of box)
+      {
+        body: Matter.Bodies.rectangle(1050, 900, pickupSides, pickupSides, {
+          isStatic: true,
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
       },
     ];
 
-    //Array of enemy character objects
+    //Array of enemy character objects----------------------------------------------------------------------------------
     const arrayEnemies = [
       {
         spawnX: 1000,
@@ -281,10 +272,110 @@ render.mouse = mouse;
       },
       {
         //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 500,
-        endX: 1200,
+        spawnX: 700,
+        endX: 1800,
         goingRight: true,
-        body: Matter.Bodies.rectangle(500, 500, 80, 50, {
+        body: Matter.Bodies.rectangle(700, 1200, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 420,
+        endX: 550,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(420, 500, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 1650,
+        endX: 1900,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(1650, 500, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 1750,
+        endX: 1780,
+        goingRight: true,
+        body: Matter.Bodies.rectangle(1750, 100, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 940,
+        endX: 960,
+        goingRight: false,
+        body: Matter.Bodies.rectangle(950, 800, 80, 50, {
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                }
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: soldier } }, label: 'enemy'
+        }),
+      },
+      {
+        //(location on x axis, location on y axis, width of box, height of box)
+        spawnX: 2550,
+        endX: 2860,
+        goingRight: false,
+        body: Matter.Bodies.rectangle(2550, 800, 80, 50, {
           plugin: {
             attractors: [
               function (player, bodyB) {
@@ -301,7 +392,7 @@ render.mouse = mouse;
       },
     ];
 
-    //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS
+    //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS-----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
         scoreLevel: this.state.scoreLevel += 10,
@@ -323,10 +414,14 @@ render.mouse = mouse;
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
+      var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
+      var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
+      var condition11 = pair.bodyA.label === 'platform' && pair.bodyB.label === 'bullet';
+      var condition12 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'platform';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10 || condition11 || condition12;
     };
 
     function deleteCoin(pair) {
@@ -395,6 +490,16 @@ render.mouse = mouse;
       };
     };
 
+    function nextLevel(pair) {
+      if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
+        window.location.href = "/katara"
+      };
+
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
+        window.location.href = "/katara"
+      };
+    };
+
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
         event.pairs.filter((pair) => {
@@ -405,6 +510,7 @@ render.mouse = mouse;
             deleteBullet(pair)
             deleteEnemy(pair)
             deleteBull(pair)
+            nextLevel(pair)
             //Add to variable/ score
           })
       });
@@ -434,10 +540,10 @@ render.mouse = mouse;
     //BULLET OBJECTS
     const bullets = new Set();
 
-    //ADD PLATFORMS TO WORLD
+    //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     World.add(mainEngine, [
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(400, 260, 400, 80, {
+      Bodies.rectangle(400, 260, 200, 80, {
         isStatic: true,
         render: {
           sprite: {
@@ -472,8 +578,9 @@ render.mouse = mouse;
         },
         label: 'platform',
       }),
+
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(500, 760, 300, 80, {
+      Bodies.rectangle(500, 760, 200, 80, {
         isStatic: true,
         render: {
           sprite: {
@@ -521,7 +628,7 @@ render.mouse = mouse;
         label: 'platform',
       }),
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(250, 1100, 550, 20, {
+      Bodies.rectangle(250, 1100, 250, 20, {
         isStatic: true,
         render: {
           sprite: {
@@ -533,7 +640,7 @@ render.mouse = mouse;
         label: 'platform',
       }),
       //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1050, 1000, 350, 20, {
+      Bodies.rectangle(1050, 1000, 250, 20, {
         isStatic: true,
         render: {
           sprite: {
@@ -544,16 +651,131 @@ render.mouse = mouse;
         },
         label: 'platform',
       }),
+      Bodies.rectangle(3250, 800, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2550, 300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3050, 1300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3450, 300, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2400, 1160, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2800, 860, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3000, 460, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.4,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3650, 1080, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(2350, 780, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: grass,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'platform',
+      }),
+      Bodies.rectangle(3450, 260, 250, 20, {
+        isStatic: true,
+        render: {
+          sprite: {
+            texture: waterFlag,
+            xScale: 0.6,
+            yScale: 0.4
+          }
+        },
+        label: 'door',
+      }),
 
-      //bottom border
-      Bodies.rectangle(0, window.innerHeight, 8000, 100, { isStatic: true, label: "border" }),
-      //left border
-      Bodies.rectangle(0, 400, 10, 2000, { isStatic: true, label: "border" }),
-      //left border
-      Bodies.rectangle(window.innerWidth, 400, 10, 2000, { isStatic: true, label: "border" }),
+      //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
+      //(location on x axis, location on y axis, width of box, height of box)
+
       //top border
       Bodies.rectangle(0, 0, 8000, 10, { isStatic: true, label: "border" }),
+      //left border
+      Bodies.rectangle(0, 0, 10, 3000, { isStatic: true, label: "border" }),
+      //right border
+      Bodies.rectangle(4000, 0, 10, 3000, { isStatic: true, label: "border" }),
+      // bottom border
+      Bodies.rectangle(0, 1450, 8000, 100, { isStatic: true, label: "border" }),
     ]);
+
+    //generate elements within the engine----------------------------------------------------------------------------------------------------------
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
@@ -619,11 +841,23 @@ render.mouse = mouse;
       keysDown.delete(event.code);
     });
 
+
+    var translate = {
+      x: player.body.position.x-600,
+      y: player.body.position.y-300,
+    }
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
         keyHandlers[k]?.();
       });
+
+      translate = {
+        x: player.body.position.x-window.innerWidth/2,
+        y: player.body.position.y-window.innerHeight/2,
+      }
+      Bounds.shift(render.bounds, translate);
 
       playerFallen();
       resetJumps();
@@ -634,17 +868,6 @@ render.mouse = mouse;
       //Move each enemy
       arrayEnemies.forEach(element => {
         moveEnemy(element);
-      });
-    });
-
-    Matter.Events.on(engine, 'afterUpdate', function () {
-      if (!player.position.x) {
-        return;
-      }
-
-      // smoothly move the attractor body towards the mouse
-      Matter.Body.translate(arrayPickups, {
-        x: (arrayPickups.position.x - player.position.x) * 0.25,
       });
     });
 
@@ -659,7 +882,7 @@ render.mouse = mouse;
       <div>
         {/*Check back for when variable should be passed to other pages*/}
         <div>{`score ${this.state.scoreLevel}`}</div>
-        <div ref="scene" />
+        <div ref="scene"/>
       </div>
     )
   }

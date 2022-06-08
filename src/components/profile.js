@@ -1,7 +1,8 @@
 import React from 'react';
 import Navbar from './page_elements/navbar';
-
+import Placeholder from "../images/placeholder.png"
 import { Link } from "react-router-dom";
+import aangProfile from "../images/aangProfile.png"
 
 const styles = {
     //master div for page elements
@@ -21,15 +22,20 @@ const styles = {
         backgroundColor: 'moccasin',
     },
 
+    profileContainer: {
+        display: 'flex',
+        justifyContent: "left",
+        width: '30%',
+        height: '80%',
+        backgroundColor: 'moccasin',
+    },
+
     //style left 'column' of page
     pageColumnLeft: {
         display: 'flex',
         flexDirection: 'column',
-        width: '65%',
-        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        borderStyle: 'solid',
     },
     
     //Items within left block
@@ -117,9 +123,13 @@ export default function Profile() {
             <div className="container" style={styles.pageContainer}>
                 <Navbar />
                 <section style={styles.columnContainer}>
+                    
                     {/*Left 'column' */}
                     <section style={styles.pageColumnLeft}>
-                        <h1 style={styles.sectionHeader}>Profile</h1>
+                        <div style={styles.profileContainer}>
+                        <img src={aangProfile} style={styles.pageColumnLeft}></img>
+                    <h1 style={{fontSize: "100px", marginTop: "3vh"}}>Username</h1>
+                        </div>
                         {/* username and scores */}
                         <article style={styles.scoreBlock}>
                             <h2 style={styles.usernameItem}>Username</h2>
@@ -138,22 +148,6 @@ export default function Profile() {
                                 <button style={styles.leaderLink}>Leaderboard - 2 Player</button>
                             </div>
                         </section>
-                    </section>
-
-                    {/*Right 'column' */}
-                    <section style={styles.pageColumnRight}>
-                        <h1 style={styles.sectionHeader}>Chat</h1>
-                        {/*Chat container*/}
-                        <div style={styles.chatBlock}>
-                            <section>
-                                <input type='text'style={styles.commentText}></input>
-                                <input type='submit' value='New Comment' style={styles.submitComment}></input>
-                            </section>
-                            {/*sample elements*/}
-                            <p style={styles.postedComment}>This is what posted comments will look like.</p>
-                            <p style={styles.postedComment}>This is what posted comments will look like.</p>
-                            <p style={styles.postedComment}>This is what posted comments will look like.</p>
-                        </div>
                     </section>
                 </section>
             </div>
