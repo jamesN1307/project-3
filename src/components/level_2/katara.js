@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../images/aang.png"
-import grass from "../images/grass.png"
-import soldier from "../images/soldier.png"
-import wind from "../images/hurricane_PNG56.png"
-import coin from "../images/coin.png"
-import waterFlag from "../images/waterFlag.png"
+import aang from "../../images/Katara.png"
+import grass from "../../images/grass.png"
+import soldier from "../../images/soldier.png"
+import wind from "../../images/wave.png"
+import coin from "../../images/coin.png"
+import waterFlag from "../../images/waterFlag.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -32,22 +32,21 @@ class Scene extends React.Component {
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
-    const engine = Engine.create();
-    const render = Render.create({
+    const engine = Matter.Engine.create();
+    const render = Matter.Render.create({
       element: this.refs.scene,
       engine: engine,
       options: {
-        width: 4500,
-        height: 2000,
+        width: window.innerWidth,
+        height: window.innerHeight,
         wireframes: false,
         background: "white",
-        hasBounds: true,
+        hasBounds: true
       },
     });
     const mainEngine = engine.world;
-    var world = engine.world
-
-    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
+    
+    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
     //PLAYER CHARACTER
     const player = {
       //track whether the box has jumped
@@ -55,6 +54,7 @@ class Scene extends React.Component {
       fallen: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
+        friction: 0.1,
         render: {
           sprite: {
             texture: aang,
@@ -124,13 +124,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(600, 350, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          } },
           label: "coin",
           coinUsed: false,
         })
@@ -139,14 +137,14 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(1850, 100, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
+          render: { 
             fillStyle: "yellow",
-            sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          } 
+        },
           label: "coin",
           coinUsed: false,
         })
@@ -154,13 +152,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(1550, 250, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -169,13 +165,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -184,13 +178,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(2050, 500, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -199,13 +191,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(1450, 1000, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -214,13 +204,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(150, 1000, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -229,13 +217,11 @@ class Scene extends React.Component {
       {
         body: Matter.Bodies.rectangle(1050, 900, pickupSides, pickupSides, {
           isStatic: true,
-          render: {
-            fillStyle: "yellow", sprite: {
-              texture: coin,
-              xScale: 0.15,
-              yScale: 0.15
-            }
-          },
+          render: { fillStyle: "yellow", sprite: {
+            texture: coin,
+            xScale: 0.15,
+            yScale: 0.15
+          }  },
           label: "coin",
           coinUsed: false,
         })
@@ -430,10 +416,12 @@ class Scene extends React.Component {
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
+      var condition11 = pair.bodyA.label === 'platform' && pair.bodyB.label === 'bullet';
+      var condition12 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'platform';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10 || condition11 || condition12;
     };
 
     function deleteCoin(pair) {
@@ -855,8 +843,8 @@ class Scene extends React.Component {
 
 
     var translate = {
-      x: player.body.position.x - 600,
-      y: player.body.position.y - 300,
+      x: player.body.position.x-600,
+      y: player.body.position.y-300,
     }
 
     //Engine which updates the environment frame-to-frame
@@ -866,8 +854,8 @@ class Scene extends React.Component {
       });
 
       translate = {
-        x: player.body.position.x - window.innerWidth / 2,
-        y: player.body.position.y - window.innerHeight / 2,
+        x: player.body.position.x-window.innerWidth/2,
+        y: player.body.position.y-window.innerHeight/2,
       }
       Bounds.shift(render.bounds, translate);
 
@@ -894,7 +882,7 @@ class Scene extends React.Component {
       <div>
         {/*Check back for when variable should be passed to other pages*/}
         <div>{`score ${this.state.scoreLevel}`}</div>
-        <div ref="scene" />
+        <div ref="scene"/>
       </div>
     )
   }
