@@ -340,15 +340,6 @@ render.mouse = mouse;
       },
     ];
 
-    /*
-    sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-    */
-
-    
     //TEST ENEMY
 
     //Array of enemy character objects----------------------------------------------------------------------------------
@@ -515,7 +506,7 @@ render.mouse = mouse;
       },
     ];
 
-    //FUNCTIONS BELOW - HANDLE COLLISIONS WITH PICKUPS-----------------------------------------------------------------------------------
+    //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
         scoreLevel: this.state.scoreLevel += 10,
@@ -662,249 +653,70 @@ render.mouse = mouse;
     const bullets = new Set();
 
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
-    const arrayPlatforms = [
-      {
-        body: 
-          Bodies.rectangle(100, -200, 200, 80, {
-          isStatic: true,
-          render: {
-            sprite: {
-              texture: grass,
-              xScale: 200/480,
-              yScale: 80/200,
-              xOffset: -0.05,
-            }
-          },
-          label: 'platform',
-        })
-      }
+    //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
+    // This helps to account for the image size and empty pixels when overlapping 
+    // it over the physical body of an in-game platform
+
+    /*
+    //Add array of platforms to the world
+    arrayPlatforms.forEach(element => {
+      World.add(mainEngine, [element.body])
+    });*/
+
+    //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
+    // call for each for each listed element in 'platformPresets' to create bodies,
+    // then calls for:each on arrayPlatforms to set up bodies for the engine
+    const platformPresets = [
+      //start platform
+      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80,},
+      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80,},
+      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80,}, 
+      {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80,}, 
+      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 20,},
+      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 20,}, 
+      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 20,},
+      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 20,},
+      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20,}, 
     ];
 
+    function makePlatforms(placeX, placeY, rectWidth, rectHeight, ) {
+      const newPlatform = {
+        body: 
+        //format is x location, y location (of centerpoint), width, height, {properties}
+          Bodies.rectangle(placeX, placeY, rectWidth, rectHeight, {
+            isStatic: true,
+            render: {
+              sprite: {
+                texture: grass,
+                xScale: rectWidth/480,
+                yScale: rectHeight/200,
+                xOffset: -0.05,
+              }
+            },
+            label: 'platform',
+          })
+      }
+      return newPlatform;
+    }
+
+    
+
     World.add(mainEngine, [
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(400, 260, 200, 80, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 2,
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(1100, 560, 400, 80, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.8,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1800, 160, 400, 80, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(500, 760, 200, 80, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1400, 360, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.4,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1800, 660, 450, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.8,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1900, 1100, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.4,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(250, 1100, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      //(location on x axis, location on y axis, width of box, height of box)
-      Bodies.rectangle(1050, 1000, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3250, 800, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(2550, 300, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3050, 1300, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3450, 300, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(2400, 1160, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.4,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(2800, 860, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.4,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3000, 460, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.4,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3650, 1080, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(2350, 780, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: grass,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'platform',
-      }),
-      Bodies.rectangle(3450, 260, 250, 20, {
-        isStatic: true,
-        render: {
-          sprite: {
-            texture: waterFlag,
-            xScale: 0.6,
-            yScale: 0.4
-          }
-        },
-        label: 'door',
-      }),
-
-      //Border creation - once camera follows player, Remove height/width references-------------------------------------------------------------------------------
+      //Border creation - once camera follows player -------------------------------------------------------------------------------------
       //(location on x axis, location on y axis, width of box, height of box)
       //*Note: Matter draws these objects from their centerpoint*
-
-      //CHANGE COLOR TO MATCH BACKGROUND, INCREASE HEIGHT (top border)
+      //(location on x axis, location on y axis, width of box, height of box)
+      //CHANGE COLOR TO MATCH BACKGROUND (top border)
       //top border
       Bodies.rectangle(2000, -300, 4000, 10, { isStatic: true, label: "border", render: {fillStyle: 'blue'} }),
       //left border
@@ -915,7 +727,7 @@ render.mouse = mouse;
       Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
     ]);
 
-    //generate elements within the engine----------------------------------------------------------------------------------------------------------
+    //generate elements within the engine_------SPAWN ITEMS FORM ARRAYS----------------------------------------------------------------------------------------
 
     //Add coins/score pickups to the world
     arrayPickups.forEach(element => {
@@ -927,12 +739,13 @@ render.mouse = mouse;
       World.add(mainEngine, [element.body])
     });
 
-    //Add array if platforms to the world
-    arrayPlatforms.forEach(element => {
-      World.add(mainEngine, [element.body])
+    //call creates bodies in arrayPlatforms
+    platformPresets.forEach(element => {
+      const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight);
+      World.add(mainEngine, newPlatform.body)
     });
 
-
+    //BELOW HERE - CALLS TO CUSTOM FUNCTIONS WHICH HANDLE CONTROLS, ENEMY MOVEMENT
 
     //Add Player to the World
     World.add(mainEngine, [player.body]);
