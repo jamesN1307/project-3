@@ -158,168 +158,40 @@ class Scene extends React.Component {
     //array to hold presets
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
-    const arrayEnemies = [
-      {
-        spawnX: 1000,
-        endX: 1200,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(1000, 500, 60, 90, {
-          id: "enemy",
-          plugin: {
-            attractors: [
-              function (bodyA, bodyB) {
-                return {
-                  x: (bodyA.position.x - bodyB.position.x) * 1e-6,
-                  y: (bodyA.position.y - bodyB.position.y) * 1e-6,
-                };
-              }
-            ]
-          },
-          render: { sprite: { texture: soldier, xScale: 1, yScale: 1 } },
-          label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 300,
-        endX: 500,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(300, 160, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 700,
-        endX: 1800,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(700, 1200, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 420,
-        endX: 580,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(420, 560, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 1650,
-        endX: 1900,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(1650, 500, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 1750,
-        endX: 1780,
-        goingRight: true,
-        body: Matter.Bodies.rectangle(1750, 100, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 950,
-        endX: 1000,
-        goingRight: false,
-        body: Matter.Bodies.rectangle(950, 800, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
-      {
-        //(location on x axis, location on y axis, width of box, height of box)
-        spawnX: 2550,
-        endX: 2860,
-        goingRight: false,
-        body: Matter.Bodies.rectangle(2550, 800, 60, 90, {
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
-                }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: soldier } }, label: 'enemy'
-        }),
-      },
+    const arrayPresetEnemies = [
+      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true},
+      {placeX: 300, placeY: 160, stopX: 500, movingRight: true},
+      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true},
+      {placeX: 420, placeY: 560, stopX: 580, movingRight: true},
+      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true},
+      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true},
+      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true},
+      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true},
     ];
+
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, ) {
+      const newEnemy = {
+          spawnX: spawnX,
+          endX: endX,
+          goingRight: goingRight,
+          body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+            id: "enemy",
+            plugin: {
+              attractors: [
+                function (player, bodyB) {
+                  var force = {
+                    x: (player.position.x - bodyB.position.x) * 1e-6,
+                    y: (player.position.y - bodyB.position.y) * 1e-6,
+                  }
+                  Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                  Matter.Body.applyForce(bodyB, bodyB.position, force);
+                }
+              ]
+            }, render: { sprite: { texture: soldier } }, label: 'enemy'
+          }),
+      }
+      return newEnemy;
+    }
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
@@ -547,10 +419,13 @@ class Scene extends React.Component {
 
     //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
 
-    //Add coins/score pickups to the world
-    /*arrayPickups.forEach(element => {
-      World.add(mainEngine, [element.body])
-    });*/
+    
+    const arrayEnemies = [];
+    //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
+    arrayPresetEnemies.forEach(element => {
+      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight);
+      arrayEnemies.push(newEnemy);
+    });
 
     //Add array of enemies to the world
     arrayEnemies.forEach(element => {
