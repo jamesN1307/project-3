@@ -367,9 +367,9 @@ class Scene extends React.Component {
       {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
       {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
       {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'door', image: grass},
+      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
       //platform to leave level 
-      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20, image: waterFlag}, 
+      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20, name:'door', image: waterFlag}, 
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
