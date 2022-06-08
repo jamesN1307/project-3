@@ -664,16 +664,15 @@ render.mouse = mouse;
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     const arrayPlatforms = [
       {
-        width: 200,
-        height: 80,
         body: 
-          Bodies.rectangle(100, -200, width, height, {
+          Bodies.rectangle(100, -200, 200, 80, {
           isStatic: true,
           render: {
             sprite: {
               texture: grass,
-              xScale: width/550,
-              yScale: height/219,
+              xScale: 200/480,
+              yScale: 80/200,
+              xOffset: -0.05,
             }
           },
           label: 'platform',
