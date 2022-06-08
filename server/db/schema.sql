@@ -1,2 +1,0 @@
-DROP DATABASE IF EXISTS avatar_db;
-CREATE DATABASE  avatar_db;

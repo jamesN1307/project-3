@@ -47,7 +47,6 @@ class Scene extends React.Component {
     const mainEngine = engine.world;
     var world = engine.world
 
-
     // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
     //PLAYER CHARACTER
     const player = {
@@ -350,29 +349,30 @@ class Scene extends React.Component {
     // then calls for:each on arrayPlatforms to set up bodies for the engine
     const platformPresets = [
       //start platform
-      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80,},
-      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80,},
-      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80,}, 
-      {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80,}, 
-      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 20,},
-      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 20,}, 
-      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 20,},
-      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 20,},
-      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20,}, 
-      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20,},
+      //x,y,width,height,label,image
+      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
+      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
+      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
+      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
+      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'door', image: grass},
       //platform to leave level 
-      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20,}, 
+      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20, image: waterFlag}, 
     ];
 
-    function makePlatforms(placeX, placeY, rectWidth, rectHeight, ) {
+    function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
       const newPlatform = {
         body: 
         //format is x location, y location (of centerpoint), width, height, {properties}
@@ -380,13 +380,13 @@ class Scene extends React.Component {
             isStatic: true,
             render: {
               sprite: {
-                texture: grass,
+                texture: image,
                 xScale: rectWidth/480,
                 yScale: rectHeight/200,
                 xOffset: -0.05,
               }
             },
-            label: 'platform',
+            label: name,
           })
       }
       return newPlatform;
@@ -430,7 +430,7 @@ class Scene extends React.Component {
 
     //call creates bodies in arrayPlatforms
     platformPresets.forEach(element => {
-      const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight);
+      const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight, element.name, element.image);
       World.add(mainEngine, newPlatform.body)
     });
 
@@ -509,8 +509,8 @@ class Scene extends React.Component {
 
       //update vector for screen position
       translate = {
-        x: player.body.position.x-window.innerWidth/2,
-        y: player.body.position.y-window.innerHeight/2,
+        x: player.body.position.x - window.innerWidth / 2,
+        y: player.body.position.y - window.innerHeight / 2,
       }
       //render screen over new position
       Bounds.shift(render.bounds, translate);
@@ -527,18 +527,6 @@ class Scene extends React.Component {
       });
     });
 
-    /*
-    Matter.Events.on(engine, 'afterUpdate', function () {
-      if (!player.position.x) {
-        return;
-      }
-      // smoothly move the attractor body towards the mouse
-      Matter.Body.translate(arrayPickups, {
-        x: (arrayPickups.position.x - player.position.x) * 0.25,
-      });
-    });
-    */
-
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
@@ -550,7 +538,7 @@ class Scene extends React.Component {
       <div>
         {/*Check back for when variable should be passed to other pages*/}
         <div>{`score ${this.state.scoreLevel}`}</div>
-        <div ref="scene"/>
+        <div ref="scene" />
       </div>
     )
   }
