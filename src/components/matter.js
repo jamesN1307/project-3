@@ -146,7 +146,8 @@ class Scene extends React.Component {
             texture: coin,
             xScale: 0.15,
             yScale: 0.15
-          } },
+            }
+          },
           label: "coin",
           coinUsed: false,
         })
@@ -178,6 +179,7 @@ class Scene extends React.Component {
           endX: endX,
           goingRight: goingRight,
           body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+            isUsed: false,
             inertia: Infinity,
             id: "enemy",
             plugin: {
@@ -193,15 +195,6 @@ class Scene extends React.Component {
               ]
             }, render: { sprite: { texture: image } }, label: 'enemy'
           }),
-
-          lastFire: Date.now(),
-          resetFire: 4000,
-          enemyFire() {
-            if (this.willFire && (Date.now() - this.lastFire < this.resetFire)) {
-              makeEnemyBullet(this.body.position.x, this.body.position.y);
-            }
-            this.lastFire = Date.now();
-          }
       }
       return newEnemy;
     }
@@ -243,8 +236,8 @@ class Scene extends React.Component {
       return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10 || condition11;
     };
 
-    function deleteCoin(pair) {
-      if (pair.bodyA.label === 'coin') {
+    function deleteCoin(pair) { // coin and player only
+      if (pair.bodyA.label === 'coin' && (pair.bodyB.label === 'player')) {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
           pair.bodyA.isUsed = true;
@@ -252,7 +245,7 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'coin') {
+      if (pair.bodyB.label === 'coin' && (pair.bodyA.label === 'player')) {
         if (!pair.bodyB.isUsed) {
           scoreUpdate();
           pair.bodyB.isUsed = true;
@@ -262,18 +255,20 @@ class Scene extends React.Component {
     };
 
     //deletes enemy on impact with bullet
-    function deleteBullet(pair) {
+    function deleteEnemyFromBullet(pair) {
       if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
-        if (!pair.bodyA.isUsed) {
+        if (!pair.bodyB.isUsed) {
           scoreUpdate();
+          pair.bodyB.isUsed = true;
           pair.bodyA.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyB)
       };
 
       if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
-        if (!pair.bodyB.isUsed) {
+        if (!pair.bodyA.isUsed) {
           scoreUpdate();
+          pair.bodyA.isUsed = true;
           pair.bodyB.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyA)
@@ -295,17 +290,17 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
+        Matter.World.remove(mainEngine, pair.bodyB);
+        };
     };
 
-    //intention - delete bullet whenever a bullet hits an object
+    //intention - delete bullet or enemyBullet whenever a bullet hits an object
     function deleteBull(pair) {
-      if (pair.bodyA.label === 'bullet') {
+      if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'bullet') {
+      if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -327,7 +322,7 @@ class Scene extends React.Component {
         })
           .forEach((pair) => {
             deleteCoin(pair);
-            deleteBullet(pair)
+            deleteEnemyFromBullet(pair)
             deleteEnemy(pair)
             deleteBull(pair)
             nextLevel(pair)
@@ -364,10 +359,12 @@ class Scene extends React.Component {
     //world.add
     //world.applyforce
 
+
     //needs to be passed enemyX and enemyY for a reference on where to spawn.
     function makeEnemyBullet(enemyX, enemyY) {
       const bullet = Matter.Bodies.circle(
           enemyX+40, enemyY, 8, {
+          inertia: Infinity,
           frictionAir: 0,
           label: "enemyBullet",
           density: 0.1,
@@ -379,7 +376,7 @@ class Scene extends React.Component {
         //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, {x: enemyX, y: enemyY}, {
-          x: 20,
+          x: 1.5,
           y: 0,
           },
         );
@@ -555,6 +552,8 @@ class Scene extends React.Component {
       y: 0,
     }
 
+    var timeStamp = Date.now();
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
@@ -575,12 +574,20 @@ class Scene extends React.Component {
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
 
+      if (Date.now() - timeStamp > 5000) {
+        arrayEnemies.forEach(element => {
+          console.log(element.isUsed);
+          //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
+          if (element.willFire && !element.body.isUsed) {
+            makeEnemyBullet(element.body.position.x, element.body.position.y);
+          }
+          timeStamp = Date.now();
+        });
+      }
+
       //Move each enemy
       arrayEnemies.forEach(element => {
         moveEnemy(element);
-        if (element.willFire) {
-          //makeEnemyBullet(element.body.position.x, element.body.position.y);
-        }
       });
     });
     
@@ -589,7 +596,6 @@ class Scene extends React.Component {
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
   }
-
 
   render() {
     return (
