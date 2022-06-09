@@ -594,7 +594,7 @@ class Scene extends React.Component {
       playerFallen();
       resetJumps();
 
-      //DETECT COLLISION BETWEEN PLAYER AND COINS
+      //DETECT COLLISIONS
       detectCollision();
 
       //generate shots fired from just enemies who are supposed to shoot
