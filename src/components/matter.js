@@ -325,7 +325,7 @@ class Scene extends React.Component {
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
         if (!pair.bodyB.isUsed) {
           scoreDelete();
-          pair.bodyBisUsed = true;
+          pair.bodyB.isUsed = true;
         }
       };
 
@@ -344,10 +344,11 @@ class Scene extends React.Component {
         })
           .forEach((pair) => {
             deleteCoin(pair);
-            deleteEnemyFromBullet(pair)
-            deleteEnemy(pair)
-            deleteBull(pair)
-            nextLevel(pair)
+            deleteEnemyFromBullet(pair);
+            deleteEnemy(pair);
+            deleteBull(pair);
+            nextLevel(pair);
+            playerDamagedBullet(pair);
             //Add to variable/ score
           })
       });
@@ -383,11 +384,10 @@ class Scene extends React.Component {
 
 
     //needs to be passed enemyX and enemyY for a reference on where to spawn.
-    function makeEnemyBullet(enemyX, enemyY) {
+    function makeEnemyBullet(enemyX, enemyY, direction) {
       const bullet = Matter.Bodies.circle(
-          enemyX+40, enemyY, 8, {
+          enemyX + 40*direction, enemyY, 8, {
           isUsed: false,
-          inertia: Infinity,
           frictionAir: 0,
           label: "enemyBullet",
           density: 0.1,
@@ -399,8 +399,8 @@ class Scene extends React.Component {
         //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, {x: enemyX, y: enemyY}, {
-          x: 1.5,
-          y: 0,
+            x: 1.7*direction,
+            y: -0.3,
           },
         );
     }
@@ -597,12 +597,14 @@ class Scene extends React.Component {
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
 
+      //generate shots fired from just enemies who are supposed to shoot
       if (Date.now() - timeStamp > 5000) {
         arrayEnemies.forEach(element => {
           console.log(element.isUsed);
           //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
           if (element.willFire && !element.body.isUsed) {
-            makeEnemyBullet(element.body.position.x, element.body.position.y);
+            let direction = Math.sign(player.body.position.x-element.body.position.x)
+            makeEnemyBullet(element.body.position.x, element.body.position.y, direction);
           }
           timeStamp = Date.now();
         });
