@@ -149,7 +149,7 @@ class Scene extends React.Component {
             }
           },
           label: "coin",
-          coinUsed: false,
+          isUsed: false,
         })
       }
       return newCoin;
@@ -230,10 +230,16 @@ class Scene extends React.Component {
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
       //collisions between enemy bullets and anything else
       var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
+      //collisions between player and enemy bullets
+      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
+      var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
+
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 | condition9 || condition10 || condition11;
+      return (condition1 || condition2 || condition3 || condition4 || condition5 
+        || condition6 || condition7 || condition8 || condition9 || condition10 
+        || condition11 || condition12 || condition13);
     };
 
     function deleteCoin(pair) { // coin and player only
@@ -315,6 +321,22 @@ class Scene extends React.Component {
       };
     };
 
+    function playerDamagedBullet(pair) {
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
+        if (!pair.bodyB.isUsed) {
+          scoreDelete();
+          pair.bodyBisUsed = true;
+        }
+      };
+
+      if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
+        if (!pair.bodyA.isUsed) {
+          scoreDelete();
+          pair.bodyA.isUsed = true;
+        }
+      };
+    }
+
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
         event.pairs.filter((pair) => {
@@ -364,6 +386,7 @@ class Scene extends React.Component {
     function makeEnemyBullet(enemyX, enemyY) {
       const bullet = Matter.Bodies.circle(
           enemyX+40, enemyY, 8, {
+          isUsed: false,
           inertia: Infinity,
           frictionAir: 0,
           label: "enemyBullet",
