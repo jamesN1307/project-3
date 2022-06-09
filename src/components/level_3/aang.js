@@ -358,43 +358,7 @@ class Scene extends React.Component {
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
-    const horizontalPlatforms = 
-      {
-        body: 
-        //format is x location, y location (of centerpoint), width, height, {properties}
-          Bodies.rectangle(400, 260, 600, 80, {
-            endX: 500,
-            goingRight: true,
-            isStatic: true,
-            render: {
-              sprite: {
-                texture: grass,
-                xOffset: -0.05,
-              }
-            },
-            label: "platform"
-          })
-      }
-    World.add(mainEngine, horizontalPlatforms.body)
 
-    // function moveEnemy(movingPlatform) {
-
-    //   // if object has overshot the endPoint or startPoint
-    //   if (movingPlatform.body.position.x > movingPlatform.endX) {
-    //     movingPlatform.goingRight = false;
-    //   } else if (movingPlatform.body.position.x < movingPlatform.spawnX) {
-    //     movingPlatform.goingRight = true;
-    //   }
-
-    //   //if 'goingRight' is true or false - if true, go right, otherwise go left
-    //   if (movingPlatform.goingRight) {
-    //     Matter.Body.setVelocity(movingPlatform.body, { x: 1, y: (movingPlatform.body.velocity.y) });
-    //   } else {
-    //     Matter.Body.setVelocity(movingPlatform.body, { x: -1, y: (movingPlatform.body.velocity.y) });
-    //   }
-    // };
-
-    // World.add(mainEngine, movingPlatform.body)
 
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
@@ -402,7 +366,7 @@ class Scene extends React.Component {
     const platformPresets = [
       //start platform
       //x,y,width,height,label,image
-      // {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
+      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
@@ -482,7 +446,7 @@ class Scene extends React.Component {
       //right border
       Bodies.rectangle(7500, 0, 1400, 3000, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       // bottom border
-      Bodies.rectangle(2000, 1800, 10500, 650, { isStatic: true, label: "water", render: {fillStyle: "blue"} }),
+      Bodies.rectangle(2000, 1800, 10500, 650, { isStatic: true, label: "water", render: {fillStyle: "red"} }),
     ]);
 
     //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
@@ -500,10 +464,10 @@ class Scene extends React.Component {
       World.add(mainEngine, [element.body])
     });
 
-
     //call creates bodies in arrayPlatforms
     platformPresets.forEach(element => {
       const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight, element.name, element.image);
+      newPlatform.translate(element, {x: 1, y:0})
       World.add(mainEngine, newPlatform.body)
     });
 
@@ -574,34 +538,11 @@ class Scene extends React.Component {
       y: 0,
     }
 
-    var counter = 0
-    var scaleFactor = 1.01;
-
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
         keyHandlers[k]?.();
       });
-
-        // make bodyA move up and down
-        // body is static so must manually update velocity for friction to work
-        var py = 300 + 100 * Math.sin(engine.timing.timestamp * 0.002);
-        Matter.Body.setVelocity(horizontalPlatforms.body, { x: 0, y: py - horizontalPlatforms.body.position.y });
-        Matter.Body.setPosition(horizontalPlatforms.body, { x: 100, y: py });
-
-        // make compound body move up and down and rotate constantly
-        Matter.Body.setVelocity(horizontalPlatforms.body, { x: 0, y: py - horizontalPlatforms.body.position.y });
-        Matter.Body.setPosition(horizontalPlatforms.body, { x: 600, y: py });
-
-        // // every 1.5 sec
-        // if (counter >= 60 * 1.5) {
-        //   Matter.Body.setVelocity(bodyB, { x: 0, y: -10 });
-        //   Matter.Body.setAngle(bodyC, -Math.PI * 0.26);
-        //   Matter.Body.setAngularVelocity(bodyD, 0.2);
-
-            // // reset counter
-            // counter = 0;
-            // scaleFactor = 1;
 
       //update vector for screen position
       translate = {
