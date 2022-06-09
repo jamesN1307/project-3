@@ -11,15 +11,16 @@ import LeaderboardSingle from "./components/single_leaderboard";
 import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
-import Matter from "./components/matter";
-import Iroh from "./components/levels/iroh";
-import Toph from "./components/levels/toph";
-import Momo from "./components/levels/momo";
-import Bumi from "./components/levels/bumi";
-import Katara from "./components/character/katara";
-import Sokka from "./components/character/sokka";
-import Appa from "./components/character/appa";
-import NavBar from "./components/NavBar";
+import Aang from "./components/level_1/aang";
+import Aang_2 from "./components/level_2/aang";
+import Iroh from "./components/level_1/iroh";
+import Toph from "./components/level_1/toph";
+import Momo from "./components/level_1/momo";
+import Bumi from "./components/level_1/bumi";
+import Katara from "./components/level_1/katara";
+import Sokka from "./components/level_1/sokka";
+import Appa from "./components/level_1/appa";
+import NavBar from "./components/NavBar/index.js";
 import './style.css';
 //mport './utils/API'
 
@@ -90,14 +91,15 @@ function App() {
       <Route path="game" element={<Game />} />
       {/* <Route path="profile" element={<Profile />} /> */}
       <Route path="levels" element={<Levels />} />
-      <Route path="matter" element={<Matter />} />
+      <Route path="aang" element={<Aang />} />
+      <Route path="aang2" element={<Aang_2 />} />
       <Route path="iroh" element={<Iroh />} />
       <Route path="toph" element={<Toph />} />
       <Route path="bumi" element={<Bumi />} />
       <Route path="momo" element={<Momo />} />
-      <Route path="Katara" element={<Katara />} />
-      <Route path="Sokka" element={<Sokka />} />
-      <Route path="Appa" element={<Appa />} />
+      <Route path="katara" element={<Katara />} />
+      <Route path="sokka" element={<Sokka />} />
+      <Route path="appa" element={<Appa />} />
 
    </Routes>
    </BrowserRouter>

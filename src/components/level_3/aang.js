@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../images/aang.png"
-import grass from "../images/grass.png"
-import soldier from "../images/soldier.png"
-import wind from "../images/hurricane_PNG56.png"
-import coin from "../images/coin.png"
-import waterFlag from "../images/waterFlag.png"
+import aang from "../../images/aang.png"
+import grass from "../../images/grass.png"
+import soldier from "../../images/soldier.png"
+import wind from "../../images/hurricane_PNG56.png"
+import coin from "../../images/coin.png"
+import waterFlag from "../../images/waterFlag.png"
+import wave from "../../images/wave.png"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class Scene extends React.Component {
       element: this.refs.scene,
       engine: engine,
       options: {
-        width: 4500,
+        width: 7500,
         height: 2000,
         wireframes: false,
         background: "skyblue",
@@ -77,7 +78,7 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 0.5,
+      fireForce: 5,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -85,10 +86,8 @@ class Scene extends React.Component {
 
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        
         const x = bx + (Math.cos(this.body.angle) * 10);
         const y = by + (Math.sin(this.body.angle) * 10);
-        
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
@@ -102,11 +101,10 @@ class Scene extends React.Component {
               yScale: 0.3
             }
           }
-        });
-
+        },
+        );
         bullets.add(bullet);
         World.add(engine.world, bullet);
-        //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
           x: Math.cos(this.body.angle) * this.fireForce,
@@ -121,7 +119,7 @@ class Scene extends React.Component {
       center = typeof center !== 'undefined' ? center : true;
     }
 
-    //COIN/SCORING OBJECTS-----------------------------------------------------------------------------------------
+       //COIN/SCORING OBJECTS-----------------------------------------------------------------------------------------
 
     //array to hold presets
     //custom function to call to make body, return it
@@ -146,10 +144,9 @@ class Scene extends React.Component {
             texture: coin,
             xScale: 0.15,
             yScale: 0.15
-            }
-          },
+          } },
           label: "coin",
-          isUsed: false,
+          coinUsed: false,
         })
       }
       return newCoin;
@@ -162,25 +159,22 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
-      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
-      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
-      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
-      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
-      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
-      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
+      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier},
+      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier},
+      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier},
+      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier},
+      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier},
+      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier},
+      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier},
+      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier},
     ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image) {
       const newEnemy = {
-          willFire: willShoot,
           spawnX: spawnX,
           endX: endX,
           goingRight: goingRight,
           body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
-            isUsed: false,
-            inertia: Infinity,
             id: "enemy",
             plugin: {
               attractors: [
@@ -213,37 +207,28 @@ class Scene extends React.Component {
     };
 
     function onCollision(pair) {
-      //first pair - collisions between players and coins
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
-      //second pair - collisions between bullets and enemies
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
-      //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
-      //fourth pair - collisions between player and enemies
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
-      //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
-      //collisions between enemy bullets and anything else
-      var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
-      //collisions between player and enemy bullets
-      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
-      var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
-
+      var condition11 = pair.bodyA.label === 'water' && pair.bodyB.label === 'player';
+      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'water';
+      var condition13 = pair.bodyA.label === 'water' && pair.bodyB.label === 'bullet';
+      var condition14 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'water';
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5 
-        || condition6 || condition7 || condition8 || condition9 || condition10 
-        || condition11 || condition12 || condition13);
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 || condition9 || condition10 || condition11 || condition12 || condition13 || condition14;
     };
 
-    function deleteCoin(pair) { // coin and player only
-      if (pair.bodyA.label === 'coin' && (pair.bodyB.label === 'player')) {
+    function deleteCoin(pair) {
+      if (pair.bodyA.label === 'coin') {
         if (!pair.bodyA.isUsed) {
           scoreUpdate();
           pair.bodyA.isUsed = true;
@@ -251,7 +236,7 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if (pair.bodyB.label === 'coin' && (pair.bodyA.label === 'player')) {
+      if (pair.bodyB.label === 'coin') {
         if (!pair.bodyB.isUsed) {
           scoreUpdate();
           pair.bodyB.isUsed = true;
@@ -260,28 +245,26 @@ class Scene extends React.Component {
       };
     };
 
-    //deletes enemy on impact with bullet
-    function deleteEnemyFromBullet(pair) {
+    //deletes bullet on impact with border
+    function deleteBullet(pair) {
       if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
-        if (!pair.bodyB.isUsed) {
+        if (!pair.bodyA.isUsed) {
           scoreUpdate();
-          pair.bodyB.isUsed = true;
           pair.bodyA.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyB)
       };
 
       if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
-        if (!pair.bodyA.isUsed) {
+        if (!pair.bodyB.isUsed) {
           scoreUpdate();
-          pair.bodyA.isUsed = true;
           pair.bodyB.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyA)
       };
     };
 
-    //deletes enemy on contact with player
+    //deletes bullet on impact with border
     function deleteEnemy(pair) {
       if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
         if (!pair.bodyA.isUsed) {
@@ -296,17 +279,16 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
-        Matter.World.remove(mainEngine, pair.bodyB);
-        };
+        Matter.World.remove(mainEngine, pair.bodyB)
+      };
     };
 
-    //intention - delete bullet or enemyBullet whenever a bullet hits an object
     function deleteBull(pair) {
-      if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
+      if (pair.bodyA.label === 'bullet') {
         Matter.World.remove(mainEngine, pair.bodyA)
       };
 
-      if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
+      if (pair.bodyB.label === 'bullet') {
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
@@ -321,21 +303,15 @@ class Scene extends React.Component {
       };
     };
 
-    function playerDamagedBullet(pair) {
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
-        if (!pair.bodyB.isUsed) {
-          scoreDelete();
-          pair.bodyB.isUsed = true;
-        }
+    function waterReset(pair) {
+      if ((pair.bodyA.label === 'water') && (pair.bodyB.label === 'player')) {
+        window.location.reload();
       };
 
-      if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
-        if (!pair.bodyA.isUsed) {
-          scoreDelete();
-          pair.bodyA.isUsed = true;
-        }
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'water')) {
+        window.location.reload();
       };
-    }
+    };
 
     function detectCollision() {
       Matter.Events.on(engine, 'collisionStart', (event) => {
@@ -344,11 +320,11 @@ class Scene extends React.Component {
         })
           .forEach((pair) => {
             deleteCoin(pair);
-            deleteEnemyFromBullet(pair);
-            deleteEnemy(pair);
-            deleteBull(pair);
-            nextLevel(pair);
-            playerDamagedBullet(pair);
+            deleteBullet(pair)
+            deleteEnemy(pair)
+            deleteBull(pair)
+            nextLevel(pair)
+            waterReset(pair)
             //Add to variable/ score
           })
       });
@@ -374,41 +350,11 @@ class Scene extends React.Component {
       }
     };
 
-    //Theory of Enemy bullets
-    //custom function runs in for:each loop which already dictates enemy movement
-    //also, new label, 'enemyBullet'
-    //how to time it? No idea
-
-    //world.add
-    //world.applyforce
-
-
-    //needs to be passed enemyX and enemyY for a reference on where to spawn.
-    function makeEnemyBullet(enemyX, enemyY, direction) {
-      const bullet = Matter.Bodies.circle(
-          enemyX + 40*direction, enemyY, 8, {
-          isUsed: false,
-          frictionAir: 0,
-          label: "enemyBullet",
-          density: 0.1,
-          render: { fillStyle:'red',}
-        });
-
-        bullets.add(bullet);
-        World.add(engine.world, bullet);
-        //applyforce requires body, location to apply force FROM, then a force vector
-        Matter.Body.applyForce(
-          bullet, {x: enemyX, y: enemyY}, {
-            x: 1.7*direction,
-            y: -0.3,
-          },
-        );
-    }
 
     //BULLET OBJECTS
     const bullets = new Set();
 
-    //ADD PLATFORMS TO WORLD, BELOW--------------------------------------------------------------------------------------------------------
+    //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
@@ -420,28 +366,46 @@ class Scene extends React.Component {
     const platformPresets = [
       //start platform
       //x,y,width,height,label,image
-
-      //spawn platform
       {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
+      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      //original platforms
+      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 4000,placeY: 460, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 4600,placeY: 60, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 4200,placeY: 260, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 4250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 4350,placeY: 780, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 3900,placeY: 160, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 4800,placeY: 660, rectWidth: 450,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 4900,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 5250,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 5400,placeY: 1160, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 5800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 5800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 6050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 6650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      {placeX: 5900,placeY: 500, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      {placeX: 5300,placeY: 660, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
+
       //platform to leave level 
-      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20, name:'door', image: waterFlag}, 
+      {placeX: 6400,placeY: 260, rectWidth: 250,rectHeight: 80, name:'door', image: waterFlag}, 
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
@@ -463,26 +427,26 @@ class Scene extends React.Component {
       }
       return newPlatform;
     }
+
+    //array to hold presets
+    //custom function to call to make body, return it
+    //for each loop then returns each one and adds to engine directly
     
 
     World.add(mainEngine, [
-      //Border creation -------------------------------------------------------------------------------------------------------------------
+      //Border creation - once camera follows player -------------------------------------------------------------------------------------
+      //(location on x axis, location on y axis, width of box, height of box)
       //*Note: Matter draws these objects from their centerpoint*
       //(location on x axis, location on y axis, width of box, height of box)
-      //*Note - center box, endpoints equal [x-coordinate of bottom] +/- width/2
-      //However, since we want the bottom to cover whole page even to the edge of the screen,
-      //the actual level space is [bottom width]-[2*side border width]
-  
       //CHANGE COLOR TO MATCH BACKGROUND (top border)
-
       //top border
-      Bodies.rectangle(2000, -300, 4000, 10, { isStatic: true, label: "border", render: {fillStyle: 'blue'} }),
+      Bodies.rectangle(2000, -300, 10000, 10, { isStatic: true, label: "border", render: {fillStyle: 'blue'} }),
       //left border
       Bodies.rectangle(-700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       //right border
-      Bodies.rectangle(4700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
+      Bodies.rectangle(7500, 0, 1400, 3000, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       // bottom border
-      Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
+      Bodies.rectangle(2000, 1800, 10500, 650, { isStatic: true, label: "water", render: {fillStyle: "red"} }),
     ]);
 
     //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
@@ -491,7 +455,7 @@ class Scene extends React.Component {
     const arrayEnemies = [];
     //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
     arrayPresetEnemies.forEach(element => {
-      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image, element.willFire);
+      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image);
       arrayEnemies.push(newEnemy);
     });
 
@@ -503,6 +467,7 @@ class Scene extends React.Component {
     //call creates bodies in arrayPlatforms
     platformPresets.forEach(element => {
       const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight, element.name, element.image);
+      newPlatform.translate(element, {x: 1, y:0})
       World.add(mainEngine, newPlatform.body)
     });
 
@@ -540,9 +505,7 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => {
-        player.fire()
-      }
+      KeyS: () => player.fire()
     };
 
 
@@ -575,8 +538,6 @@ class Scene extends React.Component {
       y: 0,
     }
 
-    var timeStamp = Date.now();
-
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
@@ -594,33 +555,20 @@ class Scene extends React.Component {
       playerFallen();
       resetJumps();
 
-      //DETECT COLLISIONS
+      //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
-
-      //generate shots fired from just enemies who are supposed to shoot
-      if (Date.now() - timeStamp > 5000) {
-        arrayEnemies.forEach(element => {
-          console.log(element.isUsed);
-          //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
-          if (element.willFire && !element.body.isUsed) {
-            let direction = Math.sign(player.body.position.x-element.body.position.x)
-            makeEnemyBullet(element.body.position.x, element.body.position.y, direction);
-          }
-          timeStamp = Date.now();
-        });
-      }
 
       //Move each enemy
       arrayEnemies.forEach(element => {
         moveEnemy(element);
       });
     });
-    
 
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
     Matter.Runner.run(runner, engine);
   }
+
 
   render() {
     return (

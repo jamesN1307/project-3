@@ -130,7 +130,7 @@ export default function ChooseAvatar() {
             {/* Top row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                <Link to="/matter"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang}alt="Ang" id = "1" /></Link>
+                <Link to="/aang"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={aang}alt="Ang" id = "1" /></Link>
                 </div>
 
                 <div style={styles.characterImage}>
