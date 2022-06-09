@@ -374,16 +374,11 @@ class Scene extends React.Component {
       }
     };
 
-    //Theory of Enemy bullets
-    //custom function runs in for:each loop which already dictates enemy movement
-    //also, new label, 'enemyBullet'
-    //how to time it? No idea
 
-    //world.add
-    //world.applyforce
-
-
-    //needs to be passed enemyX and enemyY for a reference on where to spawn.
+    //needs to be passed enemyX and enemyY for a reference on where to spawn, 
+    //direction for which way the soldier should shoot.
+    //Function to make enemy bullets
+    //
     function makeEnemyBullet(enemyX, enemyY, direction) {
       const bullet = Matter.Bodies.circle(
           enemyX + 40*direction, enemyY, 8, {
@@ -575,6 +570,7 @@ class Scene extends React.Component {
       y: 0,
     }
 
+    //Time reference for enemy shooting interval
     var timeStamp = Date.now();
 
     //Engine which updates the environment frame-to-frame
@@ -600,7 +596,6 @@ class Scene extends React.Component {
       //generate shots fired from just enemies who are supposed to shoot
       if (Date.now() - timeStamp > 5000) {
         arrayEnemies.forEach(element => {
-          console.log(element.isUsed);
           //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
           if (element.willFire && !element.body.isUsed) {
             let direction = Math.sign(player.body.position.x-element.body.position.x)
