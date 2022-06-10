@@ -87,9 +87,12 @@ class Scene extends React.Component {
         },
         label: 'player',
       }),
+
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 0.5,
+      fireForce: 0.5
+      // earth()
+      fire() {
       //fire function accepts either 'true' for right or 'false' for left
       fire(ifRight) {
         if (Date.now() - this.lastShot < this.cooldown) {
