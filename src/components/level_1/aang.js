@@ -9,8 +9,10 @@ import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
+import fireBall from "../../images/fireball.png"
 import API from "../../utils/API.js"
 import AppContext from "../../AppContext"
+
 
 class Scene extends React.Component {
   constructor(props) {
@@ -426,7 +428,13 @@ class Scene extends React.Component {
           frictionAir: 0,
           label: "enemyBullet",
           density: 0.1,
-          render: { fillStyle:'red',}
+          render: {
+            sprite: {
+              texture:fireBall,
+              xScale: 0.1,
+              yScale: 0.1
+            }
+          }
         });
 
         bullets.add(bullet);
@@ -435,7 +443,7 @@ class Scene extends React.Component {
         Matter.Body.applyForce(
           bullet, {x: enemyX, y: enemyY}, {
             x: 1.7*direction,
-            y: -0.3,
+            y: 0 ,
           },
         );
     }
