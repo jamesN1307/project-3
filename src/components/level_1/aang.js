@@ -90,20 +90,26 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 0.5,
+      fireForce: 0.5
       // earth()
       fire() {
+      //fire function accepts either 'true' for right or 'false' for left
+      fire(ifRight) {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
         }
 
+        //if the firing direction is left, set value to negative
+        //when applied, the negative 'x' direction fires left
+        let dir = 1;
+        if (!ifRight) {
+          dir = -1;
+        }
+
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        
-        const x = bx + (Math.cos(this.body.angle) * 10);
-        const y = by + (Math.sin(this.body.angle) * 10);
-        
-
+        const x = bx + (Math.cos(this.body.angle) * 10 * dir);
+        const y = by + (Math.sin(this.body.angle) * 10 * dir);
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
           frictionAir: 0.006,
@@ -123,7 +129,7 @@ class Scene extends React.Component {
         //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
-          x: Math.cos(this.body.angle) * this.fireForce,
+          x: Math.cos(this.body.angle) * this.fireForce * dir,
           y: Math.sin(this.body.angle) * this.fireForce,
         },
         );
@@ -605,9 +611,13 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => {
-        player.fire()
-      }
+      //Handle player firing left and right, respectively
+      KeyI: () => {
+        player.fire(false)
+      },
+      KeyP: () => {
+        player.fire(true)
+      },
     };
 
 
