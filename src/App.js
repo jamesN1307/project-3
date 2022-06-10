@@ -13,6 +13,7 @@ import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
 import Aang from "./components/level_1/aang";
 import Aang_2 from "./components/level_2/aang";
+import Aang_3 from "./components/level_3/aang";
 import Iroh from "./components/level_1/iroh";
 import Toph from "./components/level_1/toph";
 import Momo from "./components/level_1/momo";
@@ -93,6 +94,7 @@ function App() {
       <Route path="levels" element={<Levels />} />
       <Route path="aang" element={<Aang />} />
       <Route path="aang2" element={<Aang_2 />} />
+      <Route path="aang3" element={<Aang_3 />} />
       <Route path="iroh" element={<Iroh />} />
       <Route path="toph" element={<Toph />} />
       <Route path="bumi" element={<Bumi />} />
