@@ -6,6 +6,7 @@ import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
+import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
 import wave from "../../images/wave.png"
 
@@ -78,7 +79,7 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 5,
+      fireForce: 1,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -157,44 +158,44 @@ class Scene extends React.Component {
 
     //array to hold presets
     //custom function to call to make body, return it
-   //for each loop then returns each one and adds to engine directly
-   const arrayPresetEnemies = [
-    {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
-    {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
-    {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
-    {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
-    {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
-    {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
-    {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
-    {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
-  ];
+    //for each loop then returns each one and adds to engine directly
+    const arrayPresetEnemies = [
+      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
+      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
+      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
+      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
+      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
+      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
+      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
+      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
+    ];
 
-  function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
-    const newEnemy = {
-        willFire: willShoot,
-        spawnX: spawnX,
-        endX: endX,
-        goingRight: goingRight,
-        body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
-          isUsed: false,
-          inertia: Infinity,
-          id: "enemy",
-          plugin: {
-            attractors: [
-              function (player, bodyB) {
-                var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
+      const newEnemy = {
+          willFire: willShoot,
+          spawnX: spawnX,
+          endX: endX,
+          goingRight: goingRight,
+          body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+            isUsed: false,
+            inertia: Infinity,
+            id: "enemy",
+            plugin: {
+              attractors: [
+                function (player, bodyB) {
+                  var force = {
+                    x: (player.position.x - bodyB.position.x) * 1e-6,
+                    y: (player.position.y - bodyB.position.y) * 1e-6,
+                  }
+                  Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                  Matter.Body.applyForce(bodyB, bodyB.position, force);
                 }
-                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                Matter.Body.applyForce(bodyB, bodyB.position, force);
-              }
-            ]
-          }, render: { sprite: { texture: image } }, label: 'enemy'
-        }),
+              ]
+            }, render: { sprite: { texture: image } }, label: 'enemy'
+          }),
+      }
+      return newEnemy;
     }
-    return newEnemy;
-  }
 
      //Function to make enemy bullets
     //
@@ -236,25 +237,32 @@ class Scene extends React.Component {
     };
 
     function onCollision(pair) {
+      //first pair - collisions between players and coins
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
+      //second pair - collisions between bullets and enemies
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+      //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+      //fourth pair - collisions between player and enemies
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
+      //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
-      var condition11 = pair.bodyA.label === 'water' && pair.bodyB.label === 'player';
-      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'water';
-      var condition13 = pair.bodyA.label === 'water' && pair.bodyB.label === 'bullet';
-      var condition14 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'water';
+      //collisions between enemy bullets and anything else
+      var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
+      //collisions between player and enemy bullets
+      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
+      var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 
-        || condition9 || condition10 || condition11 || condition12 || condition13 || condition14;
+      return (condition1 || condition2 || condition3 || condition4 || condition5 
+        || condition6 || condition7 || condition8 || condition9 || condition10 
+        || condition11 || condition12 || condition13);
     };
 
     function deleteCoin(pair) {
@@ -294,38 +302,61 @@ class Scene extends React.Component {
       };
     };
 
-    //deletes bullet on impact with border
-    function deleteEnemy(pair) {
-      if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
-        if (!pair.bodyA.isUsed) {
-          scoreDelete();
-          pair.bodyA.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyA)
+      //deletes enemy on impact with bullet
+      function deleteEnemyFromBullet(pair) {
+        if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
+          if (!pair.bodyB.isUsed) {
+            scoreUpdate();
+            pair.bodyB.isUsed = true;
+            pair.bodyA.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
+  
+        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
+          if (!pair.bodyA.isUsed) {
+            scoreUpdate();
+            pair.bodyA.isUsed = true;
+            pair.bodyB.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
       };
-
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
-        if (!pair.bodyB.isUsed) {
-          scoreDelete();
-          pair.bodyB.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyB)
+  
+      //deletes enemy on contact with player
+      function deleteEnemy(pair) {
+        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
+          if (!pair.bodyA.isUsed) {
+            scoreDelete();
+            pair.bodyA.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
+  
+        if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
+          if (!pair.bodyB.isUsed) {
+            scoreDelete();
+            pair.bodyB.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyB);
+          };
       };
-    };
-
-    function deleteBull(pair) {
-      if (pair.bodyA.label === 'bullet') {
-        Matter.World.remove(mainEngine, pair.bodyA)
+  
+      //intention - delete bullet or enemyBullet whenever a bullet hits an object
+      function deleteBull(pair) {
+        if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
+  
+        if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
       };
-
-      if (pair.bodyB.label === 'bullet') {
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
-    };
-
+  
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         window.location.href = "/katara"
+        
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
@@ -333,13 +364,29 @@ class Scene extends React.Component {
       };
     };
 
+    function playerDamagedBullet(pair) {
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
+        if (!pair.bodyB.isUsed) {
+          scoreDelete();
+          pair.bodyB.isUsed = true;
+        }
+      };
+
+      if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
+        if (!pair.bodyA.isUsed) {
+          scoreDelete();
+          pair.bodyA.isUsed = true;
+        }
+      };
+    }
+
     function waterReset(pair) {
       if ((pair.bodyA.label === 'water') && (pair.bodyB.label === 'player')) {
-        window.location.reload();
+        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'water')) {
-        window.location.reload();
+        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
       };
     };
 
@@ -360,6 +407,57 @@ class Scene extends React.Component {
       });
     };
 
+        //Custom function - update enemy velocity
+    //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
+    //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
+    function moveEnemy(enemyObject) {
+
+      // if object has overshot the endPoint or startPoint
+      if (enemyObject.body.position.x > enemyObject.endX) {
+        enemyObject.goingRight = false;
+      } else if (enemyObject.body.position.x < enemyObject.spawnX) {
+        enemyObject.goingRight = true;
+      }
+
+      //if 'goingRight' is true or false - if true, go right, otherwise go left
+      if (enemyObject.goingRight) {
+        Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
+      } else {
+        Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
+      }
+    };
+
+
+    //needs to be passed enemyX and enemyY for a reference on where to spawn, 
+    //direction for which way the soldier should shoot.
+    //Function to make enemy bullets
+    //
+    function makeEnemyBullet(enemyX, enemyY, direction) {
+      const bullet = Matter.Bodies.circle(
+          enemyX + 40*direction, enemyY, 8, {
+          isUsed: false,
+          frictionAir: 0,
+          label: "enemyBullet",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture:fireBall,
+              xScale: 0.1,
+              yScale: 0.1
+            }
+          }
+        });
+
+        bullets.add(bullet);
+        World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
+        Matter.Body.applyForce(
+          bullet, {x: enemyX, y: enemyY}, {
+            x: 1.7*direction,
+            y: 0 ,
+          },
+        );
+    }
     //Custom function - update enemy velocity
     //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
     //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
@@ -535,7 +633,7 @@ class Scene extends React.Component {
     const arrayEnemies = [];
     //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
     arrayPresetEnemies.forEach(element => {
-      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image);
+      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image, element.willFire);
       arrayEnemies.push(newEnemy);
     });
 
@@ -642,6 +740,9 @@ class Scene extends React.Component {
       Matter.Body.setPosition(element.body, { x: 600, y: py });*/
     }
 
+   //Time reference for enemy shooting interval
+   var timeStamp = Date.now();
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
@@ -667,6 +768,18 @@ class Scene extends React.Component {
 
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
+
+       //generate shots fired from just enemies who are supposed to shoot
+       if (Date.now() - timeStamp > 5000) {
+        arrayEnemies.forEach(element => {
+          //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
+          if (element.willFire && !element.body.isUsed) {
+            let direction = Math.sign(player.body.position.x-element.body.position.x)
+            makeEnemyBullet(element.body.position.x, element.body.position.y, direction);
+          }
+          timeStamp = Date.now();
+        });
+      }
 
       //Move each enemy
       arrayEnemies.forEach(element => {
