@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
+import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import aang from "../../images/aang.png"
@@ -7,16 +9,25 @@ import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
+import fireBall from "../../images/fireball.png"
+import API from "../../utils/API.js"
+import AppContext from "../../AppContext"
+
 
 class Scene extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scoreLevel: 0,
+      scoreLevel: 20,
     };
-  }
+  };
+
+  static contextType = AppContext;
+
 
   componentDidMount() {
+    const myContext = this.context;
+
     Matter.use(
       'matter-attractors'
     )
@@ -311,13 +322,46 @@ class Scene extends React.Component {
       };
     };
 
+    // function GetScore(){
+    //   const [data,setData] = useState([])
+    //   const [scoreData, setScoreData] =useState({
+    //     score:"",
+    //     level:""
+    //   })
+
+    //     API.collectScore(scoreData, props.token).then(result=>{
+    //       setScoreData({
+    //         score:Scene.state.scoreLevel, 
+    //         level:1
+    //       })
+    //       // API.getOneUser(id).then((data) =>{
+    //       //   if(data.username){
+    //       //     setData(data)
+    //       //   }
+    //       // })
+    //     })
+    //   }
+    function getScore(){
+      const hello = myContext.player.scoreLevel
+      const token = JSON.parse(localStorage.getItem("userToken"))
+      API.collectScore(token,hello,1)
+    }
+
+
     function nextLevel(pair) {
+
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         window.location.href = "/aang2"
+        getScore();
+        // <Navigate to="/katara" replace ={true} />
       };
-
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         window.location.href = "/aang2"
+        getScore();
+        // const hello = this.state.scoreLevel
+        // const token = JSON.parse(localStorage.getItem("userToken"))
+        // API.collectScore(token,hello,1);
+        // <Navigate to="/katara" replace ={true} />
       };
     };
 
@@ -386,7 +430,13 @@ class Scene extends React.Component {
           frictionAir: 0,
           label: "enemyBullet",
           density: 0.1,
-          render: { fillStyle:'red',}
+          render: {
+            sprite: {
+              texture:fireBall,
+              xScale: 0.1,
+              yScale: 0.1
+            }
+          }
         });
 
         bullets.add(bullet);
@@ -395,7 +445,7 @@ class Scene extends React.Component {
         Matter.Body.applyForce(
           bullet, {x: enemyX, y: enemyY}, {
             x: 1.7*direction,
-            y: -0.3,
+            y: 0 ,
           },
         );
     }
@@ -407,8 +457,19 @@ class Scene extends React.Component {
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
-
-
+    const newPlatForm = [
+      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, stopX: 600, goingRight:true, name: 'platform', image: grass},
+    ]
+    function makePlatformMove (placeX,placeY,rectWidth, goingRight, rectHeight,stopX) {
+      const movePlatform = {
+        placeX:placeX,
+        stopX:stopX,
+        goingRight: goingRight,
+        body:Matter.Bodies.rectangle(placeX,placeY )
+      }
+    }
+    World.add(mainEngine,newPlatForm)
+ 
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
     // then calls for:each on arrayPlatforms to set up bodies for the engine
@@ -436,7 +497,7 @@ class Scene extends React.Component {
       {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
       {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
       //platform to leave level 
-      {placeX: 3450,placeY: 260, rectWidth: 250,rectHeight: 20, name:'door', image: waterFlag}, 
+      {placeX: 250,placeY: 500, rectWidth: 250,rectHeight: 20, name:'door', image: waterFlag}, 
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
@@ -607,7 +668,6 @@ class Scene extends React.Component {
 
       //Move each enemy
       arrayEnemies.forEach(element => {
-        moveEnemy(element);
       });
     });
     
@@ -618,6 +678,7 @@ class Scene extends React.Component {
   }
 
   render() {
+    const myContext = this.context;
     return (
       <div>
         {/*Check back for when variable should be passed to other pages*/}

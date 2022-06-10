@@ -1,7 +1,7 @@
 //DEVELOP
-//const BASE_URL = "http://localhost:3001";
+const BASE_URL = "http://localhost:3001";
 //PROD
-const BASE_URL = "https://stormy-citadel-38044.herokuapp.com";
+// const BASE_URL = "https://stormy-citadel-38044.herokuapp.com";
 
 const API = {
   getAllUsers: () => {
@@ -13,6 +13,20 @@ const API = {
   verify: (token) => {
     return fetch(`${BASE_URL}/api/users/verifyToken`, {
       headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+  },
+  collectScore: (token, scoreLevel, level) => {
+    return fetch(`${BASE_URL}/api/scores`,{
+      method: "POST",
+      body: JSON.stringify({
+        score : scoreLevel,
+        level : level
+      }
+        ),
+      headers: {
+        "Content-Type": "application/json",
         authorization: `Bearer ${token}`,
       },
     }).then((res) => res.json());
