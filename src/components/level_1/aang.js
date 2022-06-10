@@ -20,6 +20,8 @@ class Scene extends React.Component {
     this.state = {
       scoreLevel: 20,
     };
+    // this.getScore= this.getScore.bind(this);
+
   };
 
   static contextType = AppContext;
@@ -218,16 +220,17 @@ class Scene extends React.Component {
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
-        scoreLevel: this.state.scoreLevel += 10,
+        scoreLevel: this.state.scoreLevel + 10,
       })
+
     };
 
     const scoreDelete = () => {
       this.setState({
-        scoreLevel: this.state.scoreLevel -= 10,
+        scoreLevel: this.state.scoreLevel - 10,
       })
-    };
 
+    };
     function onCollision(pair) {
       //first pair - collisions between players and coins
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
@@ -346,28 +349,31 @@ class Scene extends React.Component {
     //       // })
     //     })
     //   }
-    function getScore(){
-      const hello = myContext.player.scoreLevel
-      const token = JSON.parse(localStorage.getItem("userToken"))
-      API.collectScore(token,hello,1)
+    
+    const getScore = (props)=>{
+      const hello = this.state.scoreLevel
+      console.log(this.state.scoreLevel)
+      // const token = JSON.parse(localStorage.getItem("userToken"))
+      // console.log(token)
+      API.collectScore(this.state.scoreLevel,1)
     }
 
-
+    
+    
     function nextLevel(pair) {
-
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/aang2"
         getScore();
-        // <Navigate to="/katara" replace ={true} />
+        <Navigate to = "/aang2" replace={true} />
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/aang2"
         getScore();
+        <Navigate to = "/aang2" replace={true} />
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);
         // <Navigate to="/katara" replace ={true} />
       };
+
     };
 
     function playerDamagedBullet(pair) {
