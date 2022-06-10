@@ -11,6 +11,8 @@ import avatarAang from "../images/avatarAang.jpg"
 import fire from "../images/fire.jpg"
 import Krew from "../images/Krew.png"
 import sky from "../images/sky.png"
+import API from "../utils/API"
+import { response } from 'express';
 // import background from "../images/leaderboard_background.png";
 
 // LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
@@ -151,7 +153,12 @@ const styles = {
 export default function LeaderboardSingle() {
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-
+        
+    const getLvlOne = ()=>{
+        API.getLeaderboard()
+      }
+  
+      console.log(this.state.scoreLevel)
     return (
         <div className="container" >
             <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
@@ -169,7 +176,7 @@ export default function LeaderboardSingle() {
                     <section style={styles.scoreRow}>
                         <article style={styles.scoreEarthBlock}>
                             <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username - {{}}</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                             <p style={styles.scoreBlockElement}>Username - score</p>
                         </article>
