@@ -610,9 +610,6 @@ class Scene extends React.Component {
         Matter.Body.setVelocity(elementBody, { x: px - elementBody.position.x, y: 0 });
         Matter.Body.setPosition(elementBody, { x: px, y: elementBody.position.y });
       }
-
-
-
       /*var py = 300 + 100 * Math.sin(engine.timing.timestamp * 0.002);
 
       Matter.Body.setVelocity(element.body, { x: 0, y: py - element.body.position.y });
