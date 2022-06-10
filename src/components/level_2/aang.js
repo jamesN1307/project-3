@@ -224,7 +224,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 || condition9 || condition10 || condition11 || condition12 || condition13 || condition14;
+      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 
+        || condition9 || condition10 || condition11 || condition12 || condition13 || condition14;
     };
 
     function deleteCoin(pair) {
@@ -359,6 +360,59 @@ class Scene extends React.Component {
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
 
+    //ADD MOVING PLATFORM
+    //array moving platform presets
+    //constructor function
+    //call constructor in for:each loop on presets.
+    //add to new array of completed objects for later movement code (referencing enemy code)
+    const movingPlatformPresets = [
+      //x,y,width,height,label,image, range from start position platform will move,
+      // speed of platform movement, and axis of movement
+      //NOTE - MOVERANGE IS NOT IN PIXELS
+      {placeX: 400, placeY: 200, rectWidth: 600, rectHeight: 80, 
+        name: 'platform', image: grass, moveRange: 1, moveSpeed: 0.002, moveY: true}, 
+    ]
+
+    function makeMovingPlatform(placeX, placeY, width, height, name, image, range, speed, dirY) {
+      const mobilePlatforms = 
+        {
+          body: 
+          //format is x location, y location (of centerpoint), width, height, {properties}
+            Bodies.rectangle(placeX, placeY, width, height, {
+              moveRange: range,
+              moveSpeed: speed,
+              moveY: dirY,
+              isStatic: true,
+              render: {
+                sprite: {
+                  texture: image,
+                  xScale: width/480,
+                  yScale: height/200,
+                  xOffset: -0.05,
+                }
+              },
+              label: name
+            })
+        }
+     return mobilePlatforms;
+    }
+
+    //have presets
+    //presets.for each, makemovingplatform
+    //push to arraymovingplatforms
+    const arrayMovingPlatforms = [];
+
+    movingPlatformPresets.forEach(element => {
+      let object = makeMovingPlatform(element.placeX, element.placeY, element.rectWidth, 
+        element.rectHeight, element.name, element.image, element.moveRange, element.moveSpeed, element.moveY)
+      arrayMovingPlatforms.push(object);
+    });
+
+    
+    //generate MOVING PLATFORMS ONLY
+    arrayMovingPlatforms.forEach(element => {
+      World.add(mainEngine, element.body);
+    });
 
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
@@ -366,7 +420,7 @@ class Scene extends React.Component {
     const platformPresets = [
       //start platform
       //x,y,width,height,label,image
-      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
+      // {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
@@ -464,6 +518,7 @@ class Scene extends React.Component {
       World.add(mainEngine, [element.body])
     });
 
+
     //call creates bodies in arrayPlatforms
     platformPresets.forEach(element => {
       const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight, element.name, element.image);
@@ -537,10 +592,40 @@ class Scene extends React.Component {
       y: 0,
     }
 
+    //when called, updates the position and velocity of a 
+    //given moving platform
+    //uses range, speed, and axis of movement (moveAx)
+    //x,y,moveRange,moveSpeed,moveY
+    function platformMovement(elementBody) {
+      // MUST PLAYTEST to find good balance between distance traveled and multiplier
+      //if MoveY is true, platform moves in y direction
+      //else, moves in x direction
+      //ERROR-unclear why demo values have not scaled to values currently placed in platforms
+      if (elementBody.moveY) {
+        let py = elementBody.position.y + elementBody.moveRange * Math.sin(engine.timing.timestamp * elementBody.moveSpeed);
+        Matter.Body.setVelocity(elementBody, { x: 0, y: py - elementBody.position.y });
+        Matter.Body.setPosition(elementBody, { x: elementBody.position.x, y: py });
+      } else {
+        let px = elementBody.position.x + elementBody.moveRange * Math.sin(engine.timing.timestamp * elementBody.moveSpeed);
+        Matter.Body.setVelocity(elementBody, { x: px - elementBody.position.x, y: 0 });
+        Matter.Body.setPosition(elementBody, { x: px, y: elementBody.position.y });
+      }
+      /*var py = 300 + 100 * Math.sin(engine.timing.timestamp * 0.002);
+
+      Matter.Body.setVelocity(element.body, { x: 0, y: py - element.body.position.y });
+      Matter.Body.setPosition(element.body, { x: 600, y: py });*/
+    }
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
         keyHandlers[k]?.();
+      });
+
+      //update position and velocity of each moving platform
+      arrayMovingPlatforms.forEach(element => {
+        // must playtest to find good balance between distance traveled and multiplier
+        platformMovement(element.body);
       });
 
       //update vector for screen position
