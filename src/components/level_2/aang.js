@@ -358,6 +358,8 @@ class Scene extends React.Component {
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
+
+    //ADD MOVING PLATFORM
     const horizontalPlatforms = 
       {
         body: 
