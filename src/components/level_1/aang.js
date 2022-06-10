@@ -313,11 +313,11 @@ class Scene extends React.Component {
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
+        window.location.href = "/aang2"
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        window.location.href = "/aang2"
       };
     };
 

@@ -157,41 +157,70 @@ class Scene extends React.Component {
 
     //array to hold presets
     //custom function to call to make body, return it
-    //for each loop then returns each one and adds to engine directly
-    const arrayPresetEnemies = [
-      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier},
-      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier},
-      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier},
-      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier},
-      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier},
-      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier},
-      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier},
-    ];
+   //for each loop then returns each one and adds to engine directly
+   const arrayPresetEnemies = [
+    {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
+    {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
+    {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
+    {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
+    {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
+    {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
+    {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
+    {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
+  ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image) {
-      const newEnemy = {
-          spawnX: spawnX,
-          endX: endX,
-          goingRight: goingRight,
-          body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
-            id: "enemy",
-            plugin: {
-              attractors: [
-                function (player, bodyB) {
-                  var force = {
-                    x: (player.position.x - bodyB.position.x) * 1e-6,
-                    y: (player.position.y - bodyB.position.y) * 1e-6,
-                  }
-                  Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                  Matter.Body.applyForce(bodyB, bodyB.position, force);
+  function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
+    const newEnemy = {
+        willFire: willShoot,
+        spawnX: spawnX,
+        endX: endX,
+        goingRight: goingRight,
+        body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+          isUsed: false,
+          inertia: Infinity,
+          id: "enemy",
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
                 }
-              ]
-            }, render: { sprite: { texture: image } }, label: 'enemy'
-          }),
-      }
-      return newEnemy;
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: image } }, label: 'enemy'
+        }),
     }
+    return newEnemy;
+  }
+
+     //Function to make enemy bullets
+    //
+    function makeEnemyBullet(enemyX, enemyY, direction) {
+      const bullet = Matter.Bodies.circle(
+          enemyX + 40*direction, enemyY, 8, {
+          isUsed: false,
+          frictionAir: 0,
+          label: "enemyBullet",
+          density: 0.1,
+          render: { fillStyle:'red',}
+        });
+
+        bullets.add(bullet);
+        World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
+        Matter.Body.applyForce(
+          bullet, {x: enemyX, y: enemyY}, {
+            x: 1.7*direction,
+            y: -0.3,
+          },
+        );
+    }
+
+    //BULLET OBJECTS
+    const bullets = new Set();
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
@@ -351,9 +380,6 @@ class Scene extends React.Component {
       }
     };
 
-
-    //BULLET OBJECTS
-    const bullets = new Set();
 
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
