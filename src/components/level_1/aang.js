@@ -317,7 +317,7 @@ class Scene extends React.Component {
     //     })
     //   }
     function getScore(){
-      const hello = myContext.scoreLevel
+      const hello = myContext.player.scoreLevel
       const token = JSON.parse(localStorage.getItem("userToken"))
       API.collectScore(token,hello,1)
     }
