@@ -65,7 +65,12 @@ class Scene extends React.Component {
     const player = {
       //track whether the box has jumped
       hasJumped: false,
+      //whether box has started to fall after a jump
       fallen: false,
+      //whether box has started going up after a jump
+      //(addresses gey area where force is applied when falling,
+      // but acceleration has not completely overcome gravity)
+      wentUp: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         render: {
@@ -607,10 +612,17 @@ class Scene extends React.Component {
       }
     };
 
+    //if the player has started actually moving upward
+    function goingUp() {
+      if (player.hasJumped && (player.body.velocity.y < 0)) {
+        player.goingUp = true;
+      }
+    }
+
 
     //If the player character has jumped and is falling
     function playerFallen() {
-      if (player.hasJumped && (player.body.velocity.y > 0)) {
+      if (player.hasJumped && (player.body.velocity.y > 0) && player.goingUp) {
         player.fallen = true;
       }
     };
@@ -620,6 +632,7 @@ class Scene extends React.Component {
       if (player.hasJumped && player.fallen && (0.00000001 < player.body.velocity.y < 0.00000001)) {
         player.hasJumped = false;
         player.fallen = false;
+        player.goingUp = false;
       }
     };
 
@@ -654,6 +667,8 @@ class Scene extends React.Component {
       //render screen over new position
       Bounds.shift(render.bounds, translate);
 
+      //call three functions which manage when a player can jump
+      goingUp();
       playerFallen();
       resetJumps();
 
@@ -674,6 +689,7 @@ class Scene extends React.Component {
 
       //Move each enemy
       arrayEnemies.forEach(element => {
+        moveEnemy(element);
       });
     });
     
