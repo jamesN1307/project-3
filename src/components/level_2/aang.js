@@ -170,13 +170,15 @@ class Scene extends React.Component {
       {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
     ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image,willShoot) {
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
       const newEnemy = {
           willFire: willShoot,
           spawnX: spawnX,
           endX: endX,
           goingRight: goingRight,
           body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+            isUsed: false,
+            inertia: Infinity,
             id: "enemy",
             plugin: {
               attractors: [
@@ -194,6 +196,32 @@ class Scene extends React.Component {
       }
       return newEnemy;
     }
+
+     //Function to make enemy bullets
+    //
+    function makeEnemyBullet(enemyX, enemyY, direction) {
+      const bullet = Matter.Bodies.circle(
+          enemyX + 40*direction, enemyY, 8, {
+          isUsed: false,
+          frictionAir: 0,
+          label: "enemyBullet",
+          density: 0.1,
+          render: { fillStyle:'red',}
+        });
+
+        bullets.add(bullet);
+        World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
+        Matter.Body.applyForce(
+          bullet, {x: enemyX, y: enemyY}, {
+            x: 1.7*direction,
+            y: -0.3,
+          },
+        );
+    }
+
+    //BULLET OBJECTS
+    const bullets = new Set();
 
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
@@ -450,9 +478,6 @@ class Scene extends React.Component {
       }
     };
 
-
-    //BULLET OBJECTS
-    const bullets = new Set();
 
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05

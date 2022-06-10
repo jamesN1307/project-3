@@ -351,10 +351,12 @@ class Scene extends React.Component {
     function nextLevel(pair) {
 
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
+        window.location.href = "/aang2"
         getScore();
         // <Navigate to="/katara" replace ={true} />
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
+        window.location.href = "/aang2"
         getScore();
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
