@@ -6,6 +6,7 @@ import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
+import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
 import wave from "../../images/wave.png"
 
@@ -78,7 +79,7 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 5,
+      fireForce: 1,
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -159,22 +160,25 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier},
-      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier},
-      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier},
-      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier},
-      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier},
-      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier},
-      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier},
+      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
+      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
+      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
+      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
+      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
+      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
+      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
+      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
     ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image) {
+    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
       const newEnemy = {
+          willFire: willShoot,
           spawnX: spawnX,
           endX: endX,
           goingRight: goingRight,
           body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+            isUsed: false,
+            inertia: Infinity,
             id: "enemy",
             plugin: {
               attractors: [
@@ -193,6 +197,32 @@ class Scene extends React.Component {
       return newEnemy;
     }
 
+     //Function to make enemy bullets
+    //
+    function makeEnemyBullet(enemyX, enemyY, direction) {
+      const bullet = Matter.Bodies.circle(
+          enemyX + 40*direction, enemyY, 8, {
+          isUsed: false,
+          frictionAir: 0,
+          label: "enemyBullet",
+          density: 0.1,
+          render: { fillStyle:'red',}
+        });
+
+        bullets.add(bullet);
+        World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
+        Matter.Body.applyForce(
+          bullet, {x: enemyX, y: enemyY}, {
+            x: 1.7*direction,
+            y: -0.3,
+          },
+        );
+    }
+
+    //BULLET OBJECTS
+    const bullets = new Set();
+
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
@@ -207,24 +237,32 @@ class Scene extends React.Component {
     };
 
     function onCollision(pair) {
+      //first pair - collisions between players and coins
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
+      //second pair - collisions between bullets and enemies
       var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
       var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+      //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+      //fourth pair - collisions between player and enemies
       var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
       var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
+      //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
-      var condition11 = pair.bodyA.label === 'water' && pair.bodyB.label === 'player';
-      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'water';
-      var condition13 = pair.bodyA.label === 'water' && pair.bodyB.label === 'bullet';
-      var condition14 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'water';
+      //collisions between enemy bullets and anything else
+      var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
+      //collisions between player and enemy bullets
+      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
+      var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
 
 
       //returns true condition
-      return condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7 || condition8 || condition9 || condition10 || condition11 || condition12 || condition13 || condition14;
+      return (condition1 || condition2 || condition3 || condition4 || condition5 
+        || condition6 || condition7 || condition8 || condition9 || condition10 
+        || condition11 || condition12 || condition13);
     };
 
     function deleteCoin(pair) {
@@ -264,38 +302,61 @@ class Scene extends React.Component {
       };
     };
 
-    //deletes bullet on impact with border
-    function deleteEnemy(pair) {
-      if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
-        if (!pair.bodyA.isUsed) {
-          scoreDelete();
-          pair.bodyA.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyA)
+      //deletes enemy on impact with bullet
+      function deleteEnemyFromBullet(pair) {
+        if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
+          if (!pair.bodyB.isUsed) {
+            scoreUpdate();
+            pair.bodyB.isUsed = true;
+            pair.bodyA.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
+  
+        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
+          if (!pair.bodyA.isUsed) {
+            scoreUpdate();
+            pair.bodyA.isUsed = true;
+            pair.bodyB.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
       };
-
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
-        if (!pair.bodyB.isUsed) {
-          scoreDelete();
-          pair.bodyB.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyB)
+  
+      //deletes enemy on contact with player
+      function deleteEnemy(pair) {
+        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
+          if (!pair.bodyA.isUsed) {
+            scoreDelete();
+            pair.bodyA.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
+  
+        if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
+          if (!pair.bodyB.isUsed) {
+            scoreDelete();
+            pair.bodyB.isUsed = true;
+          }
+          Matter.World.remove(mainEngine, pair.bodyB);
+          };
       };
-    };
-
-    function deleteBull(pair) {
-      if (pair.bodyA.label === 'bullet') {
-        Matter.World.remove(mainEngine, pair.bodyA)
+  
+      //intention - delete bullet or enemyBullet whenever a bullet hits an object
+      function deleteBull(pair) {
+        if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
+          Matter.World.remove(mainEngine, pair.bodyA)
+        };
+  
+        if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
+          Matter.World.remove(mainEngine, pair.bodyB)
+        };
       };
-
-      if (pair.bodyB.label === 'bullet') {
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
-    };
-
+  
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         window.location.href = "/katara"
+        
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
@@ -303,13 +364,29 @@ class Scene extends React.Component {
       };
     };
 
+    function playerDamagedBullet(pair) {
+      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
+        if (!pair.bodyB.isUsed) {
+          scoreDelete();
+          pair.bodyB.isUsed = true;
+        }
+      };
+
+      if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
+        if (!pair.bodyA.isUsed) {
+          scoreDelete();
+          pair.bodyA.isUsed = true;
+        }
+      };
+    }
+
     function waterReset(pair) {
       if ((pair.bodyA.label === 'water') && (pair.bodyB.label === 'player')) {
-        window.location.reload();
+        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'water')) {
-        window.location.reload();
+        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
       };
     };
 
@@ -330,6 +407,57 @@ class Scene extends React.Component {
       });
     };
 
+        //Custom function - update enemy velocity
+    //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
+    //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
+    function moveEnemy(enemyObject) {
+
+      // if object has overshot the endPoint or startPoint
+      if (enemyObject.body.position.x > enemyObject.endX) {
+        enemyObject.goingRight = false;
+      } else if (enemyObject.body.position.x < enemyObject.spawnX) {
+        enemyObject.goingRight = true;
+      }
+
+      //if 'goingRight' is true or false - if true, go right, otherwise go left
+      if (enemyObject.goingRight) {
+        Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
+      } else {
+        Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
+      }
+    };
+
+
+    //needs to be passed enemyX and enemyY for a reference on where to spawn, 
+    //direction for which way the soldier should shoot.
+    //Function to make enemy bullets
+    //
+    function makeEnemyBullet(enemyX, enemyY, direction) {
+      const bullet = Matter.Bodies.circle(
+          enemyX + 40*direction, enemyY, 8, {
+          isUsed: false,
+          frictionAir: 0,
+          label: "enemyBullet",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture:fireBall,
+              xScale: 0.1,
+              yScale: 0.1
+            }
+          }
+        });
+
+        bullets.add(bullet);
+        World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
+        Matter.Body.applyForce(
+          bullet, {x: enemyX, y: enemyY}, {
+            x: 1.7*direction,
+            y: 0 ,
+          },
+        );
+    }
     //Custom function - update enemy velocity
     //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
     //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
@@ -351,14 +479,64 @@ class Scene extends React.Component {
     };
 
 
-    //BULLET OBJECTS
-    const bullets = new Set();
-
     //ADD PLATFORMS TO WORLD--------------------------------------------------------------------------------------------------------
     //ALL PLATFORMS - Set xScale as 'width/480', set yScale as 'height/200', set xOffset -0.05
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
 
+    //ADD MOVING PLATFORM
+    //array moving platform presets
+    //constructor function
+    //call constructor in for:each loop on presets.
+    //add to new array of completed objects for later movement code (referencing enemy code)
+    const movingPlatformPresets = [
+      //x,y,width,height,label,image, range from start position platform will move,
+      // speed of platform movement, and axis of movement
+      //NOTE - MOVERANGE IS NOT IN PIXELS
+      {placeX: 400, placeY: 200, rectWidth: 600, rectHeight: 80, 
+        name: 'platform', image: grass, moveRange: 1, moveSpeed: 0.002, moveY: true}, 
+    ]
+
+    function makeMovingPlatform(placeX, placeY, width, height, name, image, range, speed, dirY) {
+      const mobilePlatforms = 
+        {
+          body: 
+          //format is x location, y location (of centerpoint), width, height, {properties}
+            Bodies.rectangle(placeX, placeY, width, height, {
+              moveRange: range,
+              moveSpeed: speed,
+              moveY: dirY,
+              isStatic: true,
+              render: {
+                sprite: {
+                  texture: image,
+                  xScale: width/480,
+                  yScale: height/200,
+                  xOffset: -0.05,
+                }
+              },
+              label: name
+            })
+        }
+     return mobilePlatforms;
+    }
+
+    //have presets
+    //presets.for each, makemovingplatform
+    //push to arraymovingplatforms
+    const arrayMovingPlatforms = [];
+
+    movingPlatformPresets.forEach(element => {
+      let object = makeMovingPlatform(element.placeX, element.placeY, element.rectWidth, 
+        element.rectHeight, element.name, element.image, element.moveRange, element.moveSpeed, element.moveY)
+      arrayMovingPlatforms.push(object);
+    });
+
+    
+    //generate MOVING PLATFORMS ONLY
+    arrayMovingPlatforms.forEach(element => {
+      World.add(mainEngine, element.body);
+    });
 
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
@@ -366,7 +544,7 @@ class Scene extends React.Component {
     const platformPresets = [
       //start platform
       //x,y,width,height,label,image
-      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
+      // {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
@@ -446,7 +624,7 @@ class Scene extends React.Component {
       //right border
       Bodies.rectangle(7500, 0, 1400, 3000, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
       // bottom border
-      Bodies.rectangle(2000, 1800, 10500, 650, { isStatic: true, label: "water", render: {fillStyle: "red"} }),
+      Bodies.rectangle(2000, 1800, 10500, 650, { isStatic: true, label: "water", render: {fillStyle: "blue"} }),
     ]);
 
     //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
@@ -455,7 +633,7 @@ class Scene extends React.Component {
     const arrayEnemies = [];
     //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
     arrayPresetEnemies.forEach(element => {
-      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image);
+      const newEnemy = makeEnemyObject(element.placeX, element.placeY, element.stopX, element.movingRight, element.image, element.willFire);
       arrayEnemies.push(newEnemy);
     });
 
@@ -464,10 +642,10 @@ class Scene extends React.Component {
       World.add(mainEngine, [element.body])
     });
 
+
     //call creates bodies in arrayPlatforms
     platformPresets.forEach(element => {
       const newPlatform = makePlatforms(element.placeX, element.placeY, element.rectWidth, element.rectHeight, element.name, element.image);
-      newPlatform.translate(element, {x: 1, y:0})
       World.add(mainEngine, newPlatform.body)
     });
 
@@ -538,10 +716,43 @@ class Scene extends React.Component {
       y: 0,
     }
 
+    //when called, updates the position and velocity of a 
+    //given moving platform
+    //uses range, speed, and axis of movement (moveAx)
+    //x,y,moveRange,moveSpeed,moveY
+    function platformMovement(elementBody) {
+      // MUST PLAYTEST to find good balance between distance traveled and multiplier
+      //if MoveY is true, platform moves in y direction
+      //else, moves in x direction
+      //ERROR-unclear why demo values have not scaled to values currently placed in platforms
+      if (elementBody.moveY) {
+        let py = elementBody.position.y + elementBody.moveRange * Math.sin(engine.timing.timestamp * elementBody.moveSpeed);
+        Matter.Body.setVelocity(elementBody, { x: 0, y: py - elementBody.position.y });
+        Matter.Body.setPosition(elementBody, { x: elementBody.position.x, y: py });
+      } else {
+        let px = elementBody.position.x + elementBody.moveRange * Math.sin(engine.timing.timestamp * elementBody.moveSpeed);
+        Matter.Body.setVelocity(elementBody, { x: px - elementBody.position.x, y: 0 });
+        Matter.Body.setPosition(elementBody, { x: px, y: elementBody.position.y });
+      }
+      /*var py = 300 + 100 * Math.sin(engine.timing.timestamp * 0.002);
+
+      Matter.Body.setVelocity(element.body, { x: 0, y: py - element.body.position.y });
+      Matter.Body.setPosition(element.body, { x: 600, y: py });*/
+    }
+
+   //Time reference for enemy shooting interval
+   var timeStamp = Date.now();
+
     //Engine which updates the environment frame-to-frame
     Matter.Events.on(engine, "beforeUpdate", event => {
       [...keysDown].forEach(k => {
         keyHandlers[k]?.();
+      });
+
+      //update position and velocity of each moving platform
+      arrayMovingPlatforms.forEach(element => {
+        // must playtest to find good balance between distance traveled and multiplier
+        platformMovement(element.body);
       });
 
       //update vector for screen position
@@ -557,6 +768,18 @@ class Scene extends React.Component {
 
       //DETECT COLLISION BETWEEN PLAYER AND COINS
       detectCollision();
+
+       //generate shots fired from just enemies who are supposed to shoot
+       if (Date.now() - timeStamp > 5000) {
+        arrayEnemies.forEach(element => {
+          //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
+          if (element.willFire && !element.body.isUsed) {
+            let direction = Math.sign(player.body.position.x-element.body.position.x)
+            makeEnemyBullet(element.body.position.x, element.body.position.y, direction);
+          }
+          timeStamp = Date.now();
+        });
+      }
 
       //Move each enemy
       arrayEnemies.forEach(element => {

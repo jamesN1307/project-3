@@ -17,12 +17,12 @@ const API = {
       },
     }).then((res) => res.json());
   },
-  collectScore: (token, scoreLevel, level) => {
+  collectScore: (token,scoreLevel, level) => {
     return fetch(`${BASE_URL}/api/scores`,{
       method: "POST",
       body: JSON.stringify({
         score : scoreLevel,
-        level : level
+        level : level,
       }
         ),
       headers: {

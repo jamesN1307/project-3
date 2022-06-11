@@ -9,8 +9,11 @@ import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
+import fireBall from "../../images/fireball.png"
+import rockFormation from "../../images/rockFormation.jpg"
 import API from "../../utils/API.js"
 import AppContext from "../../AppContext"
+
 
 class Scene extends React.Component {
   constructor(props) {
@@ -18,6 +21,8 @@ class Scene extends React.Component {
     this.state = {
       scoreLevel: 20,
     };
+    // this.getScore= this.getScore.bind(this);
+
   };
 
   static contextType = AppContext;
@@ -61,7 +66,12 @@ class Scene extends React.Component {
     const player = {
       //track whether the box has jumped
       hasJumped: false,
+      //whether box has started to fall after a jump
       fallen: false,
+      //whether box has started going up after a jump
+      //(addresses gey area where force is applied when falling,
+      // but acceleration has not completely overcome gravity)
+      wentUp: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
         render: {
@@ -87,17 +97,25 @@ class Scene extends React.Component {
       lastShot: Date.now(),
       cooldown: 300,
       fireForce: 0.5,
-      fire() {
+      //fire function accepts either 'true' for right or 'false' for left
+      fire(ifRight) {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
         }
 
+        //if the firing direction is left, set value to negative
+        //when applied, the negative 'x' direction fires left
+        let dir = 1;
+        if (!ifRight) {
+          dir = -1;
+        }
+
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        
-        const x = bx + (Math.cos(this.body.angle) * 10);
-        const y = by + (Math.sin(this.body.angle) * 10);
-        
+
+        const x = bx + (Math.cos(this.body.angle) * 10 * dir);
+        const y = by + (Math.sin(this.body.angle) * 10 * dir);
+
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
@@ -118,7 +136,7 @@ class Scene extends React.Component {
         //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
-          x: Math.cos(this.body.angle) * this.fireForce,
+          x: Math.cos(this.body.angle) * this.fireForce * dir,
           y: Math.sin(this.body.angle) * this.fireForce,
         },
         );
@@ -135,26 +153,26 @@ class Scene extends React.Component {
     //array to hold presets
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
-    
+
     const arrayCoinPresets = [
-      {placeX: 600, placeY: 350},
-      {placeX: 1850, placeY: 100},
-      {placeX: 1550, placeY: 250},
-      {placeX: 2050, placeY: 500},
-      {placeX: 1450, placeY: 1000},
-      {placeX: 150, placeY: 1000},
-      {placeX:1050, placeY: 900},
+      { placeX: 600, placeY: 350 },
+      { placeX: 1850, placeY: 100 },
+      { placeX: 1550, placeY: 250 },
+      { placeX: 2050, placeY: 500 },
+      { placeX: 1450, placeY: 1000 },
+      { placeX: 150, placeY: 1000 },
+      { placeX: 1050, placeY: 900 },
     ];
-    
-    function makeCoinObject (coinX, coinY) {
+
+    function makeCoinObject(coinX, coinY) {
       const newCoin = {
         body: Matter.Bodies.rectangle(coinX, coinY, 30, 30, {
           isStatic: true,
-          render: { 
+          render: {
             sprite: {
-            texture: coin,
-            xScale: 0.15,
-            yScale: 0.15
+              texture: coin,
+              xScale: 0.15,
+              yScale: 0.15
             }
           },
           label: "coin",
@@ -171,39 +189,39 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
-      {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
-      {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
-      {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
-      {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
-      {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
-      {placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true},
+      { placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true },
+      { placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true },
+      { placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true },
+      { placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true },
+      { placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true },
+      { placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true },
+      { placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true },
+      { placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true },
     ];
 
-    function makeEnemyObject (spawnX, spawnY, endX, goingRight, image, willShoot) {
+    function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
       const newEnemy = {
-          willFire: willShoot,
-          spawnX: spawnX,
-          endX: endX,
-          goingRight: goingRight,
-          body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
-            isUsed: false,
-            inertia: Infinity,
-            id: "enemy",
-            plugin: {
-              attractors: [
-                function (player, bodyB) {
-                  var force = {
-                    x: (player.position.x - bodyB.position.x) * 1e-6,
-                    y: (player.position.y - bodyB.position.y) * 1e-6,
-                  }
-                  Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
-                  Matter.Body.applyForce(bodyB, bodyB.position, force);
+        willFire: willShoot,
+        spawnX: spawnX,
+        endX: endX,
+        goingRight: goingRight,
+        body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 90, {
+          isUsed: false,
+          inertia: Infinity,
+          id: "enemy",
+          plugin: {
+            attractors: [
+              function (player, bodyB) {
+                var force = {
+                  x: (player.position.x - bodyB.position.x) * 1e-6,
+                  y: (player.position.y - bodyB.position.y) * 1e-6,
                 }
-              ]
-            }, render: { sprite: { texture: image } }, label: 'enemy'
-          }),
+                Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
+                Matter.Body.applyForce(bodyB, bodyB.position, force);
+              }
+            ]
+          }, render: { sprite: { texture: image } }, label: 'enemy'
+        }),
       }
       return newEnemy;
     }
@@ -211,16 +229,17 @@ class Scene extends React.Component {
     //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
     const scoreUpdate = () => {
       this.setState({
-        scoreLevel: this.state.scoreLevel += 10,
+        scoreLevel: this.state.scoreLevel + 10,
       })
+
     };
 
     const scoreDelete = () => {
       this.setState({
-        scoreLevel: this.state.scoreLevel -= 10,
+        scoreLevel: this.state.scoreLevel - 10,
       })
-    };
 
+    };
     function onCollision(pair) {
       //first pair - collisions between players and coins
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
@@ -246,8 +265,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5 
-        || condition6 || condition7 || condition8 || condition9 || condition10 
+      return (condition1 || condition2 || condition3 || condition4 || condition5
+        || condition6 || condition7 || condition8 || condition9 || condition10
         || condition11 || condition12 || condition13);
     };
 
@@ -306,7 +325,7 @@ class Scene extends React.Component {
           pair.bodyB.isUsed = true;
         }
         Matter.World.remove(mainEngine, pair.bodyB);
-        };
+      };
     };
 
     //intention - delete bullet or enemyBullet whenever a bullet hits an object
@@ -339,26 +358,33 @@ class Scene extends React.Component {
     //       // })
     //     })
     //   }
-    function getScore(){
-      const hello = myContext.player.scoreLevel
-      const token = JSON.parse(localStorage.getItem("userToken"))
-      API.collectScore(token,hello,1)
+    
+    const getScore = ()=>{
+      const hello = this.state.scoreLevel
+      console.log(this.state.scoreLevel)
+      const token = localStorage.getItem("token")
+      console.log(token)
+      API.collectScore(token,this.state.scoreLevel,1)
     }
 
+    console.log(this.state.scoreLevel)
 
+    
+    
     function nextLevel(pair) {
-
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         getScore();
-        // <Navigate to="/katara" replace ={true} />
+        <Navigate to = "/aang2" replace={true} />
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         getScore();
+        <Navigate to = "/aang2" replace={true} />
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);
         // <Navigate to="/katara" replace ={true} />
       };
+
     };
 
     function playerDamagedBullet(pair) {
@@ -421,23 +447,29 @@ class Scene extends React.Component {
     //
     function makeEnemyBullet(enemyX, enemyY, direction) {
       const bullet = Matter.Bodies.circle(
-          enemyX + 40*direction, enemyY, 8, {
-          isUsed: false,
-          frictionAir: 0,
-          label: "enemyBullet",
-          density: 0.1,
-          render: { fillStyle:'red',}
-        });
+        enemyX + 40 * direction, enemyY, 8, {
+        isUsed: false,
+        frictionAir: 0,
+        label: "enemyBullet",
+        density: 0.1,
+        render: {
+          sprite: {
+            texture: fireBall,
+            xScale: 0.1,
+            yScale: 0.1
+          }
+        }
+      });
 
-        bullets.add(bullet);
-        World.add(engine.world, bullet);
-        //applyforce requires body, location to apply force FROM, then a force vector
-        Matter.Body.applyForce(
-          bullet, {x: enemyX, y: enemyY}, {
-            x: 1.7*direction,
-            y: -0.3,
-          },
-        );
+      bullets.add(bullet);
+      World.add(engine.world, bullet);
+      //applyforce requires body, location to apply force FROM, then a force vector
+      Matter.Body.applyForce(
+        bullet, { x: enemyX, y: enemyY }, {
+        x: 1.7 * direction,
+        y: 0,
+      },
+      );
     }
 
     //BULLET OBJECTS
@@ -448,18 +480,18 @@ class Scene extends React.Component {
     // This helps to account for the image size and empty pixels when overlapping 
     // it over the physical body of an in-game platform
     const newPlatForm = [
-      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, stopX: 600, goingRight:true, name: 'platform', image: grass},
+      { placeX: 400, placeY: 260, rectWidth: 200, rectHeight: 80, stopX: 600, goingRight: true, name: 'platform', image: grass },
     ]
-    function makePlatformMove (placeX,placeY,rectWidth, goingRight, rectHeight,stopX) {
+    function makePlatformMove(placeX, placeY, rectWidth, goingRight, rectHeight, stopX) {
       const movePlatform = {
-        placeX:placeX,
-        stopX:stopX,
+        placeX: placeX,
+        stopX: stopX,
         goingRight: goingRight,
-        body:Matter.Bodies.rectangle(placeX,placeY )
+        body: Matter.Bodies.rectangle(placeX, placeY)
       }
     }
-    World.add(mainEngine,newPlatForm)
- 
+    World.add(mainEngine, newPlatForm)
+
     //CUSTOM FUNCTION TO SET PLATFORMS IN ARRAY BASED ON PARAMETERS
     // call for each for each listed element in 'platformPresets' to create bodies,
     // then calls for:each on arrayPlatforms to set up bodies for the engine
@@ -468,39 +500,39 @@ class Scene extends React.Component {
       //x,y,width,height,label,image
 
       //spawn platform
-      {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
-      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass}, 
-      {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 20, name: 'platform', image: grass},
+      { placeX: 400, placeY: 260, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1100, placeY: 560, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1800, placeY: 160, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 500, placeY: 760, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
       //platform to leave level 
-      {placeX: 250,placeY: 500, rectWidth: 250,rectHeight: 20, name:'door', image: waterFlag}, 
+      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 20, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
       const newPlatform = {
-        body: 
-        //format is x location, y location (of centerpoint), width, height, {properties}
+        body:
+          //format is x location, y location (of centerpoint), width, height, {properties}
           Bodies.rectangle(placeX, placeY, rectWidth, rectHeight, {
             isStatic: true,
             render: {
               sprite: {
                 texture: image,
-                xScale: rectWidth/480,
-                yScale: rectHeight/200,
+                xScale: rectWidth / 480,
+                yScale: rectHeight / 200,
                 xOffset: -0.05,
               }
             },
@@ -509,7 +541,18 @@ class Scene extends React.Component {
       }
       return newPlatform;
     }
-    
+
+    //Get an earth bending rectangle body to randomly generate in different spots along the field with different heights
+    //make new variable with an bodies.rectange
+
+    //x axis is math.floor(math.random * 4000) , y axis is math.floor(math.random * 1500), width is fixed, height is math.floor(math.random * 1500)
+    //use Nick's time logic to get earth bending body to appear every 4 seconds
+
+    const randomXPlace = Math.floor(Math.random() * 3000)
+    const randomXPlace1 = Math.floor(Math.random() * 3000)
+    const randomXPlace2 = Math.floor(Math.random() * 3000)
+    // const randomYPlace = Math.floor(Math.random() * 1500)
+    // const randomYHeight = Math.floor(Math.random() * 600)
 
     World.add(mainEngine, [
       //Border creation -------------------------------------------------------------------------------------------------------------------
@@ -518,22 +561,22 @@ class Scene extends React.Component {
       //*Note - center box, endpoints equal [x-coordinate of bottom] +/- width/2
       //However, since we want the bottom to cover whole page even to the edge of the screen,
       //the actual level space is [bottom width]-[2*side border width]
-  
+
       //CHANGE COLOR TO MATCH BACKGROUND (top border)
 
       //top border
-      Bodies.rectangle(2000, -300, 4000, 10, { isStatic: true, label: "border", render: {fillStyle: 'blue'} }),
+      Bodies.rectangle(2000, -300, 4000, 10, { isStatic: true, label: "border", render: { fillStyle: 'blue' } }),
       //left border
-      Bodies.rectangle(-700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
+      Bodies.rectangle(-700, 600, 1400, 1800, { isStatic: true, label: "border", render: { fillStyle: 'green' } }),
       //right border
-      Bodies.rectangle(4700, 600, 1400, 1800, { isStatic: true, label: "border", render: {fillStyle: 'green'} }),
+      Bodies.rectangle(4700, 600, 1400, 1800, { isStatic: true, label: "border", render: { fillStyle: 'green' } }),
       // bottom border
-      Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: {fillStyle: 'darkgreen'} }),
+      Bodies.rectangle(2000, 1800, 6500, 650, { isStatic: true, label: "border", render: { fillStyle: 'darkgreen' } }),
     ]);
 
     //generate elements within the engine_------SPAWN ITEMS FROM ARRAYS----------------------------------------------------------------------------------------
 
-    
+
     const arrayEnemies = [];
     //adds new bodies to the arrayEnemies array to maintain functionality with other custom functions
     arrayPresetEnemies.forEach(element => {
@@ -586,15 +629,26 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => {
-        player.fire()
-      }
+      //Handle player firing left and right, respectively
+      KeyI: () => {
+        player.fire(false)
+      },
+      KeyP: () => {
+        player.fire(true)
+      },
     };
+
+    //if the player has started actually moving upward
+    function goingUp() {
+      if (player.hasJumped && (player.body.velocity.y < 0)) {
+        player.goingUp = true;
+      }
+    }
 
 
     //If the player character has jumped and is falling
     function playerFallen() {
-      if (player.hasJumped && (player.body.velocity.y > 0)) {
+      if (player.hasJumped && (player.body.velocity.y > 0) && player.goingUp) {
         player.fallen = true;
       }
     };
@@ -604,6 +658,7 @@ class Scene extends React.Component {
       if (player.hasJumped && player.fallen && (0.00000001 < player.body.velocity.y < 0.00000001)) {
         player.hasJumped = false;
         player.fallen = false;
+        player.goingUp = false;
       }
     };
 
@@ -638,6 +693,8 @@ class Scene extends React.Component {
       //render screen over new position
       Bounds.shift(render.bounds, translate);
 
+      //call three functions which manage when a player can jump
+      goingUp();
       playerFallen();
       resetJumps();
 
@@ -649,7 +706,7 @@ class Scene extends React.Component {
         arrayEnemies.forEach(element => {
           //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
           if (element.willFire && !element.body.isUsed) {
-            let direction = Math.sign(player.body.position.x-element.body.position.x)
+            let direction = Math.sign(player.body.position.x - element.body.position.x)
             makeEnemyBullet(element.body.position.x, element.body.position.y, direction);
           }
           timeStamp = Date.now();
@@ -658,9 +715,10 @@ class Scene extends React.Component {
 
       //Move each enemy
       arrayEnemies.forEach(element => {
+        moveEnemy(element);
       });
     });
-    
+
 
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
