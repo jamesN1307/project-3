@@ -17,7 +17,7 @@ const API = {
       },
     }).then((res) => res.json());
   },
-  collectScore: ( scoreLevel, level) => {
+  collectScore: (token,scoreLevel, level) => {
     return fetch(`${BASE_URL}/api/scores`,{
       method: "POST",
       body: JSON.stringify({
@@ -27,7 +27,7 @@ const API = {
         ),
       headers: {
         "Content-Type": "application/json",
-        // authorization: `Bearer${token}`,
+        authorization: `Bearer ${token}`,
       },
     }).then((res) => res.json());
   },
