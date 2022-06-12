@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
+import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/Appa.png"
+import aang from "../../images/aang.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
-
+import fireBall from "../../images/fireball.png"
+import rockFormation from "../../images/rockFormation.jpg"
+import API from "../../utils/API.js"
+import AppContext from "../../AppContext"
 
 class Scene extends React.Component {
   constructor(props) {
