@@ -223,190 +223,6 @@ class Scene extends React.Component {
     //BULLET OBJECTS
     const bullets = new Set();
 
-    //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
-    const scoreUpdate = () => {
-      this.setState({
-        scoreLevel: this.state.scoreLevel += 10,
-      })
-    };
-
-    const scoreDelete = () => {
-      this.setState({
-        scoreLevel: this.state.scoreLevel -= 10,
-      })
-    };
-
-    function onCollision(pair) {
-      //first pair - collisions between players and coins
-      var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
-      var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
-      //second pair - collisions between bullets and enemies
-      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
-      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
-      //third pair - collisions between bullets and borders
-      var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
-      var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
-      //fourth pair - collisions between player and enemies
-      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
-      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
-      //fifth pair - collisions between player and the 'door'
-      var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
-      var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
-      //collisions between enemy bullets and anything else
-      var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
-      //collisions between player and enemy bullets
-      var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
-      var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
-
-
-      //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5 
-        || condition6 || condition7 || condition8 || condition9 || condition10 
-        || condition11 || condition12 || condition13);
-    };
-
-    function deleteCoin(pair) {
-      if (pair.bodyA.label === 'coin') {
-        if (!pair.bodyA.isUsed) {
-          scoreUpdate();
-          pair.bodyA.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyA)
-      };
-
-      if (pair.bodyB.label === 'coin') {
-        if (!pair.bodyB.isUsed) {
-          scoreUpdate();
-          pair.bodyB.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
-    };
-
-    //deletes bullet on impact with border
-    function deleteBullet(pair) {
-      if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
-        if (!pair.bodyA.isUsed) {
-          scoreUpdate();
-          pair.bodyA.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyB)
-      };
-
-      if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
-        if (!pair.bodyB.isUsed) {
-          scoreUpdate();
-          pair.bodyB.isUsed = true;
-        }
-        Matter.World.remove(mainEngine, pair.bodyA)
-      };
-    };
-
-      //deletes enemy on impact with bullet
-      function deleteEnemyFromBullet(pair) {
-        if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
-          if (!pair.bodyB.isUsed) {
-            scoreUpdate();
-            pair.bodyB.isUsed = true;
-            pair.bodyA.isUsed = true;
-          }
-          Matter.World.remove(mainEngine, pair.bodyB)
-        };
-  
-        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
-          if (!pair.bodyA.isUsed) {
-            scoreUpdate();
-            pair.bodyA.isUsed = true;
-            pair.bodyB.isUsed = true;
-          }
-          Matter.World.remove(mainEngine, pair.bodyA)
-        };
-      };
-  
-      //deletes enemy on contact with player
-      function deleteEnemy(pair) {
-        if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
-          if (!pair.bodyA.isUsed) {
-            scoreDelete();
-            pair.bodyA.isUsed = true;
-          }
-          Matter.World.remove(mainEngine, pair.bodyA)
-        };
-  
-        if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
-          if (!pair.bodyB.isUsed) {
-            scoreDelete();
-            pair.bodyB.isUsed = true;
-          }
-          Matter.World.remove(mainEngine, pair.bodyB);
-          };
-      };
-  
-      //intention - delete bullet or enemyBullet whenever a bullet hits an object
-      function deleteBull(pair) {
-        if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
-          Matter.World.remove(mainEngine, pair.bodyA)
-        };
-  
-        if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
-          Matter.World.remove(mainEngine, pair.bodyB)
-        };
-      };
-  
-    function nextLevel(pair) {
-      if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
-        
-      };
-
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
-      };
-    };
-
-    function playerDamagedBullet(pair) {
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
-        if (!pair.bodyB.isUsed) {
-          scoreDelete();
-          pair.bodyB.isUsed = true;
-        }
-      };
-
-      if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
-        if (!pair.bodyA.isUsed) {
-          scoreDelete();
-          pair.bodyA.isUsed = true;
-        }
-      };
-    }
-
-    function waterReset(pair) {
-      if ((pair.bodyA.label === 'water') && (pair.bodyB.label === 'player')) {
-        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
-      };
-
-      if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'water')) {
-        Matter.Body.setPosition(player.body, { x: 400, y: 50 });
-      };
-    };
-
-    function detectCollision() {
-      Matter.Events.on(engine, 'collisionStart', (event) => {
-        event.pairs.filter((pair) => {
-          return onCollision(pair);
-        })
-          .forEach((pair) => {
-            deleteCoin(pair);
-            deleteBullet(pair)
-            deleteEnemy(pair)
-            deleteBull(pair)
-            nextLevel(pair)
-            waterReset(pair)
-            //Add to variable/ score
-          })
-      });
-    };
-
         //Custom function - update enemy velocity
     //ASSUMPTION - starting point is always spawning point, endpoint is always to the right
     //Add code - if starting point equals endpoint, do nothing (if block wrapping all)
@@ -495,6 +311,20 @@ class Scene extends React.Component {
       //NOTE - MOVERANGE IS NOT IN PIXELS
       {placeX: 400, placeY: 200, rectWidth: 600, rectHeight: 80, 
         name: 'platform', image: grass, moveRange: 1, moveSpeed: 0.002, moveY: true}, 
+      {placeX: 1550,placeY: 1000, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass, moveRange: 3, moveSpeed: 0.002, moveY: true}, 
+      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass, moveRange: 2, moveSpeed: 0.002, moveY: true},
+      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass, moveRange: 1, moveSpeed: 0.002, moveY: true}, 
+      {placeX: 3800,placeY: 560, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass, moveRange: 5, moveSpeed: 0.002, moveY: true}, 
+      {placeX: 5300,placeY: 660, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass, moveRange: 4, moveSpeed: 0.002, moveY: true}, 
+      {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass, moveRange: 4, moveSpeed: 0.002, moveY: true},
+      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass, moveRange: 4, moveSpeed: 0.002, moveY: true},
+
+
+
+
+ 
+
+
     ]
 
     function makeMovingPlatform(placeX, placeY, width, height, name, image, range, speed, dirY) {
@@ -548,23 +378,18 @@ class Scene extends React.Component {
       {placeX: 500,placeY: 760, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 3250,placeY: 800, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 2550,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 3050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 3450,placeY: 300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 2400,placeY: 1160, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 2800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 3000,placeY: 460, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 3650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 2350,placeY: 780, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       //original platforms
       {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 1050,placeY: 1000, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 1100,placeY: 560, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 1400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 1800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 1800,placeY: 660, rectWidth: 450,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 1900,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 4000,placeY: 460, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 4600,placeY: 60, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 4200,placeY: 260, rectWidth: 200,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 4250,placeY: 1100, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
@@ -577,10 +402,8 @@ class Scene extends React.Component {
       {placeX: 5800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 5800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 6050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
       {placeX: 6650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
       {placeX: 5900,placeY: 500, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 5300,placeY: 660, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass}, 
 
       //platform to leave level 
       {placeX: 6400,placeY: 260, rectWidth: 250,rectHeight: 80, name:'door', image: waterFlag}, 
@@ -659,6 +482,194 @@ class Scene extends React.Component {
 
     //Add Player to the World
     World.add(mainEngine, [player.body]);
+
+        //FUNCTIONS BELOW - HANDLE COLLISIONS -----------------------------------------------------------------------------------
+        const scoreUpdate = () => {
+          this.setState({
+            scoreLevel: this.state.scoreLevel += 10,
+          })
+        };
+    
+        const scoreDelete = () => {
+          this.setState({
+            scoreLevel: this.state.scoreLevel -= 10,
+          })
+        };
+    
+        function onCollision(pair) {
+          //first pair - collisions between players and coins
+          var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
+          var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
+          //second pair - collisions between bullets and enemies
+          var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
+          var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
+          //third pair - collisions between bullets and borders
+          var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
+          var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
+          //fourth pair - collisions between player and enemies
+          var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
+          var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
+          //fifth pair - collisions between player and the 'door'
+          var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
+          var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
+          //collisions between enemy bullets and anything else
+          var condition11 = pair.bodyA.label === 'enemyBullet' || pair.bodyB.label === 'enemyBullet';
+          //collisions between player and enemy bullets
+          var condition12 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemyBullet';
+          var condition13 = pair.bodyA.label === 'enemyBullet' && pair.bodyB.label === 'player';
+          //player and water collision
+          var condition14 = pair.bodyA.label === 'player' && pair.bodyB.label === 'water';
+          var condition15 = pair.bodyA.label === 'water' && pair.bodyB.label === 'player';
+    
+    
+          //returns true condition
+          return (condition1 || condition2 || condition3 || condition4 || condition5 
+            || condition6 || condition7 || condition8 || condition9 || condition10 
+            || condition11 || condition12 || condition13 || condition14 || condition15);
+        };
+    
+        function deleteCoin(pair) {
+          if (pair.bodyA.label === 'coin') {
+            if (!pair.bodyA.isUsed) {
+              scoreUpdate();
+              pair.bodyA.isUsed = true;
+            }
+            Matter.World.remove(mainEngine, pair.bodyA)
+          };
+    
+          if (pair.bodyB.label === 'coin') {
+            if (!pair.bodyB.isUsed) {
+              scoreUpdate();
+              pair.bodyB.isUsed = true;
+            }
+            Matter.World.remove(mainEngine, pair.bodyB)
+          };
+        };
+    
+        //deletes bullet on impact with border
+        function deleteBullet(pair) {
+          if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
+            if (!pair.bodyA.isUsed) {
+              scoreUpdate();
+              pair.bodyA.isUsed = true;
+            }
+            Matter.World.remove(mainEngine, pair.bodyB)
+          };
+    
+          if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
+            if (!pair.bodyB.isUsed) {
+              scoreUpdate();
+              pair.bodyB.isUsed = true;
+            }
+            Matter.World.remove(mainEngine, pair.bodyA)
+          };
+        };
+    
+          //deletes enemy on impact with bullet
+          function deleteEnemyFromBullet(pair) {
+            if ((pair.bodyA.label === 'bullet') && (pair.bodyB.label === 'enemy')) {
+              if (!pair.bodyB.isUsed) {
+                scoreUpdate();
+                pair.bodyB.isUsed = true;
+                pair.bodyA.isUsed = true;
+              }
+              Matter.World.remove(mainEngine, pair.bodyB)
+            };
+      
+            if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'bullet')) {
+              if (!pair.bodyA.isUsed) {
+                scoreUpdate();
+                pair.bodyA.isUsed = true;
+                pair.bodyB.isUsed = true;
+              }
+              Matter.World.remove(mainEngine, pair.bodyA)
+            };
+          };
+      
+          //deletes enemy on contact with player
+          function deleteEnemy(pair) {
+            if ((pair.bodyA.label === 'enemy') && (pair.bodyB.label === 'player')) {
+              if (!pair.bodyA.isUsed) {
+                scoreDelete();
+                pair.bodyA.isUsed = true;
+              }
+              Matter.World.remove(mainEngine, pair.bodyA)
+            };
+      
+            if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemy')) {
+              if (!pair.bodyB.isUsed) {
+                scoreDelete();
+                pair.bodyB.isUsed = true;
+              }
+              Matter.World.remove(mainEngine, pair.bodyB);
+              };
+          };
+      
+          //intention - delete bullet or enemyBullet whenever a bullet hits an object
+          function deleteBull(pair) {
+            if ((pair.bodyA.label === 'bullet') || (pair.bodyA.label === 'enemyBullet')) {
+              Matter.World.remove(mainEngine, pair.bodyA)
+            };
+      
+            if ((pair.bodyB.label === 'bullet') || (pair.bodyB.label === 'enemyBullet')) {
+              Matter.World.remove(mainEngine, pair.bodyB)
+            };
+          };
+      
+        function nextLevel(pair) {
+          if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
+            window.location.href = "/aang3"
+            
+          };
+    
+          if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
+            window.location.href = "/aang3"
+          };
+        };
+    
+        function playerDamagedBullet(pair) {
+          if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'enemyBullet')) {
+            if (!pair.bodyB.isUsed) {
+              scoreDelete();
+              pair.bodyB.isUsed = true;
+            }
+          };
+    
+          if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
+            if (!pair.bodyA.isUsed) {
+              scoreDelete();
+              pair.bodyA.isUsed = true;
+            }
+          };
+        }
+    
+        function waterReset(pair) {
+          if ((pair.bodyA.label === 'water') && (pair.bodyB.label === 'player')) {
+            Matter.Body.setPosition(player.body, { x: 400, y: 50 });
+          };
+    
+          if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'water')) {
+            Matter.Body.setPosition(player.body, { x: 400, y: 50 });
+          };
+        };
+    
+        function detectCollision() {
+          Matter.Events.on(engine, 'collisionStart', (event) => {
+            event.pairs.filter((pair) => {
+              return onCollision(pair);
+            })
+              .forEach((pair) => {
+                deleteCoin(pair);
+                deleteBullet(pair)
+                deleteEnemy(pair)
+                deleteBull(pair)
+                nextLevel(pair)
+                waterReset(pair)
+                //Add to variable/ score
+              })
+          });
+        };
+    
 
     //Player Controls
     const keyHandlers = {
