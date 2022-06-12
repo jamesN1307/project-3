@@ -163,7 +163,6 @@ class Scene extends React.Component {
       {placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true},
       {placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true},
       {placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true},
-      {placeX: 420, placeY: 560, stopX: 580, movingRight: true, image: soldier, willFire: true},
       {placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true},
       {placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true},
       {placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true},
