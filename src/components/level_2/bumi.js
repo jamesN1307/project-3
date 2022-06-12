@@ -6,6 +6,7 @@ import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import rock from "../../images/theRock.png"
 import coin from "../../images/coin.png"
+import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
 
 class Scene extends React.Component {

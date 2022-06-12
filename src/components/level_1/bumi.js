@@ -3,26 +3,36 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
+import aang from "../../images/aang.png"
 import bumi from "../../images/bumi.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
-import rock from "../../images/rock.jpg"
+import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
+import rock from "../../images/rocks.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
 import rockFormation from "../../images/rockFormation.jpg"
 import API from "../../utils/API.js"
 import AppContext from "../../AppContext"
 
+
 class Scene extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      scoreLevel: 0,
+      scoreLevel: 20,
     };
-  }
+    // this.getScore= this.getScore.bind(this);
+
+  };
+
+  static contextType = AppContext;
+
 
   componentDidMount() {
+    const myContext = this.context;
+
     Matter.use(
       'matter-attractors'
     )
@@ -38,29 +48,34 @@ class Scene extends React.Component {
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
-    const engine = Matter.Engine.create();
-    const render = Matter.Render.create({
+    const engine = Engine.create();
+    const render = Render.create({
       element: this.refs.scene,
       engine: engine,
       options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 4500,
+        height: 2000,
         wireframes: false,
-        background: "white",
-        hasBounds: true
+        background: "skyblue",
+        hasBounds: true,
       },
     });
-    const mainEngine = engine.world
+    const mainEngine = engine.world;
+    var world = engine.world
 
-    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
+    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
     //PLAYER CHARACTER
     const player = {
       //track whether the box has jumped
       hasJumped: false,
+      //whether box has started to fall after a jump
       fallen: false,
+      //whether box has started going up after a jump
+      //(addresses gey area where force is applied when falling,
+      // but acceleration has not completely overcome gravity)
+      wentUp: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
-        friction: 0.1,
         render: {
           sprite: {
             texture: bumi,
@@ -83,16 +98,26 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 0.25,
-      fire() {
+      fireForce: 0.5,
+      //fire function accepts either 'true' for right or 'false' for left
+      fire(ifRight) {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
         }
 
+        //if the firing direction is left, set value to negative
+        //when applied, the negative 'x' direction fires left
+        let dir = 1;
+        if (!ifRight) {
+          dir = -1;
+        }
+
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        const x = bx + (Math.cos(this.body.angle) * 10);
-        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const x = bx + (Math.cos(this.body.angle) * 10 * dir);
+        const y = by + (Math.sin(this.body.angle) * 10 * dir);
+
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
@@ -102,24 +127,24 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.1,
-              yScale: 0.1
+              xScale: 0.3,
+              yScale: 0.3
             }
           }
-        },
-        );
+        });
+
         bullets.add(bullet);
         World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
-          x: Math.cos(this.body.angle) * this.fireForce,
+          x: Math.cos(this.body.angle) * this.fireForce * dir,
           y: Math.sin(this.body.angle) * this.fireForce,
         },
         );
         this.lastShot = Date.now();
       },
     } //END PLAYER OBJECT
-
 
     Matter.Render.lookAt = function (render, player, padding, center) {
       center = typeof center !== 'undefined' ? center : true;
@@ -364,11 +389,11 @@ class Scene extends React.Component {
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        <Navigate to = "/bumi2" replace={true} />
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        <Navigate to = "/bumi2" replace={true} />
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);

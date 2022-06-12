@@ -134,34 +134,34 @@ export default function ChooseAvatar() {
                 </div>
 
                 <div style={styles.characterImage}>
-                <Link to ="/appa"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" id = "2"/></Link>   
+                <Link to ="/appa1"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={appa} alt="appa" id = "2"/></Link>   
                 </div>
 
                 <div style={styles.characterImage}> 
-                <Link to ="/katara"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" id = "3" /></Link>
+                <Link to ="/katara1"> <img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={katara} alt="katara" id = "3" /></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                <Link to = "/sokka"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" id = "4" /></Link>
+                <Link to = "/sokka1"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={sokka} alt="sokka" id = "4" /></Link>
                 </div>
             </section>
             
             {/* Bottom row of characters */}
             <section style={styles.characterRow}>
                 <div style={styles.characterImage}>
-                <Link to="/iroh"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" id = "5"/></Link>
+                <Link to="/iroh1"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={iroh} alt="Iroh" id = "5"/></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                <Link to="/toph"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" id = "6"/></Link>
+                <Link to="/toph1"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={toph} alt="Toph" id = "6"/></Link>
                 </div>
                 
                 <div style={styles.characterImage}>
-                <Link to="/bumi"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" id = "7"/></Link>
+                <Link to="/bumi1"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={bumi} alt="Bumi" id = "7"/></Link>
                 </div>
             
                 <div style={styles.characterImage}>
-                <Link to="/momo"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" id = "8"/></Link>
+                <Link to="/momo1"><img onMouseLeave={leaveCharacter} onMouseOver={hoverOnCharacter}src={momo} alt="Momo" id = "8"/></Link>
                 </div>
             </section>
 

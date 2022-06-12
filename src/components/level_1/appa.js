@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/aang.png"
+import aang from "../../images/Appa.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
@@ -387,11 +387,11 @@ class Scene extends React.Component {
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        <Navigate to = "/appa2" replace={true} />
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        <Navigate to = "/aapa2" replace={true} />
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);

@@ -62,7 +62,7 @@ class Scene extends React.Component {
         friction: 0.1,
         render: {
           sprite: {
-            texture: aang,
+            texture: katara,
             xScale: 0.3,
             yScale: 0.3
           }
@@ -100,7 +100,7 @@ class Scene extends React.Component {
           density: 0.1,
           render: {
             sprite: {
-              texture: wind,
+              texture: wave,
               xScale: 0.3,
               yScale: 0.3
             }
