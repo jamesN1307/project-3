@@ -372,13 +372,15 @@ class Scene extends React.Component {
     //     })
     //   }
     
-    const getScore = (props)=>{
+    const getScore = ()=>{
       const hello = this.state.scoreLevel
       console.log(this.state.scoreLevel)
-      // const token = JSON.parse(localStorage.getItem("userToken"))
-      // console.log(token)
-      API.collectScore(this.state.scoreLevel,1)
+      const token = localStorage.getItem("token")
+      console.log(token)
+      API.collectScore(token,this.state.scoreLevel,1)
     }
+
+    console.log(this.state.scoreLevel)
 
     
     
