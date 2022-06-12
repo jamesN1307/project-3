@@ -153,7 +153,8 @@ class  LeaderboardSingle extends React.Component {
         super(props);
     
         this.state = {
-          scores: null,
+          scores: [],
+          users: [],
         };
       }
     
@@ -162,8 +163,8 @@ class  LeaderboardSingle extends React.Component {
         // const response = await API.getLeaderboard(scoresLevel, token);  
         const data = await responses.json();
         this.setState({
+            scores:data.score,
             users: data.username,
-            scores:data.score
         })
     }
     // All functional components must have a return method that contains JSX.
@@ -175,6 +176,7 @@ class  LeaderboardSingle extends React.Component {
             <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
             <Navbar />
             <div style={styles.masterContainer} >
+
                 {/* <img style={styles.background} src={background} alt="Aang and epic background" /> */}
                 <section style={styles.mainBlock}>
 
@@ -187,9 +189,14 @@ class  LeaderboardSingle extends React.Component {
                     <section style={styles.scoreRow}>
                         <article style={styles.scoreEarthBlock}>
                             <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+
+                            {this.state.data.map(score =>(
+                                <div>
+                                <p style={styles.scoreBlockElement}>Username{score.data.username} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                                </div>
+                            ))}
                         </article>
 
                         <article style={styles.scoreWaterBlock}>
