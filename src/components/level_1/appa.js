@@ -15,7 +15,6 @@ import rockFormation from "../../images/rockFormation.jpg"
 import API from "../../utils/API.js"
 import AppContext from "../../AppContext"
 
-
 class Scene extends React.Component {
   constructor(props) {
     super(props);
