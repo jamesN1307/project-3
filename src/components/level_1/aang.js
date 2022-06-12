@@ -197,7 +197,20 @@ class Scene extends React.Component {
       { placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true },
       { placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true },
       { placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true },
+      //New enemies added
+      { placeX: 2400, placeY: 1140, stopX: 2400, movingRight: true, image: soldier, willFire: true },
+      { placeX: 2280, placeY: 400, stopX: 2400, movingRight: true, image: soldier, willFire: true },
+      { placeX: 3000, placeY: 400, stopX: 3100, movingRight: true, image: soldier, willFire: true },
+      { placeX: 3650, placeY: 1080, stopX: 3800, movingRight: true, image: soldier, willFire: true },
+      { placeX: 3000, placeY: 780, stopX: 3100, movingRight: true, image: soldier, willFire: true },
     ];
+
+    // { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+    // { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+    // { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+    // { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+    // { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+
 
     function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
       const newEnemy = {
@@ -504,22 +517,22 @@ class Scene extends React.Component {
       { placeX: 1100, placeY: 560, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
       { placeX: 1800, placeY: 160, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
       { placeX: 500, placeY: 760, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
-      { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 20, name: 'platform', image: grass },
+      { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       //platform to leave level 
-      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 20, name: 'door', image: waterFlag },
+      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
