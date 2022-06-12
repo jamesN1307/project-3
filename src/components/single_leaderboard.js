@@ -11,10 +11,10 @@ import avatarAang from "../images/avatarAang.jpg"
 import fire from "../images/fire.jpg"
 import Krew from "../images/Krew.png"
 import sky from "../images/sky.png"
+import API from '../utils/API';
 // import background from "../images/leaderboard_background.png";
 
 // LEADERBOARD ISSUE - SCORE BLOCKS NOT ADJUSTING TO SCREEN SIZE
-
 const styles = {
     masterContainer: {
         display: 'flex',
@@ -148,12 +148,30 @@ const styles = {
     }
 }
 
-export default function LeaderboardSingle() {
+class  LeaderboardSingle extends React.Component {
+    constructor(props) {
+        super(props);
+    
+        this.state = {
+          scores: null,
+        };
+      }
+    
+    async componentDidMount() {
+        const responses = await fetch('http://localhost:3001/api/users');
+        // const response = await API.getLeaderboard(scoresLevel, token);  
+        const data = await responses.json();
+        this.setState({
+            users: data.username,
+            scores:data.score
+        })
+    }
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-
-    return (
-        <div className="container" >
+    render() {
+        const {scores, users} = this.state;
+         return (
+            <div className="container" >
             <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
             <Navbar />
             <div style={styles.masterContainer} >
@@ -169,30 +187,30 @@ export default function LeaderboardSingle() {
                     <section style={styles.scoreRow}>
                         <article style={styles.scoreEarthBlock}>
                             <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                         </article>
 
                         <article style={styles.scoreWaterBlock}>
                             <img src={waterLevel} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                         </article>
 
                         <article style={styles.scoreFireBlock}>
                             <img src={avatarAang} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                         </article>
 
                         <article style={styles.scoreBlock}>
                             <img src={Krew} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
-                            <p style={styles.scoreBlockElement}>Username - score</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                         </article>
                     </section>
 
@@ -203,3 +221,5 @@ export default function LeaderboardSingle() {
         </div>
     );
 }
+}
+export default LeaderboardSingle;
