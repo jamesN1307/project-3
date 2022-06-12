@@ -11,9 +11,11 @@ import LeaderboardSingle from "./components/single_leaderboard";
 import LeaderboardDouble from "./components/double_leaderboard";
 import Profile from "./components/profile";
 import Levels from "./components/levelSelect";
+import Win from "./components/win"
 import Aang from "./components/level_1/aang";
 import Aang_2 from "./components/level_2/aang";
 import Aang_3 from "./components/level_3/aang";
+import Aang_4 from "./components/level_4/aang";
 import Iroh from "./components/level_1/iroh";
 import Toph from "./components/level_1/toph";
 import Momo from "./components/level_1/momo";
@@ -22,7 +24,7 @@ import Katara from "./components/level_1/katara";
 import Sokka from "./components/level_1/sokka";
 import Appa from "./components/level_1/appa";
 import NavBar from "./components/NavBar/index.js";
-import './style.css';
+// import './style.css';
 //mport './utils/API'
 
 import { useEffect,useState } from "react";
@@ -95,6 +97,8 @@ function App() {
       <Route path="aang" element={<Aang />} />
       <Route path="aang2" element={<Aang_2 />} />
       <Route path="aang3" element={<Aang_3 />} />
+      <Route path="aang4" element={<Aang_4 />} />
+      <Route path="win" element={<Win />} />
       <Route path="iroh" element={<Iroh />} />
       <Route path="toph" element={<Toph />} />
       <Route path="bumi" element={<Bumi />} />
