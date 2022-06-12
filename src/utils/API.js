@@ -17,6 +17,9 @@ const API = {
       },
     }).then((res) => res.json());
   },
+  getLeaderboard: (scoreLevel) =>{
+    return fetch(`${BASE_URL}/api/scores/${scoreLevel}`).then((res) => res.json())
+  },
   collectScore: (token,scoreLevel, level) => {
     return fetch(`${BASE_URL}/api/scores`,{
       method: "POST",

@@ -7,6 +7,7 @@ import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
+import fireBall from "../../images/fireball.png"
 import lemur from "../../images/lemur.png"
 
 

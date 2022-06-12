@@ -9,7 +9,7 @@ import coin from "../../images/coin.png"
 import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
 import wave from "../../images/wave.png"
-
+import ozai from '../../images/Ozai.png'
 class Scene extends React.Component {
   constructor(props) {
     super(props);
