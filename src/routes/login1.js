@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import API from "../utils/API";
 import { useNavigate } from "react-router-dom";
 
+
+
 export default function Login(props) {
   const [loginData, setLoginData] = useState({
     username: "",
@@ -13,6 +15,7 @@ export default function Login(props) {
   });
   let navigate = useNavigate();
 
+  // login data submission
   const loginSubmit = async (e) => {
     e.preventDefault();
     props.login(loginData);
@@ -28,6 +31,8 @@ export default function Login(props) {
       });
     }
   };
+
+  // signup data submission
   const signupSubmit = (e) => {
     e.preventDefault();
     props.signup(signupData);
@@ -45,11 +50,14 @@ export default function Login(props) {
       });
     }
   };
-  return (
+
+  // Begin Return Statement
+  return ( 
     <div className="Login">
-      <h2>Login</h2>
-      <form onSubmit={loginSubmit}>
+      <form onSubmit={loginSubmit} className='dataForm'>
+      <h2 className='Title'>Login</h2>
         <input
+          className = 'inputValue'
           value={loginData.username}
           type="text"
           name="loginUsername"
@@ -59,19 +67,23 @@ export default function Login(props) {
           }
         />
         <input
+          className = 'inputValue'
           value={loginData.password}
           type="password"
           name="loginPassword"
+          placeholder='password'
           onChange={(e) =>
             setLoginData({ ...loginData, password: e.target.value })
           }
         />
-        <button>Login</button>
+        <button className='giveData'>Login!</button>
       </form>
-      <hr />
-      <h2>Signup</h2>
-      <form onSubmit={signupSubmit}>
+      
+      
+      <form onSubmit={signupSubmit} className='dataForm'>
+      <h2 className='Title'>Signup</h2>
         <input
+          className = 'inputValue'
           value={signupData.username}
           type="text"
           name="signupUsername"
@@ -81,16 +93,17 @@ export default function Login(props) {
           }
         />
         <input
+          className = 'inputValue'
           value={signupData.password}
           type="password"
           name="signupPassword"
+          placeholder='password'
           onChange={(e) =>
             setSignupData({ ...signupData, password: e.target.value })
           }
         />
-        <button>signup</button>
+        <button className='giveData'>Sign Up!</button>
       </form>
-      <hr />
     </div>
   );
 }
