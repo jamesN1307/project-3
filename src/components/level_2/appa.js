@@ -494,14 +494,27 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
+    const getScore = ()=>{
+      const hello = this.state.scoreLevel
+      console.log(this.state.scoreLevel)
+      const token = localStorage.getItem("token")
+      console.log(token)
+      API.collectScore(token,this.state.scoreLevel,1)
+    }
+
+    console.log(this.state.scoreLevel)
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
+        getScore()
+
+        window.location.href = "/appa3"
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        getScore()
+
+        window.location.href = "/appa3"
       };
     };
 

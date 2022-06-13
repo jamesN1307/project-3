@@ -4,10 +4,11 @@ import Matter from "matter-js";
 import iroh from "../../images/iroh.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
-import wind from "../../images/hurricane_PNG56.png"
+import wind from "../../images/green-tea.png"
 import coin from "../../images/coin.png"
 import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
+import API from "../../utils/API.js"
 
 class Scene extends React.Component {
   constructor(props) {
@@ -612,15 +613,26 @@ class Scene extends React.Component {
               Matter.World.remove(mainEngine, pair.bodyB)
             };
           };
+          const getScore = ()=>{
+            const hello = this.state.scoreLevel
+            console.log(this.state.scoreLevel)
+            const token = localStorage.getItem("token")
+            console.log(token)
+            API.collectScore(token,this.state.scoreLevel,1)
+          }
+      
+          console.log(this.state.scoreLevel)
       
         function nextLevel(pair) {
           if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-            window.location.href = "/aang3"
+            window.location.href = "/iroh3"
+            getScore()
             
           };
     
           if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-            window.location.href = "/aang3"
+            window.location.href = "/iroh3"
+            getScore()
           };
         };
     
