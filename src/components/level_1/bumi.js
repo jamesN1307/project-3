@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/aang.png"
 import bumi from "../../images/bumi.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
