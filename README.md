@@ -49,9 +49,13 @@ MIT
 
 # Contributions
 :octocat: James Nguyen --- https://github.com/jamesN1307
+
 :robot:	Jonathan Bank  --- https://github.com/Jnbanks
+
 :sunglasses: Eric Taylor github --- https://github.com/erict001
+
 :dizzy_face: Nicholas Jones --- https://github.com/NJscc 
+
 :ghost:	Sukh 
 
 ## Images 
