@@ -101,7 +101,6 @@ function App() {
   return (
    <BrowserRouter>
    <NavBar isLoggedIn={isLoggedIn} userId={userId} logout={logout}/>
-   <hr/>
    <Routes>
      <Route path="/" element={<Home/>}/>
      <Route path="/profile/:id" element={<Profile userId={userId} token={token}/>}/>

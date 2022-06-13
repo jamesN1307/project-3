@@ -39,7 +39,6 @@ export default function NavBar(props) {
             <div style={styles.mainContainer}>
                 <Link to={`/profile/${props.userId}`}><button style={styles.buttonClass} >Profile</button></Link>
                 <Link to={`/`}><button style={styles.buttonClass} onClick={props.logout}>Logout</button></Link>
-                <Link to='/profile' ><button style={styles.buttonClass}>Profile</button></Link>
                 <Link to='/avatar' ><button style={styles.buttonClass}>Character Selection</button></Link>
                 <Link to='/levels' ><button style={styles.buttonClass}>Level Selection</button></Link>
                 <Link to='/leaderboard_one' ><button style={styles.buttonClass}>Leaderboard</button></Link>

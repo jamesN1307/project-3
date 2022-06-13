@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import './style.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
@@ -11,6 +12,10 @@ root.render(<App />);
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 //reportWebVitals();
 
+/*import './index.css';
+import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));*/
 
 // ORIGINAL PAGE
 // import React from 'react';
