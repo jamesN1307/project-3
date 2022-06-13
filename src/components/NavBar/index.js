@@ -18,6 +18,8 @@ const styles = {
         backgroundColor: "beige",
         alignItems: 'center',
         justifyContent: 'space-around',
+        paddingTop: '20px',
+        paddingBottom: '20px',
     },
     subcontainer: {
         display: 'flex',
@@ -28,6 +30,8 @@ const styles = {
         fontSize: '30pt',
         backgroundColor: 'orange',
         borderRadius: '8px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
     }
 };
 
@@ -40,7 +44,6 @@ export default function NavBar(props) {
                 <Link to={`/profile/${props.userId}`}><button style={styles.buttonClass} >Profile</button></Link>
                 <Link to={`/`}><button style={styles.buttonClass} onClick={props.logout}>Logout</button></Link>
                 <Link to='/avatar' ><button style={styles.buttonClass}>Character Selection</button></Link>
-                <Link to='/levels' ><button style={styles.buttonClass}>Level Selection</button></Link>
                 <Link to='/leaderboard_one' ><button style={styles.buttonClass}>Leaderboard</button></Link>
             </div>
         ):(
