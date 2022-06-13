@@ -4,7 +4,7 @@ import Matter from "matter-js";
 import toph from "../../images/toph.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
-import rock from "../../images/rock.jpg"
+import rock from "../../images/rock1.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
@@ -98,8 +98,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.05,
-              yScale: 0.05
+              xScale: 0.15,
+              yScale: 0.15
             }
           }
         },
@@ -400,7 +400,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/toph1"
       };
 
       if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
@@ -408,7 +408,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyA.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/toph1"
       };
     }
 
