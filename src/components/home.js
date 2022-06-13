@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from "react-router-dom";
 
 const styles = {
+    bodyContainer: {
+        display: 'flex',
+        height: '80%',
+        width: '100%',
+    },
     image: {
         width: '100%',
         height: '100%',
@@ -12,24 +17,21 @@ const styles = {
     },
     h1: {
         marginTop: "5%",
-        fontSize: "80px",
+        fontSize: "120pt",
         fontFamily: "herculanum",
-        textShadow: "3px 3px 3px skyblue"
+        textShadow: "3px 3px 3px skyblue",
+        display: 'flex',
+        height: '55%',
+        width: '100%',
+        justifyContent: 'right',
+        alignItems: 'end',
+        textAlign: 'right',
     },
-    navBar: {
-        display: "flex",
-        flexDirection: "column",
-        width: "10rem",
-        height: "50rem",
-        marginLeft: "15vw",
-    },
-    buttons: {
-        borderRadius: ".1rem",
-        fontFamily: "herculanum",
-        fontWeight: "bold",
-        boxShadow: "2px 2px 2px black",
-        fontSize: "1rem"
-        //add
+    placingDiv: {
+        display: 'flex',
+        height: '100%',
+        width: '52%',
+        justifyContent: 'center',
     }
 
 };
@@ -39,18 +41,10 @@ export default function Welcome() {
     // We return all the JSX inside a parent element with a className of "container".
 
     return (
-        <div className="container" >
-            <div>
+        <div className="container" style={styles.bodyContainer}>
+            <div style={styles.placingDiv}>
                 <img style={styles.image} src="https://wallpapercave.com/wp/weaogjF.jpg" alt="Ang and epic background" />
                 <h1 style={styles.h1}>Appa's Landing</h1>
-                <nav style={styles.navBar}>
-                    <Link to="/login"><button style={styles.buttons}>Login</button></Link>
-                    <br></br>
-                    {/* <p>Don't have an account?</p> */}
-                    <Link to="/login"><button style={styles.buttons}>Signup</button></Link>
-                </nav>
-            </div>
-            <div>
             </div>
         </div>
     );
