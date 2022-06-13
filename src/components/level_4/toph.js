@@ -8,6 +8,7 @@ import rock from "../../images/tRock.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
+import theRock from "../../images/theRock.png"
 
 
 class Scene extends React.Component {
@@ -80,6 +81,32 @@ class Scene extends React.Component {
       lastShot: Date.now(),
       cooldown: 300,
       fireForce: 0.5,
+      earth() {
+        if (Date.now() - this.lastShot < this.cooldown) {
+          return;
+        }
+
+        // move the bullet away from the player a bit
+        const { x: bx, y: by } = this.body.position;
+        const x = bx + (Math.cos(this.body.angle) * 10);
+        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const bullet1 = Matter.Bodies.circle(
+          x, y, 4, {
+          frictionAir: 0.006,
+          label: "bullet1",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture: theRock,
+              xScale: 0.5,
+              yScale: 0.5
+            }
+          }
+        })
+        bullets.add(bullet1);
+        World.add(engine.world, bullet1);
+      },
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;

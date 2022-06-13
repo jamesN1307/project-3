@@ -123,8 +123,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: lemur,
-              xScale: 0.3,
-              yScale: 0.3
+              xScale: 1,
+              yScale: 1
             }
           }
         });
