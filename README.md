@@ -55,9 +55,9 @@ MIT
 :ghost:	Sukh 
 
 ## Images 
-![testImg1]("../images/background1.png")
-![testImg2]("../images/background2.png")
-![testImg3]("../images/background3.png")
+![background1](https://user-images.githubusercontent.com/97413286/173296236-a020c1f6-13df-4de7-aeb7-a4f1e6b2f67a.png)
+![background2](https://user-images.githubusercontent.com/97413286/173296242-5e635dc1-24d2-4500-b138-3307821b08bb.png)
+![background3](https://user-images.githubusercontent.com/97413286/173296260-86a049b5-aa26-42c3-b7c5-da611267fe05.png)
 
 ## Questions
 If you want to checkout my work, visit my Github account: https://github.com/jamesN1307 or
