@@ -8,8 +8,6 @@ import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
-import wave from "../../images/wave.png"
-import ozai from '../../images/Ozai.png'
 import API from "../../utils/API.js"
 
 class Scene extends React.Component {
@@ -125,7 +123,6 @@ class Scene extends React.Component {
 
         const x = bx + (Math.cos(this.body.angle) * 10 * dir);
         const y = by + (Math.sin(this.body.angle) * 10 * dir);
-
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
