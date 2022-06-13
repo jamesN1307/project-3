@@ -136,8 +136,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.8,
-              yScale: 0.8
+              xScale: 0.5,
+              yScale: 0.5
             }
           }
         });
