@@ -128,8 +128,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: tea,
-              xScale: 0.3,
-              yScale: 0.3
+              xScale: 0.15,
+              yScale: 0.15
             }
           }
         });

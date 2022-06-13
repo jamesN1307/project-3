@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/aang.png"
+import aang from "../../images/Appa.png"
 import grass from "../../images/grass.png"
-import soldier from "../../images/soldier.png"
+import ozai from "../../images/Ozai.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
@@ -84,6 +84,32 @@ class Scene extends React.Component {
       lastShot: Date.now(),
       cooldown: 300,
       fireForce: 0.5,
+      earth() {
+        if (Date.now() - this.lastShot < this.cooldown) {
+          return;
+        }
+
+        // move the bullet away from the player a bit
+        const { x: bx, y: by } = this.body.position;
+        const x = bx + (Math.cos(this.body.angle) * 10);
+        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const bullet1 = Matter.Bodies.circle(
+          x, y, 4, {
+          frictionAir: 0.006,
+          label: "bullet1",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture: fireBall,
+              xScale: 0.05,
+              yScale: 0.05
+            }
+          }
+        })
+        bullets.add(bullet1);
+        World.add(engine.world, bullet1);
+      },
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -139,17 +165,16 @@ class Scene extends React.Component {
       { placeX: 1450, placeY: 1000 },
       { placeX: 150, placeY: 1000 },
       { placeX: 1050, placeY: 900 },
-      { placeX: 4500, placeY: 350 },
       { placeX: 3850, placeY: 100 },
       { placeX: 2350, placeY: 250 },
       { placeX: 1650, placeY: 500 },
-      { placeX: 4950, placeY: 1000 },
-      { placeX: 5150, placeY: 1000 },
-      { placeX: 6050, placeY: 900 },
-      { placeX: 5250, placeY: 250 },
-      { placeX: 3250, placeY: 500 },
-      { placeX: 4750, placeY: 1000 },
       { placeX: 3950, placeY: 1000 },
+      { placeX: 4150, placeY: 1000 },
+      { placeX: 2050, placeY: 900 },
+      { placeX: 3250, placeY: 250 },
+      { placeX: 4250, placeY: 500 },
+      { placeX: 1750, placeY: 1000 },
+      { placeX: 2950, placeY: 1000 },
       { placeX: 3450, placeY: 900 },
     ];
 
@@ -177,27 +202,7 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      { placeX: 1000, placeY: 500, stopX: 1200, movingRight: true, image: soldier, willFire: true },
-      { placeX: 300, placeY: 160, stopX: 500, movingRight: true, image: soldier, willFire: true },
-      { placeX: 700, placeY: 1200, stopX: 1800, movingRight: true, image: soldier, willFire: true },
-      { placeX: 1650, placeY: 500, stopX: 1900, movingRight: true, image: soldier, willFire: true },
-      { placeX: 1750, placeY: 100, stopX: 1780, movingRight: true, image: soldier, willFire: true },
-      { placeX: 950, placeY: 800, stopX: 1000, movingRight: true, image: soldier, willFire: true },
-      { placeX: 2550, placeY: 800, stopX: 2860, movingRight: true, image: soldier, willFire: true },
-      { placeX: 3250, placeY: 560, stopX: 3330, movingRight: true, image: soldier, willFire: true },
-      { placeX: 4200, placeY: 500, stopX: 4400, movingRight: true, image: soldier, willFire: true },
-      { placeX: 2880, placeY: 100, stopX: 3050, movingRight: true, image: soldier, willFire: true },
-      { placeX: 3750, placeY: 800, stopX: 3950, movingRight: true, image: soldier, willFire: true },
-      { placeX: 3360, placeY: 800, stopX: 3550, movingRight: true, image: soldier, willFire: true },
-      { placeX: 4800, placeY: 960, stopX: 4900, movingRight: true, image: soldier, willFire: true },
-      { placeX: 5300, placeY: 500, stopX: 5500, movingRight: true, image: soldier, willFire: true },
-      { placeX: 4600, placeY: 300, stopX: 4950, movingRight: true, image: soldier, willFire: true },
-      { placeX: 5800, placeY: 800, stopX: 5900, movingRight: true, image: soldier, willFire: true },
-      { placeX: 6050, placeY: 1000, stopX: 6150, movingRight: true, image: soldier, willFire: true },
-      { placeX: 6650, placeY: 500, stopX: 6800, movingRight: true, image: soldier, willFire: true },
-      { placeX: 5600, placeY: 100, stopX: 5850, movingRight: true, image: soldier, willFire: true },
-      { placeX: 5000, placeY: 800, stopX: 5100, movingRight: true, image: soldier, willFire: true },
-      //=====================================================
+      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: ozai, willFire: true },
     ];
 
     function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
@@ -206,7 +211,7 @@ class Scene extends React.Component {
         spawnX: spawnX,
         endX: endX,
         goingRight: goingRight,
-        body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 80, {
+        body: Matter.Bodies.rectangle(spawnX, spawnY, 60, 900, {
           isUsed: false,
           inertia: Infinity,
           id: "enemy",
@@ -214,14 +219,20 @@ class Scene extends React.Component {
             attractors: [
               function (player, bodyB) {
                 var force = {
-                  x: (player.position.x - bodyB.position.x) * 1e-6,
-                  y: (player.position.y - bodyB.position.y) * 1e-6,
+                  x: (player.position.x - bodyB.position.x) * 1e-100,
+                  y: (player.position.y - bodyB.position.y) * 1e-100,
                 }
                 Matter.Body.applyForce(player, player.position, Matter.Vector.neg(force));
                 Matter.Body.applyForce(bodyB, bodyB.position, force);
               }
             ]
-          }, render: { sprite: { texture: image } }, label: 'enemy'
+          }, render: { sprite: { 
+            texture: image,
+            xScale: 0.55,
+            yScale: 0.55
+          } 
+        }, 
+        label: 'enemy'
         }),
       }
       return newEnemy;
@@ -272,14 +283,10 @@ class Scene extends React.Component {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       //second pair - collisions between bullets and enemies
-      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
-      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       //fourth pair - collisions between player and enemies
-      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
-      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
       //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
@@ -300,8 +307,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5
-        || condition6 || condition7 || condition8 || condition9 || condition10
+      return (condition1 || condition2 || condition5
+        || condition6 || condition9 || condition10
         || condition11 || condition12 || condition13 || condition14 || condition15 || condition16 || condition17 || condition18 || condition19);
     };
 
@@ -405,12 +412,12 @@ class Scene extends React.Component {
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
+        window.location.href = "/win"
 
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        window.location.href = "/win"
       };
     };
 
@@ -420,6 +427,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
+        window.location.href="/appa1"
       };
 
       if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
@@ -427,6 +435,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyA.isUsed = true;
         }
+        window.location.href="/appa1"
       };
     }
 
@@ -515,8 +524,8 @@ class Scene extends React.Component {
         render: {
           sprite: {
             texture: fireBall,
-            xScale: 0.1,
-            yScale: 0.1
+            xScale: 0.3,
+            yScale: 0.3
           }
         }
       });
@@ -546,9 +555,9 @@ class Scene extends React.Component {
 
       //if 'goingRight' is true or false - if true, go right, otherwise go left
       if (enemyObject.goingRight) {
-        Matter.Body.setVelocity(enemyObject.body, { x: 1, y: (enemyObject.body.velocity.y) });
+        Matter.Body.setVelocity(enemyObject.body, { x: 5, y: (enemyObject.body.velocity.y) });
       } else {
-        Matter.Body.setVelocity(enemyObject.body, { x: -1, y: (enemyObject.body.velocity.y) });
+        Matter.Body.setVelocity(enemyObject.body, { x: -5, y: (enemyObject.body.velocity.y) });
       }
     };
 
@@ -621,45 +630,45 @@ class Scene extends React.Component {
       //start platform
       //x,y,width,height,label,image
       // {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
-      { placeX: 500, placeY: 760, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      //new platforms
-      { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1100, placeY: 560, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1800, placeY: 160, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4600, placeY: 60, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4200, placeY: 260, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 3900, placeY: 160, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 4900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 5250, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 5400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      { placeX: 5800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass }, 
-      {placeX: 5800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 6050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      {placeX: 6650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      {placeX: 5900,placeY: 500, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      { placeX: 5300, placeY: 660, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 500, placeY: 760, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // //new platforms
+      // { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1100, placeY: 560, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1800, placeY: 160, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4600, placeY: 60, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4200, placeY: 260, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 3900, placeY: 160, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 4900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 5250, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 5400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
+      // { placeX: 5800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass }, 
+      // {placeX: 5800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      // {placeX: 6050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      // {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      // {placeX: 6650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
+      // {placeX: 5900,placeY: 500, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
+      // { placeX: 5300, placeY: 660, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
 
       //platform to leave level 
-      { placeX: 6400, placeY: 260, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
+      { placeX: 4400, placeY: 260, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
@@ -848,7 +857,7 @@ class Scene extends React.Component {
       detectCollision();
 
       //generate shots fired from just enemies who are supposed to shoot
-      if (Date.now() - timeStamp > 1000) {
+      if (Date.now() - timeStamp > 500) {
         arrayEnemies.forEach(element => {
           //if the soldier is set to fire, isn't deleted, and the time step is 5 seconds beyond a certain value
           if (element.willFire && !element.body.isUsed) {
