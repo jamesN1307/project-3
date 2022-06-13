@@ -115,8 +115,8 @@ class Scene extends React.Component {
 
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        const x = bx + (Math.cos(this.body.angle) * 10);
-        const y = by + (Math.sin(this.body.angle) * 10);
+        const x = bx + (Math.cos(this.body.angle) * 100);
+        const y = by + (Math.sin(this.body.angle) * 100);
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
