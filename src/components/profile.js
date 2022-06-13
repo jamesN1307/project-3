@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{ useState, useEffect, useContext, createContext} from 'react';
 import Navbar from './page_elements/navbar';
 import Placeholder from "../images/placeholder.png"
 import { Link } from "react-router-dom";
 import aangProfile from "../images/aangProfile.png"
+import API from "../utils/API"
 
 const styles = {
     //master div for page elements
@@ -118,6 +119,18 @@ const styles = {
 export default function Profile() {
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
+    const [users, setUsers] = useState();
+
+        const getApiData = async () => {
+        // API.getOneUser(userId,username,score)
+        const response = await fetch(`http://localhost:3001/api/users}`).then((response) => response.json())
+        setUsers(response);
+        console.log(response)
+            }
+        
+         useEffect(()=>{
+                getApiData();
+            }, []);
 
     return (
             <div className="container" style={styles.pageContainer}>
@@ -131,15 +144,21 @@ export default function Profile() {
                     <h1 style={{fontSize: "100px", marginTop: "3vh"}}>Username</h1>
                         </div>
                         {/* username and scores */}
+                         
+
+                        {users && users.map((user) => (
+                        <div>
+
                         <article style={styles.scoreBlock}>
-                            <h2 style={styles.usernameItem}>Username</h2>
+                            <h2 style={styles.usernameItem}>Welcome back Avatar :{user.username}</h2>
                             {/*improvement - revisit, add loop over server elements to add sections for all level scores?}*/}
                             <p style={styles.scores}>Level One - /score/</p>
                             <p style={styles.scores}>Level Two - /score/</p>
                             <p style={styles.scores}>Level Three - /score/</p>
                             <p style={styles.scores}>Global Score - /score/</p>
                         </article>
-
+                        </div>
+                            ))}
                         {/* section with buttons to leaderboard and 'play game' buttons*/}
                         <section style={styles.buttonBlock}>
                         <Link to="/matter"><button style={styles.gameButton}>Play Game</button></Link>
