@@ -11,6 +11,16 @@ import lemur from "../../images/lemur.png"
 import fireBall from "../../images/fireball.png"
 
 
+const styles = {
+  scoreDiv: {
+    height: '100px',
+    margin: 'auto',
+    fontSize: '60pt',
+  },
+  screenDiv: {
+
+  }
+}
 
 class Scene extends React.Component {
   constructor(props) {
@@ -871,11 +881,12 @@ class Scene extends React.Component {
 
 
   render() {
+    const myContext = this.context;
     return (
       <div>
         {/*Check back for when variable should be passed to other pages*/}
-        <div>{`score ${this.state.scoreLevel}`}</div>
-        <div ref="scene" />
+        <div style={styles.scoreDiv}>{`Score: ${this.state.scoreLevel}`}</div>
+        <div style={styles.screenDiv} ref="scene" />
       </div>
     )
   }
