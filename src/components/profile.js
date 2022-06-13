@@ -115,35 +115,11 @@ const styles = {
 
 };
 
-class  Profile extends React.Component {
+export default function Profile() {
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          scores: [],
-          users:[]
-        };
-      }
-    
-    async componentDidMount() {
-        const responses = await fetch('http://localhost:3001/api/users');
-        // const response = await API.getLeaderboard(scoresLevel, token);  
-        const data = await responses.json();
-        this.setState({
-            scores:data.score,
-            users: data.username,
-        })
-        console.log(data);
-        // console.log(users);
-    }
-    
-    render() {       
-        const {scores, users} = this.state;
-        // console.log(scores);
-        // console.log(users);
-        return (
+
+    return (
             <div className="container" style={styles.pageContainer}>
                 <Navbar />
                 <section style={styles.columnContainer}>
@@ -154,11 +130,9 @@ class  Profile extends React.Component {
                         <img src={aangProfile} style={styles.pageColumnLeft}></img>
                     <h1 style={{fontSize: "100px", marginTop: "3vh"}}>Username</h1>
                         </div>
-                        {/* {this.state.scores.map()}
-                        {this.state.users.map()} */}
                         {/* username and scores */}
                         <article style={styles.scoreBlock}>
-                            <h2 style={styles.usernameItem}>Username {users}</h2>
+                            <h2 style={styles.usernameItem}>Username</h2>
                             {/*improvement - revisit, add loop over server elements to add sections for all level scores?}*/}
                             <p style={styles.scores}>Level One - /score/</p>
                             <p style={styles.scores}>Level Two - /score/</p>
@@ -179,5 +153,3 @@ class  Profile extends React.Component {
             </div>
     );
 }
-}
-export default Profile;
