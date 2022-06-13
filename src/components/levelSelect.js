@@ -54,7 +54,7 @@ export default function Levels() {
 
     return (
         <div className="container" style={styles.mainContainer}>
-            <Navbar />
+            {/*<Navbar />*/}
             <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
             <div style={styles.buttonContainer}>
                 <h1 style={styles.pageHeader}>Level Selection</h1>

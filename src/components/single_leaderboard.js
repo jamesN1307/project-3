@@ -18,7 +18,7 @@ import API from '../utils/API';
 const styles = {
     masterContainer: {
         display: 'flex',
-        height: '100%',
+        height: '85%',
         width: '100%',
         justifyContent: 'center',
         flexGrow: '1',
@@ -37,14 +37,19 @@ const styles = {
 
     //page header
     header: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         fontFamily: "herculanum",
+        backgroundColor: 'orange',
+        borderRadius: '10px',
         color: 'black',
-        marginTop: "10vh",
-        marginBottom: "15vh",
-        margin: '25px auto 25px',
+        marginTop: '20px',
+        marginBottom: '20px',
         padding: '0 20px 0',
         fontSize: '60pt',
         borderRadius: '8px',
+        height: '20%',
     },
 
     //contains all page elements
@@ -53,6 +58,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign: 'center',
         width: '100%',
         height: '100%',
         flexGrow: '1',
@@ -65,7 +71,7 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-around',
         width: '90%',
-        height: '100%',
+        height: '50%',
         flexGrow: '1',
         flexShrink: '1',
     },
@@ -179,60 +185,55 @@ export default function LeaderboardSingle() {
     // We return all the JSX inside a parent element with a className of "container".
          return (
             <div className="container" >
-            <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
-            <Navbar />
+            
+            <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="Aang flying" />
+            {/*<Navbar />*/}
             <div style={styles.masterContainer} >
 
-                {/* <img style={styles.background} src={background} alt="Aang and epic background" /> */}
                 <section style={styles.mainBlock}>
 
-                    <h1 style={styles.header}>Leaderboard - Singleplayer</h1>
-
-                    {/*NOTE FOR FUTURE DEVELOPMENT - TO AVOID 
-                        OVERFLOWING THE SCREEN, MAY WANT TO LIMIT THE DISPLAY
-                    TO THE TOP N (5 - 10) SCORES */}
+                    <h1 style={styles.header}>Leaderboard</h1>
 
                     <section style={styles.scoreRow}>
                         <article style={styles.scoreEarthBlock}>
                             <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+
+                            {/*Blocked due to malfunction
+                            {this.state.data.map(score =>(
                                 <div>
-                                {users && users.map((user) => (
-                            <div>
-                                <p style={styles.scoreBlockElement}>Username:{user.username} - score:{users[0].username}</p>
-                            {/* <p style={styles.scoreBlockElement}>Username{user.username} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p> */}
-                            </div>
-                            ))}
+                                <p style={styles.scoreBlockElement}>Username{score.data.username} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                                 </div>
-                                
-                            {/* ))} */}
+                            }))}*/}
                         </article>
-{/* 
+
                         <article style={styles.scoreWaterBlock}>
                             <img src={waterLevel} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
                         </article>
 
                         <article style={styles.scoreFireBlock}>
                             <img src={avatarAang} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
                         </article>
 
                         <article style={styles.scoreBlock}>
                             <img src={Krew} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                        </article> */}
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
+                        </article> 
                     </section>
 
                 </section>
-            </div>
-            <div>
             </div>
         </div>
     );

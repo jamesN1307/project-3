@@ -1,19 +1,58 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
+const styles = {
+    mainContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        height: "100%",
+        width: '80%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    fullBar: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        height: '90px',
+        backgroundColor: "beige",
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingTop: '20px',
+        paddingBottom: '20px',
+        borderStyle: 'solid',
+        borderColor: 'skyblue',
+        
+    },
+    subcontainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+    },
+    buttonClass: {
+        fontSize: '30pt',
+        backgroundColor: 'orange',
+        borderRadius: '8px',
+        paddingLeft: '20px',
+        paddingRight: '20px',
+    }
+};
+
 export default function NavBar(props) {
   return (
-    <div className="NavBar">
-        <Link to="/"><button>Home</button></Link>
+    <div className="NavBar" style={styles.fullBar}>
+        <Link to="/" ><button style={styles.buttonClass}>Home</button></Link>
         {props.isLoggedIn?(
-            <>
-                <Link to={`/profile/${props.userId}`}><button>Profile</button></Link>
-                <Link to={`/`}><button onClick={props.logout}>Logout</button></Link>
-            </>
+            <div style={styles.mainContainer}>
+                <Link to={`/profile/${props.userId}`}><button style={styles.buttonClass} >Profile</button></Link>
+                <Link to={`/`}><button style={styles.buttonClass} onClick={props.logout}>Logout</button></Link>
+                <Link to='/avatar' ><button style={styles.buttonClass}>Character Selection</button></Link>
+                <Link to='/leaderboard_one' ><button style={styles.buttonClass}>Leaderboard</button></Link>
+            </div>
         ):(
-            <>
-                <Link to="/login"><button>Login/Signup</button></Link> 
-            </>
+            <div>
+                <Link to="/login" ><button style={styles.buttonClass}>Login/Signup</button></Link> 
+            </div>
         )}
     </div>
   )

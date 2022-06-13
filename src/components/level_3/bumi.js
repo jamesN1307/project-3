@@ -4,11 +4,23 @@ import Matter from "matter-js";
 import bumi from "../../images/bumi.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
-import rock from "../../images/green-tea.png"
-import fireBall from "../../images/fireball.png"
+import rock from "../../images/elbow.png"
+import fireBall from "../../images/tRock.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
 import API from "../../utils/API.js"
+
+
+const styles = {
+  scoreDiv: {
+    height: '100px',
+    margin: 'auto',
+    fontSize: '60pt',
+  },
+  screenDiv: {
+
+  }
+}
 
 class Scene extends React.Component {
   constructor(props) {
@@ -34,21 +46,22 @@ class Scene extends React.Component {
       MouseConstraint = Matter.MouseConstraint,
       Bounds = Matter.Bounds;
 
-    const engine = Matter.Engine.create();
-    const render = Matter.Render.create({
+    const engine = Engine.create();
+    const render = Render.create({
       element: this.refs.scene,
       engine: engine,
       options: {
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: 7500,
+        height: 2000,
         wireframes: false,
-        background: "white",
-        hasBounds: true
+        background: "skyblue",
+        hasBounds: true,
       },
     });
-    const mainEngine = engine.world
+    const mainEngine = engine.world;
+    var world = engine.world
 
-    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//
+    // ----OBJECTS TO BE RENDERED WITHIN MATTER----//--------------------------------------
     //PLAYER CHARACTER
     const player = {
       //track whether the box has jumped
@@ -56,7 +69,6 @@ class Scene extends React.Component {
       fallen: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
         inertia: Infinity,
-        friction: 0.1,
         render: {
           sprite: {
             texture: bumi,
@@ -79,8 +91,8 @@ class Scene extends React.Component {
 
       lastShot: Date.now(),
       cooldown: 300,
-      fireForce: 0.25,
-      fire() {
+      fireForce: 0.5,
+      earth() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
         }
@@ -90,6 +102,41 @@ class Scene extends React.Component {
         const x = bx + (Math.cos(this.body.angle) * 10);
         const y = by + (Math.sin(this.body.angle) * 10);
 
+        const bullet1 = Matter.Bodies.circle(
+          x, y, 4, {
+          frictionAir: 0.006,
+          label: "bullet1",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture: fireBall,
+              xScale: 0.05,
+              yScale: 0.05
+            }
+          }
+        })
+        bullets.add(bullet1);
+        World.add(engine.world, bullet1);
+      },
+      fire(ifRight) {
+        if (Date.now() - this.lastShot < this.cooldown) {
+          return;
+        }
+
+        //if the firing direction is left, set value to negative
+        //when applied, the negative 'x' direction fires left
+        let dir = 1;
+        if (!ifRight) {
+          dir = -1;
+        }
+
+        // move the bullet away from the player a bit
+        const { x: bx, y: by } = this.body.position;
+
+        const x = bx + (Math.cos(this.body.angle) * 10 * dir);
+        const y = by + (Math.sin(this.body.angle) * 10 * dir);
+
+
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
           frictionAir: 0.006,
@@ -98,17 +145,18 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.15,
-              yScale: 0.15
+              xScale: 0.3,
+              yScale: 0.3
             }
           }
-        },
-        );
+        });
+
         bullets.add(bullet);
         World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
-          x: Math.cos(this.body.angle) * this.fireForce,
+          x: Math.cos(this.body.angle) * this.fireForce * dir,
           y: Math.sin(this.body.angle) * this.fireForce,
         },
         );
@@ -411,14 +459,14 @@ class Scene extends React.Component {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         if(!pair.bodyB.isUsed) {
           getScore();
-        window.location.href = "/bumi4"
+          window.location.href = "/bumi4"
         }
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         if(!pair.bodyB.isUsed) {
           getScore();
-        window.location.href = "/bumi4"
+          window.location.href = "/bumi4"
         }
       };
     };
@@ -769,8 +817,13 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyI: () => player.earth(),
-      KeyP: () => player.fire()
+      KeyS: () => player.earth(),
+      KeyI: () => {
+        player.fire(false)
+      },
+      KeyP: () => {
+        player.fire(true)
+      },
     };
 
 
@@ -882,11 +935,12 @@ class Scene extends React.Component {
 
 
   render() {
+    const myContext = this.context;
     return (
       <div>
         {/*Check back for when variable should be passed to other pages*/}
-        <div>{`score ${this.state.scoreLevel}`}</div>
-        <div ref="scene" />
+        <div style={styles.scoreDiv}>{`Score: ${this.state.scoreLevel}`}</div>
+        <div style={styles.screenDiv} ref="scene" />
       </div>
     )
   }
