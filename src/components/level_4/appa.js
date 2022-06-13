@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/aang.png"
+import aang from "../../images/Appa.png"
 import grass from "../../images/grass.png"
-import soldier from "../../images/soldier.png"
+import ozai from "../../images/Ozai.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
@@ -202,7 +202,7 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: soldier, willFire: true },
+      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: ozai, willFire: true },
     ];
 
     function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
@@ -283,14 +283,10 @@ class Scene extends React.Component {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       //second pair - collisions between bullets and enemies
-      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
-      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       //fourth pair - collisions between player and enemies
-      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
-      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
       //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
@@ -311,8 +307,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5
-        || condition6 || condition7 || condition8 || condition9 || condition10
+      return (condition1 || condition2 || condition5
+        || condition6 || condition9 || condition10
         || condition11 || condition12 || condition13 || condition14 || condition15 || condition16 || condition17 || condition18 || condition19);
     };
 
