@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect, useContext, createContext} from 'react';
 import { Link } from "react-router-dom";
 import Navbar from './page_elements/navbar';
 import leaderboard_one from "../images/leaderboard_one.png"
@@ -153,30 +153,36 @@ const styles = {
         fontSize: '16pt',
     }
 }
+export default function LeaderboardSingle() {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //       scores: [],
+    //       users: [],
+    //     };
+    //   }
+    
+    // async componentDidMount() {
+        const [users, setUsers] = useState();
 
-class  LeaderboardSingle extends React.Component {
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          scores: [],
-          users: [],
-        };
-      }
-    
-    async componentDidMount() {
-        const responses = await fetch('http://localhost:3001/api/users');
+        const getApiData = async () => {
+
+        const response = await fetch('http://localhost:3001/api/users').then((response) => response.json())
+        setUsers(response);
+        console.log(response)
+            }
         // const response = await API.getLeaderboard(scoresLevel, token);  
-        const data = await responses.json();
-        this.setState({
-            scores:data.score,
-            users: data.username,
-        })
-    }
+        // this.setState({
+        //     scores:data.score,
+        //     users: data.username,
+        // })
+        useEffect(()=>{
+            getApiData();
+        }, []);
+      
+
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-    render() {
-        const {scores, users} = this.state;
          return (
             <div className="container" >
             
@@ -204,24 +210,27 @@ class  LeaderboardSingle extends React.Component {
 
                         <article style={styles.scoreWaterBlock}>
                             <img src={waterLevel} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
                         </article>
 
                         <article style={styles.scoreFireBlock}>
                             <img src={avatarAang} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
                         </article>
 
                         <article style={styles.scoreBlock}>
                             <img src={Krew} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
+                            {/* Blocked due to malfunction
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                        </article>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>*/}
+                        </article> 
                     </section>
 
                 </section>
@@ -229,5 +238,3 @@ class  LeaderboardSingle extends React.Component {
         </div>
     );
 }
-}
-export default LeaderboardSingle;

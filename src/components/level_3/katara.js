@@ -8,6 +8,7 @@ import wind from "../../images/wave.png"
 import coin from "../../images/coin.png"
 import fireBall from "../../images/fireball.png"
 import waterFlag from "../../images/waterFlag.png"
+import API from "../../utils/API.js"
 
 
 const styles = {
@@ -408,15 +409,29 @@ class Scene extends React.Component {
         Matter.World.remove(mainEngine, pair.bodyB)
       };
     };
+    const getScore = ()=>{
+      const hello = this.state.scoreLevel
+      console.log(this.state.scoreLevel)
+      const token = localStorage.getItem("token")
+      console.log(token)
+      API.collectScore(token,this.state.scoreLevel,1)
+    }
+
+    console.log(this.state.scoreLevel)
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
-
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/katara4"
+        }
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/katara4"
+        }
       };
     };
 
@@ -766,7 +781,7 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => player.earth(),
+      KeyI: () => player.earth(),
       KeyP: () => player.fire()
     };
 

@@ -8,6 +8,7 @@ import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
+import rock from "../../images/rock.jpg"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
 import rockFormation from "../../images/rockFormation.jpg"
@@ -84,6 +85,7 @@ class Scene extends React.Component {
       // but acceleration has not completely overcome gravity)
       wentUp: false,
       body: Bodies.rectangle(400, 200, 80, 80, {
+        isUsed:false,
         inertia: Infinity,
         render: {
           sprite: {
@@ -397,12 +399,16 @@ class Scene extends React.Component {
     
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        getScore();
-        <Navigate to = "/aang2" replace={true} />
+        if(!pair.bodyB.isUsed) {
+          getScore();
+          window.location.href = "/aang2"
+        }
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        getScore();
-        <Navigate to = "/aang2" replace={true} />
+        if(!pair.bodyA.isUsed) {
+          getScore();
+          window.location.href = "/aang2"
+        }
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);
@@ -543,12 +549,13 @@ class Scene extends React.Component {
       { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       //platform to leave level 
-      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
+      { placeX: 3900, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
       const newPlatform = {
         body:
+        
           //format is x location, y location (of centerpoint), width, height, {properties}
           Bodies.rectangle(placeX, placeY, rectWidth, rectHeight, {
             isStatic: true,

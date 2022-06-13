@@ -5,11 +5,12 @@ import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import katara from "../../images/Katara.png"
 import grass from "../../images/grass.png"
-import soldier from "../../images/soldier.png"
+import ozai from "../../images/Ozai.png"
 import wave from "../../images/wave.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
+import waterball from "../../images/waterball.png"
 import rockFormation from "../../images/rockFormation.jpg"
 import API from "../../utils/API.js"
 import AppContext from "../../AppContext"
@@ -94,6 +95,32 @@ class Scene extends React.Component {
       lastShot: Date.now(),
       cooldown: 300,
       fireForce: 0.5,
+      earth() {
+        if (Date.now() - this.lastShot < this.cooldown) {
+          return;
+        }
+
+        // move the bullet away from the player a bit
+        const { x: bx, y: by } = this.body.position;
+        const x = bx + (Math.cos(this.body.angle) * 10);
+        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const bullet1 = Matter.Bodies.circle(
+          x, y, 4, {
+          frictionAir: 0.006,
+          label: "bullet1",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture: waterball,
+              xScale: 0.5,
+              yScale: 0.5
+            }
+          }
+        })
+        bullets.add(bullet1);
+        World.add(engine.world, bullet1);
+      },
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -185,7 +212,7 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: soldier, willFire: true },
+      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: ozai, willFire: true },
     ];
 
     function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
@@ -266,14 +293,10 @@ class Scene extends React.Component {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       //second pair - collisions between bullets and enemies
-      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
-      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       //fourth pair - collisions between player and enemies
-      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
-      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
       //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
@@ -294,8 +317,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5
-        || condition6 || condition7 || condition8 || condition9 || condition10
+      return (condition1 || condition2 || condition5
+        || condition6 || condition9 || condition10
         || condition11 || condition12 || condition13 || condition14 || condition15 || condition16 || condition17 || condition18 || condition19);
     };
 
@@ -414,7 +437,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/katara1"
       };
 
       if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
@@ -422,7 +445,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyA.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/katara1"
       };
     }
 
@@ -564,7 +587,7 @@ class Scene extends React.Component {
       // speed of platform movement, and axis of movement
       //NOTE - MOVERANGE IS NOT IN PIXELS
       {
-        placeX: 400, placeY: 200, rectWidth: 600, rectHeight: 80,
+        placeX: 400, placeY: 200, rectWidth: 400, rectHeight: 80,
         name: 'platform', image: grass, moveRange: 3, moveSpeed: 0.001, moveY: true
       },
     ]

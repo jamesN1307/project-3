@@ -397,11 +397,11 @@ class Scene extends React.Component {
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        window.location.href = "/sokka2"
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         getScore();
-        <Navigate to = "/aang2" replace={true} />
+        window.location.href = "/sokka2"
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);
@@ -542,7 +542,7 @@ class Scene extends React.Component {
       { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       //platform to leave level 
-      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
+      { placeX: 3900, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {

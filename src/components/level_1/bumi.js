@@ -3,13 +3,12 @@ import { useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import Matter from "matter-js";
-import aang from "../../images/aang.png"
 import bumi from "../../images/bumi.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
-import rock from "../../images/rocks.png"
+import rock from "../../images/elbow.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
 import rockFormation from "../../images/rockFormation.jpg"
@@ -137,8 +136,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.3,
-              yScale: 0.3
+              xScale: 0.8,
+              yScale: 0.8
             }
           }
         });
@@ -399,11 +398,11 @@ class Scene extends React.Component {
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
         getScore();
-        <Navigate to = "/bumi2" replace={true} />
+        window.location.href = "/bumi2"
       };
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
         getScore();
-        <Navigate to = "/bumi2" replace={true} />
+        window.location.href = "/bumi2"
         // const hello = this.state.scoreLevel
         // const token = JSON.parse(localStorage.getItem("userToken"))
         // API.collectScore(token,hello,1);
@@ -544,7 +543,7 @@ class Scene extends React.Component {
       { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
       //platform to leave level 
-      { placeX: 250, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
+      { placeX: 3900, placeY: 500, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },
     ];
 
     function makePlatforms(placeX, placeY, rectWidth, rectHeight, name, image) {
