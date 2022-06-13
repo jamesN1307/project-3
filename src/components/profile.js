@@ -10,7 +10,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
-        height: '100%',
+        height: '90%',
     },
 
     //container for each page 'column'
@@ -24,20 +24,26 @@ const styles = {
 
     profileContainer: {
         display: 'flex',
-        justifyContent: "left",
-        width: '30%',
-        height: '80%',
-        backgroundColor: 'moccasin',
+        flexDirection: 'column',
+        justifyContent: "center",
+        alignItems: 'center',
+        width: '45%',
+        height: '50%',
+        backgroundColor: 'skyblue',
+        borderRadius: '8px',
     },
 
     //style left 'column' of page
     pageColumnLeft: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
+        width: '100%',
+        height: '90%',
+        marginTop: '20px',
     },
-    
+
     //Items within left block
 
     sectionHeader: {
@@ -47,21 +53,62 @@ const styles = {
     },
 
     scoreBlock: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
         borderStyle: 'solid',
-        width: '80%',
+        width: '50%',
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
         borderRadius: '8px',
+        height: '100%',
+        marginTop: '25px',
+    },
+
+    profileTitle: {
+        borderRadius: '8px',
+        fontSize: "60px",
+        marginTop: "10px",
+        borderStyle: 'solid',
+        borderColor: 'black',
+        height: '40%',
+        width: '55%',
+        textAlign: 'center',
+        justifyContent: 'center',
+    },
+
+    pictureDivision: {
+        display: 'flex',
+        height: '80%',
+        width: '65%',
+        borderStyle: 'solid',
+        borderColor: 'black',
+    },
+
+    picture: {
+        width: '100%',
+        height: '100%',
     },
 
     usernameItem: {
-        borderRadius: '8px',
-
+        display: 'flex',
+        height: '25%',
+        textAlign: 'center',
+        justifyContent: 'center',
+        fontSize: '40pt',
     },
 
     scores: {
-
+        height: '15%',
+        backgroundColor: 'orange',
+        fontSize: '25pt',
+        borderRadius: '8px',
+        display: 'flex',
+        textAlign: 'center',
+        alignItems: 'center',
+        margin: '5px auto 5px',
+        padding: '0 15px 0',
     },
 
     buttonBlock: {
@@ -84,75 +131,49 @@ const styles = {
 
     },
 
-    //style right 'column' of page
-    pageColumnRight: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '35%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderStyle: 'solid',
-    },
-    //Items within right block
-
-    chatBlock: {
-
-    },
-
-    commentText: {
-
-    },
-
-    submitComment: {
-
-    },
-
-    postedComment: {
-
-    }
-
-
 };
 
-class  Profile extends React.Component {
+class Profile extends React.Component {
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
     constructor(props) {
         super(props);
-    
+
         this.state = {
-          scores: [],
-          users:[]
+            scores: [],
+            users: []
         };
-      }
-    
+    }
+
     async componentDidMount() {
         const responses = await fetch('http://localhost:3001/api/users');
         // const response = await API.getLeaderboard(scoresLevel, token);  
         const data = await responses.json();
         this.setState({
-            scores:data.score,
+            scores: data.score,
             users: data.username,
         })
         console.log(data);
         // console.log(users);
     }
-    
-    render() {       
-        const {scores, users} = this.state;
+
+    render() {
+        const { scores, users } = this.state;
         // console.log(scores);
         // console.log(users);
         return (
             <div className="container" style={styles.pageContainer}>
                 {/*<Navbar />*/}
                 <section style={styles.columnContainer}>
-                    
+
                     {/*Left 'column' */}
                     <section style={styles.pageColumnLeft}>
                         <div style={styles.profileContainer}>
-                        <img src={aangProfile} style={styles.pageColumnLeft}></img>
-                    <h1 style={{fontSize: "100px", marginTop: "3vh"}}>Username</h1>
+
+                            <div style={styles.pictureDivision}>
+                                <img src={aangProfile} style={styles.picture}></img>
+                            </div>
+
                         </div>
                         {/* {this.state.scores.map()}
                         {this.state.users.map()} */}
@@ -166,18 +187,18 @@ class  Profile extends React.Component {
                             <p style={styles.scores}>Global Score - /score/</p>
                         </article>
 
-                        {/* section with buttons to leaderboard and 'play game' buttons*/}
+                        {/* section with buttons to leaderboard and 'play game' buttons
                         <section style={styles.buttonBlock}>
-                        <Link to="/matter"><button style={styles.gameButton}>Play Game</button></Link>
+                            <Link to="/matter"><button style={styles.gameButton}>Play Game</button></Link>
                             <div style={styles.leaderButtons}>
                                 <button style={styles.leaderLink}>Leaderboard - 1 Player</button>
                                 <button style={styles.leaderLink}>Leaderboard - 2 Player</button>
                             </div>
-                        </section>
+                        </section>*/}
                     </section>
                 </section>
             </div>
-    );
-}
+        );
+    }
 }
 export default Profile;

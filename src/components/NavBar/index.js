@@ -20,6 +20,9 @@ const styles = {
         justifyContent: 'space-around',
         paddingTop: '20px',
         paddingBottom: '20px',
+        borderStyle: 'solid',
+        borderColor: 'skyblue',
+        
     },
     subcontainer: {
         display: 'flex',
