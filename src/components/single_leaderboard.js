@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect, useContext, createContext} from 'react';
 import { Link } from "react-router-dom";
 import Navbar from './page_elements/navbar';
 import leaderboard_one from "../images/leaderboard_one.png"
@@ -147,30 +147,36 @@ const styles = {
         fontSize: '16pt',
     }
 }
+export default function LeaderboardSingle() {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //       scores: [],
+    //       users: [],
+    //     };
+    //   }
+    
+    // async componentDidMount() {
+        const [users, setUsers] = useState();
 
-class  LeaderboardSingle extends React.Component {
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-          scores: [],
-          users: [],
-        };
-      }
-    
-    async componentDidMount() {
-        const responses = await fetch('http://localhost:3001/api/users');
+        const getApiData = async () => {
+
+        const response = await fetch('http://localhost:3001/api/users').then((response) => response.json())
+        setUsers(response);
+        console.log(response)
+            }
         // const response = await API.getLeaderboard(scoresLevel, token);  
-        const data = await responses.json();
-        this.setState({
-            scores:data.score,
-            users: data.username,
-        })
-    }
+        // this.setState({
+        //     scores:data.score,
+        //     users: data.username,
+        // })
+        useEffect(()=>{
+            getApiData();
+        }, []);
+      
+
     // All functional components must have a return method that contains JSX.
     // We return all the JSX inside a parent element with a className of "container".
-    render() {
-        const {scores, users} = this.state;
          return (
             <div className="container" >
             <img style={{ width: "100%", height: "100%", zIndex: -1, position: "absolute", opacity: "0.6" }} src={celebrate} alt="4 Nations Map" />
@@ -189,16 +195,19 @@ class  LeaderboardSingle extends React.Component {
                     <section style={styles.scoreRow}>
                         <article style={styles.scoreEarthBlock}>
                             <img src={EarthKingdom} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
-
-                            {this.state.data.map(score =>(
                                 <div>
-                                <p style={styles.scoreBlockElement}>Username{score.data.username} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                                </div>
+                                {users && users.map((user) => (
+                            <div>
+                                <p style={styles.scoreBlockElement}>Username:{user.username} - score:{users[0].username}</p>
+                            {/* <p style={styles.scoreBlockElement}>Username{user.username} - score:{scores}</p>
+                            <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p> */}
+                            </div>
                             ))}
+                                </div>
+                                
+                            {/* ))} */}
                         </article>
-
+{/* 
                         <article style={styles.scoreWaterBlock}>
                             <img src={waterLevel} style={{height:"300px", width: "100%", opacity: "0.9", borderRadius: "15px"}}/>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
@@ -218,7 +227,7 @@ class  LeaderboardSingle extends React.Component {
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
                             <p style={styles.scoreBlockElement}>Username{users} - score:{scores}</p>
-                        </article>
+                        </article> */}
                     </section>
 
                 </section>
@@ -228,5 +237,3 @@ class  LeaderboardSingle extends React.Component {
         </div>
     );
 }
-}
-export default LeaderboardSingle;
