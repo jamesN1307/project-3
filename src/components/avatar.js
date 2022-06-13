@@ -79,7 +79,7 @@ const styles = {
     containerStyling: {
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100%'
+        height: '90%'
     },
 
     headerStyling: {
@@ -119,7 +119,7 @@ export default function ChooseAvatar() {
   return (
     <div className="container" style={styles.containerStyling}>
         <img style={styles.image} src="https://i.pinimg.com/originals/87/37/4c/87374c7fcdb4a9308621a23a4f9c9a69.png" alt="4 Nations Map" />
-        <Navbar />
+        {/*<Navbar />*/}
 
         {/* Contains header and both rows */}
         <div style={styles.characterSelectBox}>

@@ -145,7 +145,7 @@ class  Profile extends React.Component {
         // console.log(users);
         return (
             <div className="container" style={styles.pageContainer}>
-                <Navbar />
+                {/*<Navbar />*/}
                 <section style={styles.columnContainer}>
                     
                     {/*Left 'column' */}
