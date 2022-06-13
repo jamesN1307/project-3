@@ -411,12 +411,18 @@ class Scene extends React.Component {
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/appa4"
+        }
 
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/appa4"
+        }
       };
     };
 
@@ -766,7 +772,7 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => player.earth(),
+      KeyI: () => player.earth(),
       KeyP: () => player.fire()
     };
 
