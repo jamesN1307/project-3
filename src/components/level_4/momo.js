@@ -117,15 +117,23 @@ class Scene extends React.Component {
         bullets.add(bullet1);
         World.add(engine.world, bullet1);
       },
-      fire() {
+      fire(ifRight) {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
         }
 
+        //if the firing direction is left, set value to negative
+        //when applied, the negative 'x' direction fires left
+        let dir = 1;
+        if (!ifRight) {
+          dir = -1;
+        }
+
         // move the bullet away from the player a bit
         const { x: bx, y: by } = this.body.position;
-        const x = bx + (Math.cos(this.body.angle) * 10);
-        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const x = bx + (Math.cos(this.body.angle) * 10 * dir);
+        const y = by + (Math.sin(this.body.angle) * 10 * dir);
 
         const bullet = Matter.Bodies.circle(
           x, y, 4, {
@@ -135,17 +143,18 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: lemur,
-              // xScale: 0.3,
-              // yScale: 0.3
+              xScale: 0.3,
+              yScale: 0.3
             }
           }
-        },
-        );
+        });
+
         bullets.add(bullet);
         World.add(engine.world, bullet);
+        //applyforce requires body, location to apply force FROM, then a force vector
         Matter.Body.applyForce(
           bullet, this.body.position, {
-          x: Math.cos(this.body.angle) * this.fireForce,
+          x: Math.cos(this.body.angle) * this.fireForce * dir,
           y: Math.sin(this.body.angle) * this.fireForce,
         },
         );
@@ -739,7 +748,15 @@ class Scene extends React.Component {
         }
       },
       KeyS: () => player.earth(),
-      KeyP: () => player.fire()
+      KeyI: () => {
+        player.fire(false)
+      },
+      KeyP: () => {
+        player.fire(true)
+      },
+      KeyQ: () => {
+        window.location.href = "/avatar"
+      }
     };
 
 

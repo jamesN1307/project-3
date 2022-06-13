@@ -659,6 +659,9 @@ class Scene extends React.Component {
       KeyP: () => {
         player.fire(true)
       },
+      KeyQ: () => {
+        window.location.href = "/avatar"
+      }
     };
 
     //if the player has started actually moving upward
