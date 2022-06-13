@@ -4,7 +4,7 @@ import Matter from "matter-js";
 import bumi from "../../images/bumi.png"
 import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
-import rock from "../../images/theRock.png"
+import rock from "../../images/green-tea.png"
 import fireBall from "../../images/fireball.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
@@ -98,8 +98,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 1,
-              yScale: 1
+              xScale: 0.15,
+              yScale: 0.15
             }
           }
         },
@@ -409,12 +409,17 @@ class Scene extends React.Component {
 
     function nextLevel(pair) {
       if ((pair.bodyA.label === 'door') && (pair.bodyB.label === 'player')) {
-        window.location.href = "/katara"
-
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/bumi4"
+        }
       };
 
       if ((pair.bodyA.label === 'player') && (pair.bodyB.label === 'door')) {
-        window.location.href = "/katara"
+        if(!pair.bodyB.isUsed) {
+          getScore();
+        window.location.href = "/bumi4"
+        }
       };
     };
 
@@ -764,7 +769,7 @@ class Scene extends React.Component {
           Matter.Body.setVelocity(player.body, { x: -10, y: (player.body.velocity.y) })
         }
       },
-      KeyS: () => player.earth(),
+      KeyI: () => player.earth(),
       KeyP: () => player.fire()
     };
 

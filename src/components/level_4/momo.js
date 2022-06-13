@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Matter from "matter-js";
 import momo from "../../images/momo.png"
 import grass from "../../images/grass.png"
-import soldier from "../../images/soldier.png"
+import ozai from "../../images/Ozai.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
 import waterFlag from "../../images/waterFlag.png"
@@ -82,6 +82,32 @@ class Scene extends React.Component {
       lastShot: Date.now(),
       cooldown: 300,
       fireForce: 0.1,
+      earth() {
+        if (Date.now() - this.lastShot < this.cooldown) {
+          return;
+        }
+
+        // move the bullet away from the player a bit
+        const { x: bx, y: by } = this.body.position;
+        const x = bx + (Math.cos(this.body.angle) * 10);
+        const y = by + (Math.sin(this.body.angle) * 10);
+
+        const bullet1 = Matter.Bodies.circle(
+          x, y, 4, {
+          frictionAir: 0.006,
+          label: "bullet1",
+          density: 0.1,
+          render: {
+            sprite: {
+              texture: wind,
+              xScale: 0.15,
+              yScale: 0.15
+            }
+          }
+        })
+        bullets.add(bullet1);
+        World.add(engine.world, bullet1);
+      },
       fire() {
         if (Date.now() - this.lastShot < this.cooldown) {
           return;
@@ -173,7 +199,7 @@ class Scene extends React.Component {
     //custom function to call to make body, return it
     //for each loop then returns each one and adds to engine directly
     const arrayPresetEnemies = [
-      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: soldier, willFire: true },
+      { placeX: 2000, placeY: 1000, stopX: 3500, movingRight: true, image: ozai, willFire: true },
     ];
 
     function makeEnemyObject(spawnX, spawnY, endX, goingRight, image, willShoot) {
@@ -254,14 +280,10 @@ class Scene extends React.Component {
       var condition1 = pair.bodyA.label === 'player' && pair.bodyB.label === 'coin';
       var condition2 = pair.bodyA.label === 'coin' && pair.bodyB.label === 'player';
       //second pair - collisions between bullets and enemies
-      var condition3 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'enemy';
-      var condition4 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'bullet';
       //third pair - collisions between bullets and borders
       var condition5 = pair.bodyA.label === 'border' && pair.bodyB.label === 'bullet';
       var condition6 = pair.bodyA.label === 'bullet' && pair.bodyB.label === 'border';
       //fourth pair - collisions between player and enemies
-      var condition7 = pair.bodyA.label === 'player' && pair.bodyB.label === 'enemy';
-      var condition8 = pair.bodyA.label === 'enemy' && pair.bodyB.label === 'player';
       //fifth pair - collisions between player and the 'door'
       var condition9 = pair.bodyA.label === 'player' && pair.bodyB.label === 'door';
       var condition10 = pair.bodyA.label === 'door' && pair.bodyB.label === 'player';
@@ -282,8 +304,8 @@ class Scene extends React.Component {
 
 
       //returns true condition
-      return (condition1 || condition2 || condition3 || condition4 || condition5
-        || condition6 || condition7 || condition8 || condition9 || condition10
+      return (condition1 || condition2 || condition5
+        || condition6 || condition9 || condition10
         || condition11 || condition12 || condition13 || condition14 || condition15 || condition16 || condition17 || condition18 || condition19);
     };
 
@@ -402,7 +424,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyB.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/momo1"
       };
 
       if ((pair.bodyB.label === 'player') && (pair.bodyA.label === 'enemyBullet')) {
@@ -410,7 +432,7 @@ class Scene extends React.Component {
           scoreDelete();
           pair.bodyA.isUsed = true;
         }
-        window.location.href="/aang"
+        window.location.href="/momo1"
       };
     }
 
@@ -604,43 +626,6 @@ class Scene extends React.Component {
     const platformPresets = [
       //start platform
       //x,y,width,height,label,image
-      // {placeX:400,placeY: 260, rectWidth:200,rectHeight: 80, name: 'platform', image: grass},
-      // { placeX: 500, placeY: 760, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3250, placeY: 800, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 2550, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3050, placeY: 1300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3450, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 2400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 2800, placeY: 860, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3650, placeY: 1080, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 2350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // //new platforms
-      // { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1050, placeY: 1000, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1100, placeY: 560, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1400, placeY: 360, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1800, placeY: 160, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 1900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4000, placeY: 460, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4600, placeY: 60, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4200, placeY: 260, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4250, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4350, placeY: 780, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 3900, placeY: 160, rectWidth: 200, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4800, placeY: 660, rectWidth: 450, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 4900, placeY: 1100, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 5250, placeY: 300, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 5400, placeY: 1160, rectWidth: 250, rectHeight: 80, name: 'platform', image: grass },
-      // { placeX: 5800,placeY: 160, rectWidth: 400,rectHeight: 80, name: 'platform', image: grass }, 
-      // {placeX: 5800,placeY: 860, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      // {placeX: 6050,placeY: 1300, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      // {placeX: 6400,placeY: 360, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      // {placeX: 6650,placeY: 1080, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass}, 
-      // {placeX: 5900,placeY: 500, rectWidth: 250,rectHeight: 80, name: 'platform', image: grass},
-      // { placeX: 5300, placeY: 660, rectWidth: 400, rectHeight: 80, name: 'platform', image: grass },
 
       //platform to leave level 
       { placeX: 4400, placeY: 260, rectWidth: 250, rectHeight: 80, name: 'door', image: waterFlag },

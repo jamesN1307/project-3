@@ -9,7 +9,7 @@ import grass from "../../images/grass.png"
 import soldier from "../../images/soldier.png"
 import wind from "../../images/hurricane_PNG56.png"
 import coin from "../../images/coin.png"
-import rock from "../../images/rocks.png"
+import rock from "../../images/elbow.png"
 import waterFlag from "../../images/waterFlag.png"
 import fireBall from "../../images/fireball.png"
 import rockFormation from "../../images/rockFormation.jpg"
@@ -127,8 +127,8 @@ class Scene extends React.Component {
           render: {
             sprite: {
               texture: rock,
-              xScale: 0.3,
-              yScale: 0.3
+              xScale: 0.8,
+              yScale: 0.8
             }
           }
         });
