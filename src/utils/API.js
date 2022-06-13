@@ -1,7 +1,7 @@
 //DEVELOP
-const BASE_URL = "http://localhost:3001";
+// const BASE_URL = "http://localhost:3001";
 //PROD
-// const BASE_URL = "https://stormy-citadel-38044.herokuapp.com";
+const BASE_URL = "https://stormy-citadel-38044.herokuapp.com";
 
 const API = {
   getAllUsers: () => {
